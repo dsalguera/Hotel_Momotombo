@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" fx:id="lienzo" prefHeight="460.0" prefWidth="276.0" styleClass="side-panel" stylesheets="@estilos/Estilos.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto_hotel.FXMLDocumentController">
+    <children>
+      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox alignment="CENTER_RIGHT" onMouseDragged="#Arrastrar" onMousePressed="#Presionar" prefHeight="50.0" prefWidth="936.0" styleClass="top-panel" stylesheets="@estilos/Estilos.css">
+               <children>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="271.0" styleClass="pane" stylesheets="@estilos/Estilos.css">
+                     <children>
+                        <JFXButton fx:id="btnMinimizar" alignment="CENTER_RIGHT" contentDisplay="GRAPHIC_ONLY" onAction="#Minimizar" styleClass="button-skyblue">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="MINUS" size="15" styleClass="icon-color" />
+                           </graphic>
+                           <HBox.margin>
+                              <Insets left="3.0" right="3.0" />
+                           </HBox.margin>
+                        </JFXButton>
+                        <JFXButton fx:id="btnCerrar" alignment="CENTER_RIGHT" contentDisplay="GRAPHIC_ONLY" onAction="#Cerrar" styleClass="button-skyblue">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="TIMES" size="15" styleClass="icon-color" />
+                           </graphic>
+                           <HBox.margin>
+                              <Insets left="3.0" right="3.0" />
+                           </HBox.margin>
+                        </JFXButton>
+                     </children>
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
+                  </HBox>
+               </children>
+            </HBox>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@imagenes/logo.png" />
+               </image>
+               <VBox.margin>
+                  <Insets bottom="10.0" top="20.0" />
+               </VBox.margin>
+            </ImageView>
+            <JFXTextField fx:id="txtuser" prefHeight="32.0" prefWidth="181.0" promptText="Nombre de Usuario" styleClass="campos" stylesheets="@estilos/Estilos.css">
+               <font>
+                  <Font name="The Dodger Inky Regular" size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="15.0" left="50.0" right="50.0" top="15.0" />
+               </VBox.margin>
+            </JFXTextField>
+            <JFXPasswordField fx:id="txtpass" prefHeight="32.0" prefWidth="181.0" promptText="Contraseña" styleClass="campos" stylesheets="@estilos/Estilos.css">
+               <font>
+                  <Font name="The Dodger Inky Regular" size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="15.0" left="50.0" right="50.0" top="15.0" />
+               </VBox.margin>
+            </JFXPasswordField>
+            <JFXButton fx:id="btnIniciar_sesion" onAction="#Iniciar_sesion" prefHeight="32.0" prefWidth="181.0" styleClass="button-skyblue" stylesheets="@estilos/Estilos.css" text="Iniciar Sesión">
+               <font>
+                  <Font name="The Dodger Inky Regular" size="20.0" />
+               </font>
+               <graphic>
+                  <FontAwesomeIconView glyphName="SEND" styleClass="icon-color" />
+               </graphic>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </JFXButton>
+            <JFXButton fx:id="btnRegistrarse" onAction="#Registrarse" prefHeight="32.0" prefWidth="181.0" styleClass="button-skyblue" stylesheets="@estilos/Estilos.css" text="Registrarse">
+               <font>
+                  <Font name="The Dodger Inky Regular" size="20.0" />
+               </font>
+               <graphic>
+                  <FontAwesomeIconView glyphName="EDIT" size="14" styleClass="icon-color" />
+               </graphic>
+               <VBox.margin>
+                  <Insets top="12.0" />
+               </VBox.margin>
+            </JFXButton>
+         </children>
+      </VBox>
+    </children>
+</AnchorPane>

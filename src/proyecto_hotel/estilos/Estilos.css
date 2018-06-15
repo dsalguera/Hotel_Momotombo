@@ -1,0 +1,100 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 25-abr-2018, 19:57:42
+    Author     : David Salguera
+*/
+
+
+.side-panel {
+    -fx-background-color: #2B3033;
+}
+
+.top-panel {
+    -fx-background-color: #24292C;
+}
+
+.button-selection {
+    -fx-text-fill: #FFF;
+}
+
+.button-selection:hover {
+    -fx-background-color: #24292C;
+}
+
+.button-skyblue {
+    -fx-background-color: #00BFE9;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-radius: 25px;
+}
+
+.button-skyblue:hover {
+    -fx-background-color: #17D7FF; 
+}
+
+.button-skyblue .icon-color {
+    -fx-fill:#FFFFFF;
+}
+
+.icon-color {
+    -fx-fill:#FFF;
+}
+ 
+
+.campos {
+    -fx-prompt-text-fill: #9FA5AE;
+    -fx-text-fill: #FFFFFF;
+    -jfx-focus-color: #00BFE9;
+    -jfx-unfocus-color: #9FA5AE; 
+    -fx-font-family:'The Dodger Inky';
+    -fx-font-size:18px;
+}
+
+/* 
+
+.list-cell:filled:focused, .list-cell:filled:selected {
+    -fx-background-color:#2B3033;
+}*/
+
+
+.list-cell {
+    -fx-font-family:'The Dodger Inky';
+    -fx-font-size:17px;
+}
+
+/* Los estilos del list-view */
+
+.round-red {
+    -fx-background-color: #F3565D;
+    -fx-background-radius: 30;
+    -fx-background-insets: 0;
+    -fx-text-fill: white;
+    -fx-padding:10;
+}
+
+.round-green {
+    -fx-background-color: #47B7AF;
+    -fx-background-radius: 30;
+    -fx-background-insets: 0;
+    -fx-text-fill: white;
+    -fx-padding:10;
+}
+
+.espacio {
+    -fx-padding: 1;
+}
+
+.jfx-date-picker .jfx-text-field{
+    -fx-prompt-text-fill: #9FA5AE;
+    -fx-text-fill: #FFFFFF;
+    -jfx-focus-color: #00BFE9;
+    -jfx-unfocus-color: #9FA5AE; 
+    -fx-font-family:'The Dodger Inky';
+    -fx-font-size:18px;
+}
+
+
+
