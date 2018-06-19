@@ -18,14 +18,16 @@ public class Productos {
     String nombre;
     double precio;
     String tipo;
+    int cantidad;
     int estado;
 
-    public Productos(Image imagen, int id, String nombre, double precio, String tipo, int estado) {
+    public Productos(Image imagen, int id, String nombre, double precio, String tipo, int cantidad, int estado) {
         this.imagen = imagen;
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
         this.tipo = tipo;
+        this.cantidad = cantidad;
         this.estado = estado;
     }
 
@@ -69,6 +71,14 @@ public class Productos {
         this.tipo = tipo;
     }
 
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
+
     public int getEstado() {
         return estado;
     }
@@ -77,7 +87,4 @@ public class Productos {
         this.estado = estado;
     }
 
-    
-    
-    
 }

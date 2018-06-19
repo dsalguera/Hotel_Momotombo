@@ -101,6 +101,9 @@ public class ProductosController implements Initializable {
 
     @FXML
     private JFXTextField txtprecio;
+    
+    @FXML
+    private JFXTextField txtcantidad;
 
     @FXML
     private JFXButton btnNuevo;
@@ -160,11 +163,12 @@ public class ProductosController implements Initializable {
         
         String nombre, tipo, telefono, descripcion;
         double precio;
-        int ident;
+        int ident,cantidad;
         
         ident = id;
         nombre = txtnombre.getText().toString();
         tipo = txttipo.getText().toString();
+        cantidad = Integer.parseInt(txtcantidad.getText().toString());
         precio = Double.parseDouble(txtprecio.getText().toString());
        
         Image imagenP = screen_img.getImage();
@@ -177,7 +181,7 @@ public class ProductosController implements Initializable {
             estado = 2;
         }
         
-        data.add(new Productos(imagenP,id,nombre,precio,tipo,estado));
+        data.add(new Productos(imagenP,id,nombre,precio,tipo,cantidad,estado));
         
         Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
         Statement stm = (Statement) connection.createStatement();
@@ -186,21 +190,21 @@ public class ProductosController implements Initializable {
         if (click == 1) {
             
             query = "update Producto set Nombre = '"+nombre+"', Tipo_producto = '"+tipo+"', Precio = "+precio+" , "
-                    + "Estado = "+estado+", Imagen = '"+nombre_img+"' " 
+                    + "Estado = "+estado+", Cantidad = "+cantidad+", Imagen = '"+nombre_img+"' " 
                     + "where Id_producto = "+id+";";
 
             
         }else{
             
             query = "update Producto set Nombre = '"+nombre+"', Tipo_producto = '"+tipo+"', Precio = "+precio+" , "
-                    + "Estado = "+estado+" " 
+                    + "Estado = "+estado+",  Cantidad = "+cantidad+" " 
                     + "where Id_producto = "+id+";";
             
         }
         
         click = 0;
         stm.executeUpdate(query);
-        Crear_Lista("select * from Producto;");
+        Crear_Lista("select * from Producto where Eliminado = 0;");
         
     }
 
@@ -213,12 +217,13 @@ public class ProductosController implements Initializable {
     void Guardar_Registro(ActionEvent event) throws SQLException {
         
         String nombre, tipo, telefono, descripcion;
+        int cantidad;
         double precio;
         
         nombre = txtnombre.getText().toString();
         tipo = txttipo.getText().toString();
         precio = Double.parseDouble(txtprecio.getText().toString());
-        
+        cantidad = Integer.parseInt(txtcantidad.getText().toString());
         
         Image imagen = screen_img.getImage();
         String dir = imagen.impl_getUrl();
@@ -231,17 +236,17 @@ public class ProductosController implements Initializable {
             estado = 2;
         }
         
-        data.add(new Productos(imagen,id,nombre,precio,tipo,estado));
+        data.add(new Productos(imagen,id,nombre,precio,tipo,cantidad,estado));
         
         Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
         Statement stm = (Statement) connection.createStatement();
         
-        String query = "insert into Producto (Nombre, Tipo_producto, Precio, Estado,Imagen) " +
-        "values ('"+nombre+"','"+tipo+"',"+precio+","+estado+",'"+nombre_img+"');";
+        String query = "insert into Producto (Nombre, Tipo_producto, Precio, Estado,Cantidad,Imagen) " +
+        "values ('"+nombre+"','"+tipo+"',"+precio+","+estado+","+cantidad+",'"+nombre_img+"');";
         
         stm.executeUpdate(query);
         
-        Crear_Lista("select * from Producto;");
+        Crear_Lista("select * from Producto where Eliminado = 0;");
     }
 
     @FXML
@@ -286,7 +291,7 @@ public class ProductosController implements Initializable {
         
         String busq = txtbuscar.getText();
         String filtro = combo_buscar.getSelectionModel().getSelectedItem();
-        String query = "select * from Producto where "+filtro+" like '%"+(busq)+"%'";
+        String query = "select * from Producto where "+filtro+" like '%"+(busq)+"%' and Eliminado = 0";
         
         ResultSet rs = stm.executeQuery(query);
         
@@ -296,11 +301,12 @@ public class ProductosController implements Initializable {
                 String tipo = rs.getString("tipo_producto");
                 double precio = rs.getDouble("precio");
                 int estado = rs.getInt("estado");
+                int cantidad = rs.getInt("cantidad");
                 String imagen = rs.getString("imagen");
                 
                 Productos producto = new Productos(
                         
-                new Image(new File(dir+imagen).toURI().toString()),id,nombre, precio, tipo,estado);
+                new Image(new File(dir+imagen).toURI().toString()),id,nombre, precio, tipo,cantidad,estado);
                 data.add(producto);
         }
          
@@ -320,15 +326,19 @@ public class ProductosController implements Initializable {
         String nombre = lista_productos.getSelectionModel().getSelectedItem().getNombre();
         String tipo = lista_productos.getSelectionModel().getSelectedItem().getTipo();
         int estado = lista_productos.getSelectionModel().getSelectedItem().getEstado();
+        int cantidad = lista_productos.getSelectionModel().getSelectedItem().getCantidad();
         Image imagen = lista_productos.getSelectionModel().getSelectedItem().getImagen();
         double precio = lista_productos.getSelectionModel().getSelectedItem().getPrecio();
         
         txtnombre.setText(nombre);
         txttipo.setText(tipo);
+        txtcantidad.setText(""+cantidad);
         if (estado==1) {
             check_estado.setSelected(true);
+            check_estado.setText("Activo");
         }else{
             check_estado.setSelected(false);
+            check_estado.setText("Inactivo");
         }
         screen_img.setImage(imagen);
         txtprecio.setText(""+precio);
@@ -353,11 +363,12 @@ public class ProductosController implements Initializable {
                 String tipo = rs.getString("tipo_producto");
                 double precio = rs.getDouble("precio");
                 int estado = rs.getInt("estado");
+                int cantidad = rs.getInt("cantidad");
                 String imagen = rs.getString("imagen");
                 
                 Productos producto = new Productos(
                         
-                new Image(new File(dir+imagen).toURI().toString()),id,nombre, precio, tipo,estado);
+                new Image(new File(dir+imagen).toURI().toString()),id,nombre, precio, tipo,cantidad,estado);
                 data.add(producto);
         }
         
@@ -389,13 +400,15 @@ public class ProductosController implements Initializable {
                             
             String estado = "";
                             
-            if(item.getEstado()==1){
-                estado = "Producto Disponible";
-            }else{
-                estado = "Producto Agotado";
+            if(item.getEstado() == 1 && item.getCantidad() > 0){
+                estado = "Producto Disponible | Circulando";
+            }else if(item.getEstado() == 0 && item.getCantidad() > 0){
+                estado = "Producto Disponible | No Circulando";
+            }else if(item.getEstado() == 1 && item.getCantidad() <= 0){
+                estado = "Producto Agotado | Circulando";
             }
             
-            Label Nombre,Tipo,Precio,Estado;
+            Label Nombre,Tipo,Precio,Estado,Cantidad;
             ImageView imagen;
             
             VBox vBox = new VBox(
@@ -403,6 +416,7 @@ public class ProductosController implements Initializable {
                 Nombre = new Label("Nombre: "+item.getNombre()), 
                 Tipo = new Label("Tipo: "+item.getTipo()), 
                 Precio = new Label("Precio: $ "+item.getPrecio()),
+                Cantidad = new Label("Cantidad: "+item.getCantidad()),
                 Estado = new Label(""+estado)     
                 );
              
@@ -410,10 +424,12 @@ public class ProductosController implements Initializable {
                     Tipo.getStyleClass().add("espacio");
                     Precio.getStyleClass().add("espacio");
                     
-                    if (estado == "Producto Disponible") {
+                    if (estado == "Producto Disponible | Circulando") {
                         Estado.getStyleClass().add("round-green");
-                    }else{
-                        Estado.getStyleClass().add("round-red");
+                    }else if(estado == "Producto Disponible | No Circulando"){
+                        Estado.getStyleClass().add("round-yellow");
+                    }else if(estado == "Producto Agotado | Circulando"){
+                        Estado.getStyleClass().add("round-red");    
                     }
                          
                     HBox hBox = new HBox(
@@ -464,10 +480,11 @@ public class ProductosController implements Initializable {
         busquedas.add("Nombre");
         busquedas.add("Tipo_Producto");
         busquedas.add("Precio");
+        busquedas.add("Cantidad");
         
         combo_buscar.getItems().addAll(busquedas);
         
-        Crear_Lista("select * from Producto;");
+        Crear_Lista("select * from Producto where Eliminado = 0;");
         
         Nuevo();
 

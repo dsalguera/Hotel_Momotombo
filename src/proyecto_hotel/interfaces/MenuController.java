@@ -223,7 +223,9 @@ public class MenuController implements Initializable {
     @FXML
     void Bitacora(ActionEvent event) throws IOException {
         
-        
+        Pane bitacora = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Bitacora.fxml"));
+        AjustePagina(bitacora);
+        lienzo.getChildren().add(bitacora);
         
     }
 
