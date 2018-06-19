@@ -7,5 +7,15 @@ _The Dodger Inky_ en la carpeta *font* del Proyecto.
 
 # Instrucciones
 
-1. Correr el script de la base de datos en MySQL. Se encuentra en *src\proyecto_hotel\scriptBD*. 
+1. Correr el script de la base de datos en MySQL. Se encuentra en *src\proyecto_hotel\scriptBD\Base de Datos Hotel.sql*. 
 2. Instalar la fuente para una mejor vista del diseño.
+3. Asegurarse de agregar las librerias en la carpeta *lib* del proyecto.
+4. Una vez todo este listo, al paso siguiente.
+5. Hay dos usuarios de prueba, 
+
+David con Pass = Salguera; 
+Sergio con Pass = Lopez;
+
+
+
+
