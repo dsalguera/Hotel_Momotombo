@@ -12,9 +12,8 @@ _The Dodger Inky_ en la carpeta *font* del Proyecto.
 3. Asegurarse de agregar las librerias en la carpeta *lib* del proyecto.
 4. Una vez todo este listo, al paso siguiente.
 5. Hay dos usuarios de prueba, 
-
-David con Pass = Salguera; 
-Sergio con Pass = Lopez;
+    5.1. David con Pass = Salguera; 
+    5.2. Sergio con Pass = Lopez;
 
 
 
