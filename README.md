@@ -11,13 +11,17 @@ _The Dodger Inky_ en la carpeta *font* del Proyecto.
 2. Instalar la fuente para una mejor vista del diseño.
 3. Asegurarse de agregar las librerias en la carpeta *lib* del proyecto.
 4. Una vez todo este listo, al paso siguiente.
-5. Hay dos usuarios de prueba, 
+5. Hay tres usuarios de prueba 
     
 # Usuarios en la BD
 
 1. David con Pass = Salguera; (Administrador)
 2. Manuel con Pass = Lopez; (Secretario)
 3. Sergio con Pass = Lopez; (Visitante)
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+6. Probar que todo funcione bien al ingresar con un user.
 
 
 
