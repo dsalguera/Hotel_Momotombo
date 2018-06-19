@@ -1,4 +1,5 @@
-# [ESPAÑOL] Proyecto_Hotel | Base de Datos II
+
+# [ES] Proyecto_Hotel | Base de Datos II
 
 Antes de descargar este proyecto, para una mejor experiencia instalar la fuente 
 _The Dodger Inky_ en la carpeta *font* del Proyecto.
@@ -22,10 +23,10 @@ _The Dodger Inky_ en la carpeta *font* del Proyecto.
 6. Probar que todo funcione bien al ingresar con un user.
 
 
-# ----------------------------------------------------------------------------------------
+# --------------------------------------------------------------------
 
 
-# [ENGLISH] Hotel_Project | Databases II
+# [EN] Hotel_Project | Databases II
 
 Before download this project, for a better experience we recommend you install 
 _The Dodger Ink_ font located within the folder *font* of the main project.
