@@ -47,6 +47,9 @@ import proyecto_hotel.Conexion;
 public class Ventana_HabitacionesController implements Initializable {
 
     @FXML
+    private AnchorPane anchorpane;
+    
+    @FXML
     private ComboBox<String> combo_buscar;
 
     @FXML
@@ -63,21 +66,28 @@ public class Ventana_HabitacionesController implements Initializable {
 
     @FXML
     private JFXButton btnCancelar;
+    
 
+    public static String HabitacionInfoCopia;
+    
     @FXML
-    void Aceptar(ActionEvent event) throws SQLException {
+    void Aceptar(ActionEvent event) throws SQLException, IOException {
         
     }
 
     @FXML
     void Cancelar(ActionEvent event) {
 
+        
+        
     }
     
     Conexion c = new Conexion();
     Connection connection ;
     ObservableList<Habitaciones> data = FXCollections.observableArrayList();
     String dir = "src\\proyecto_hotel\\imagenes\\habitaciones\\";
+    
+    static String nombre_habitacion_copia;
     
     void Conexion(String query) throws SQLException{ 
         
@@ -158,7 +168,6 @@ public class Ventana_HabitacionesController implements Initializable {
         telefono = lista_habitaciones.getSelectionModel().getSelectedItem().getTelefono();
         tarifa = lista_habitaciones.getSelectionModel().getSelectedItem().getTarifa();
         descripcion = lista_habitaciones.getSelectionModel().getSelectedItem().getDescripcion();
-        
         
     }
     

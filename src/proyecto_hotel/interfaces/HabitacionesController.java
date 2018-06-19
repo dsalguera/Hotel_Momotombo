@@ -496,7 +496,7 @@ public class HabitacionesController implements Initializable {
         busquedas.add("Nombre");
         busquedas.add("Tipo");
         busquedas.add("Tarifa");
-        
+   
         combo_buscar.getItems().addAll(busquedas);
         
         Crear_Lista("select * from habitacion;");

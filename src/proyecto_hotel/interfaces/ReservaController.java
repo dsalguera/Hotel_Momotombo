@@ -64,8 +64,8 @@ import javafx.util.Callback;
 import javax.swing.JOptionPane;
 import proyecto_hotel.clases.CustomThing;
 import proyecto_hotel.clases.Habitaciones;
-import proyecto_hotel.Conexion;
-import proyecto_hotel.clases.Productos;
+import proyecto_hotel.*;
+import proyecto_hotel.clases.*;
 /**
  * FXML Controller class
  *
@@ -86,8 +86,8 @@ public class ReservaController implements Initializable {
     private JFXButton btnBuscar;
 
     @FXML
-    private ListView<?> lista;
-
+    private ListView<Reserva> lista_reservas;
+    
     @FXML
     private JFXToggleButton check_estado;
 
@@ -95,7 +95,7 @@ public class ReservaController implements Initializable {
     private ImageView screen_img;
 
     @FXML
-    private JFXTextField txtnombre;
+    public JFXTextField txtnombre;
 
     @FXML
     private JFXButton btnBuscar_habitacion;
@@ -123,46 +123,38 @@ public class ReservaController implements Initializable {
 
     @FXML
     private JFXButton btnEliminar;
-
+    
+    public static String HabitacionInfo;
+    
+    
     @FXML
-    void Buscar_habitacion(ActionEvent event) throws SQLException {
+    void Buscar_habitacion(ActionEvent event) throws SQLException, IOException {
         
-        String nombre = txtnombre.getText();
-        Conexion("Select * from Habitacion where Nombre = '"+nombre+"' and Estado = 1");
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/proyecto_hotel/interfaces/Ventana_Habitaciones.fxml"));
+                    
+        Stage stage = new Stage();
+        //stage.initStyle(StageStyle.TRANSPARENT);
+                    
+        Scene scene = new Scene(fxmlLoader.load(),Color.TRANSPARENT);
+                    
+        stage.setTitle("Buscar Habitación");
+        stage.setScene(scene);
+        stage.show();
         
     }
+    
     
     @FXML
     void Sugerencia(KeyEvent event) {
        
     }
     
+    
     Image imagen;
     int id;
     
-    Conexion c = new Conexion();
-    Connection connection ;
     
-    void Conexion(String query) throws SQLException{ 
-        
-        String dir = "src\\proyecto_hotel\\imagenes\\habitaciones\\";
-        
-        connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
-        Statement stm = (Statement) connection.createStatement();
-        
-        ResultSet rs = stm.executeQuery(query);
-        
-        while (rs.next()) {
-                id = rs.getInt("Id_habitacion");
-                String imagenS = rs.getString("imagen");
-                imagen = new Image(new File(dir+imagenS).toURI().toString());
-                
-                screen_img.setImage(imagen);
-        }
-        
-    }
-    
-
     @FXML
     void Editar_Registro(ActionEvent event) {
 
@@ -187,12 +179,18 @@ public class ReservaController implements Initializable {
     void buscar(KeyEvent event) {
 
     }
+    
+    // Variables universales
+    String habitacion, tipo, telefono, descripcion;
+    double tarifa; 
+    int estado;
 
     @FXML
     void click(MouseEvent event) {
-
+        
+        
     }
-
+    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -203,7 +201,7 @@ public class ReservaController implements Initializable {
         busquedas.add("Tipo_Producto");
         busquedas.add("Precio");
         combo_buscar.getItems().addAll(busquedas);
-
+    
     }  
     
     

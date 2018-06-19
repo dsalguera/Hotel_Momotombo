@@ -127,6 +127,8 @@ public class FXMLDocumentController implements Initializable {
                     ((Node)(event.getSource())).getScene().getWindow().hide();
 
         } catch (IOException e) {
+            
+            JOptionPane.showMessageDialog(null,"Ocurrio un error al acceder!");
                         
         }
         
