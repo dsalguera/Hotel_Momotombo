@@ -60,7 +60,10 @@ import javafx.util.Callback;
 import javax.swing.JOptionPane;
 import proyecto_hotel.clases.CustomThing;
 import proyecto_hotel.clases.Habitaciones;
+import proyecto_hotel.interfaces.MenuController;
 import proyecto_hotel.Conexion;
+import proyecto_hotel.*;
+
 /**
  * FXML Controller class
  *
@@ -83,6 +86,9 @@ public class HabitacionesController implements Initializable {
     @FXML
     private ListView<Habitaciones> lista_habitaciones;
    
+    @FXML
+    private HBox panel_edicion;
+    
     @FXML
     private ImageView screen_img;
 
@@ -463,8 +469,28 @@ public class HabitacionesController implements Initializable {
         btnEliminar.setDisable(false);
     }
     
-    @Override
+    int type;
+    
+    
+    int Tipo_usuario_copia;
+    public void Botones(int type){
+        
+        if (type == 2) {
+            panel_edicion.getChildren().remove(btnEditar);
+            panel_edicion.getChildren().remove(btnEliminar);
+        }else if (type == 3) {
+            panel_edicion.getChildren().remove(btnNuevo);
+            panel_edicion.getChildren().remove(btnGuardar);
+            panel_edicion.getChildren().remove(btnEditar);
+            panel_edicion.getChildren().remove(btnEliminar);
+        }
+        
+    }
+    
     public void initialize(URL url, ResourceBundle rb) {
+        
+        Tipo_usuario_copia = MenuController.tipo_usuario;
+        Botones(Tipo_usuario_copia);
         
         ObservableList busquedas = FXCollections.observableArrayList();
         busquedas.add("Nombre");
@@ -476,9 +502,7 @@ public class HabitacionesController implements Initializable {
         Crear_Lista("select * from habitacion;");
         
         Nuevo();
-
+        
     }  
-    
-   
     
 }

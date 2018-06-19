@@ -66,6 +66,9 @@ public class ClientesController implements Initializable {
     
     @FXML
     private ComboBox<String> combo_buscar;
+    
+    @FXML
+    private HBox panel_edicion;
 
     @FXML
     private JFXTextField txtbuscar;
@@ -632,10 +635,28 @@ public class ClientesController implements Initializable {
         btnEditar.setDisable(false);
         btnEliminar.setDisable(false);
     }
+    
+    int Tipo_usuario_copia;
+    public void Botones(int type){
+        
+        if (type == 2) {
+            panel_edicion.getChildren().remove(btnEditar);
+            panel_edicion.getChildren().remove(btnEliminar);
+        }else if (type == 3) {
+            panel_edicion.getChildren().remove(btnNuevo);
+            panel_edicion.getChildren().remove(btnGuardar);
+            panel_edicion.getChildren().remove(btnEditar);
+            panel_edicion.getChildren().remove(btnEliminar);
+        }
+        
+    }
 
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        Tipo_usuario_copia = MenuController.tipo_usuario;
+        Botones(Tipo_usuario_copia);
         
         ObservableList busquedas = FXCollections.observableArrayList();
         ObservableList tipoID = FXCollections.observableArrayList();

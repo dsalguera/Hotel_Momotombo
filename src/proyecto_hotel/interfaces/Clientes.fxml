@@ -183,7 +183,7 @@
                         <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
                      </VBox.margin>
                   </HBox>
-                  <HBox alignment="CENTER" prefHeight="49.0" prefWidth="238.0" VBox.vgrow="ALWAYS">
+                  <HBox fx:id="panel_edicion" alignment="CENTER" prefHeight="49.0" prefWidth="238.0" VBox.vgrow="ALWAYS">
                      <children>
                         <JFXButton fx:id="btnNuevo" contentDisplay="GRAPHIC_ONLY" onAction="#Nuevo_Registro" styleClass="button-skyblue" stylesheets="@../estilos/Estilos.css">
                            <HBox.margin>

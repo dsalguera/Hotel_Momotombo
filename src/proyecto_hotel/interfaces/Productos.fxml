@@ -87,7 +87,7 @@
                         <Font name="The Dodger Inky Regular" size="18.0" />
                      </font>
                   </JFXTextField>
-                  <HBox alignment="CENTER" prefHeight="49.0" prefWidth="238.0" VBox.vgrow="ALWAYS">
+                  <HBox fx:id="panel_edicion" alignment="CENTER" prefHeight="49.0" prefWidth="238.0" VBox.vgrow="ALWAYS">
                      <children>
                         <JFXButton fx:id="btnNuevo" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" onAction="#Nuevo_Registro" styleClass="button-skyblue" stylesheets="@../estilos/Estilos.css">
                            <HBox.margin>

@@ -35,20 +35,24 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import proyecto_hotel.Conexion;
 import proyecto_hotel.FXMLDocumentController;
-import proyecto_hotel.clases.Productos;
-import proyecto_hotel.clases.Usuarios;
+import proyecto_hotel.*;
+import proyecto_hotel.clases.*;
+import proyecto_hotel.interfaces.HabitacionesController;
+
 
 /**
  * FXML Controller class
@@ -166,13 +170,15 @@ public class MenuController implements Initializable {
     }
 
     
-    String user ;
+    String user;
     int type;
+    static int tipo_usuario;
     
     public void setUser(String username, int type) throws SQLException{
         
-        txtuser.setText(username);
+        this.user = username;
         this.type = type;
+        txtuser.setText(username);
         if (this.type == 1) {
             txttipo.setText("Administrador");
         }else if (this.type == 2) {
@@ -180,9 +186,12 @@ public class MenuController implements Initializable {
         }else if (this.type == 3) {
             txttipo.setText("Visitante");
         }
+        
+        tipo_usuario = type;
         Conexion();
         
     }
+    
     
     Conexion c = new Conexion();
     Connection connection ;
@@ -288,7 +297,7 @@ public class MenuController implements Initializable {
 
     
     @FXML
-    void Habitaciones(ActionEvent event) throws IOException {
+    void Habitaciones(ActionEvent event) throws IOException, SQLException {
         
         Pane Habitaciones = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Habitaciones.fxml"));
         AjustePagina(Habitaciones);
@@ -327,14 +336,15 @@ public class MenuController implements Initializable {
             labHora.setText(" "+(hora)+":"+(minutos)+":"+(segundos)+" ");
         }
         
-    }),
-         new KeyFrame(Duration.seconds(1))
-    );
-    clock.setCycleCount(Animation.INDEFINITE);
-    clock.play();
+        }),
+             new KeyFrame(Duration.seconds(1))
+        );
+        clock.setCycleCount(Animation.INDEFINITE);
+        clock.play();
     
         
     }
+    
     
     /**
      * Initializes the controller class.
