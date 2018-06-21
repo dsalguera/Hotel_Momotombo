@@ -126,6 +126,7 @@ create table Pago (
 	id_pago int primary key auto_increment,
 	monto double, 
 	concepto varchar(50),
+        Id_origen int,
 	fecha date,id_cliente int, 
 	tipo_pago varchar (30)
 );
