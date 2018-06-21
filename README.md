@@ -41,9 +41,9 @@ _The Dodger Ink_ font located within the folder *font* of the main project.
 
 # BD user's
 
-1. David con Pass = Salguera; (Administrator)
-2. Manuel con Pass = Lopez; (Secretary)
-3. Sergio con Pass = Lopez; (Visitor)
+1. David w/ Pass = Salguera; (Administrator)
+2. Manuel w/ Pass = Lopez; (Secretary)
+3. Sergio w/ Pass = Lopez; (Visitor)
 
 # Continuation
 
