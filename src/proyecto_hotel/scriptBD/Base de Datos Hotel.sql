@@ -122,16 +122,18 @@ create table Detalle_servicio_al_cuarto(
 );
 
 
-create table Pago (
-	id_pago int primary key auto_increment,
-	monto double, 
-	concepto varchar(50),
-        Id_origen int,
-	fecha date,id_cliente int, 
-	tipo_pago varchar (30)
-);
+create table Pago (id_pago int primary key auto_increment,
+ monto  double, 
+ concepto varchar(50),
+ id_origen int,
+ fecha date,
+ id_cliente int
+ , tipo_pago varchar (30),
+ Tarjeta varchar(40)    
+ );
  
-/*Tipo pago es credito y efectivo*/
+ /*Si es en Efectivo es null*/
+ /*Tipo pago es "Tarjeta de credito" y "Efectivo"*/
 
 alter table Pago add foreign key (id_cliente) references Cliente(id_cliente);
 alter table Reserva add foreign key (Id_cliente) references Cliente(Id_cliente);
@@ -381,6 +383,67 @@ DELIMITER ;
 
 
 
+-------------------------------------------------------------------------
+
+//Procedimiento para que agreges una reserva
+
+/*Requerimientos 1. Fechas validas, 2. Usuario existente , 3. Habitacion Existente,
+Funcion : Mandale los datos que te pide la funcion con (Call) y imprimi en un dialog lo que paso con un (Result rs)
+el query verifica que la habitacion este disponible en la fecha que quiere reservar el cliente. Recorda que ahi mismo se debe de pagar
+el 10% eso lo hace el procedimiento solo mandale "Efectivo" y null si es Secretaria o Adiministrado y "Tarjeta de credito" con el numero de la tarjeta si
+es el visitante o cliente*/
+
+1.
+DROP PROCEDURE IF EXISTS setReserva;
+DELIMITER //
+
+CREATE FUNcTION get_Verificar_Reserva(DId_habitacion int,DFecha_inicio date,DFecha_Final date) RETURNS int
+BEGIN
+    RETURN  (select count(*) from Reserva where Id_habitacion=DId_habitacion and upper(Estado)=upper("Espera") and Fecha_final>=DFecha_inicio and Fecha_inicio<=DFecha_Final);
+END ;//
+
+
+DELIMITER //
+
+CREATE FUNcTION get_Ultima_Reserva() RETURNS int
+BEGIN
+    RETURN  (select Id_reserva from Reserva order by Id_reserva desc limit 1);
+END ;//
+
+
+
+DELIMITER $$
+ 
+CREATE PROCEDURE setReserva(DId_cliente int,DId_habitacion int,DFecha_inicio date,DFecha_Final date, DTipo_pago varchar (30),DTarjeta varchar(40))
+BEGIN
+set @dias=  datediff(DFecha_Final,DFecha_inicio)+1;
+ set @errores=0;
+  iF @dias<=0 or datediff(DFecha_inicio,cast( now() as date))<5 then
+  set @errores=1;
+  Select "Verificar las fechas, puede que una o ambas sean invalidas.";
+  end if;
+  set @Reservas_conflictivas=get_Verificar_Reserva(DId_habitacion ,DFecha_inicio,DFecha_Final);
+  if @Reservas_conflictivas>0 then
+  set @errores=1;
+  Select "Seleccione Otra habitacion o modifique las fechas, existe conflicto con las reservas.";
+  end if;
+  
+  if @errores=0 then
+    
+select @tarifa:=Tarifa from Habitacion where Id_habitacion=DId_habitacion;
+set @costo=@tarifa*@dias;
+insert Reserva(Id_cliente,Id_habitacion,Fecha_inicio,Fecha_final,Fecha_reserva,Estado,Costo_total)
+values(DId_cliente,DId_habitacion,DFecha_inicio,DFecha_Final,cast( now() as date),'Espera',@costo);
+insert into Pago(monto,concepto,fecha,id_origen,id_cliente,tipo_pago,Tarjeta) 
+values(@costo*0.1,"Pago de Reserva",now(),get_Ultima_Reserva(),DId_cliente,DTipo_pago,DTarjeta);
+select "La Reserva fue contratada con exito.";
+  end if;
+
+END $$
+DELIMITER ;
+
+
+call setReserva(2,1,"2018-07-2","2018-07-2","Efectivo",null);
 
 
 
