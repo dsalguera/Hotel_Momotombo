@@ -13,7 +13,7 @@
 
 <AnchorPane id="AnchorPane" fx:id="lienzo" prefHeight="710.0" prefWidth="1141.0" styleClass="back" stylesheets="@../estilos/Estilos.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto_hotel.interfaces.MenuController">
    <children>
-      <VBox layoutX="41.0" layoutY="59.0" onMouseDragged="#Arrastrar" onMousePressed="#Presionar" prefHeight="608.0" prefWidth="205.0" styleClass="side-panel" stylesheets="@../estilos/Estilos.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox fx:id="menuBtns" layoutX="41.0" layoutY="59.0" onMouseDragged="#Arrastrar" onMousePressed="#Presionar" prefHeight="608.0" prefWidth="205.0" styleClass="side-panel" stylesheets="@../estilos/Estilos.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fx:id="img_logo" fitHeight="104.0" fitWidth="182.0" pickOnBounds="true" preserveRatio="true" smooth="false">
                <image>

@@ -125,9 +125,16 @@ public class HabitacionesController implements Initializable {
     @FXML
     private JFXToggleButton check_estado;
     
+    @FXML
+    private HBox boxContenedor;
+    
+    @FXML
+    private VBox boxCambios;
+    
+    
     // Variables universales
     String nombre, tipo, telefono, descripcion;
-    int estado,id;
+    int estado,id = 0;
     Image imagen;
     double tarifa; 
      
@@ -453,7 +460,10 @@ public class HabitacionesController implements Initializable {
         
     }
     
+    String d = "src\\proyecto_hotel\\imagenes\\login\\";
+    
     void Nuevo(){
+        screen_img.setImage(new Image(new File(d+"no_image.jpg").toURI().toString()));
         btnCambiarImagen.setText("Seleccionar Imagen");
         btnNuevo.setDisable(false);
         btnGuardar.setDisable(false);
@@ -479,10 +489,7 @@ public class HabitacionesController implements Initializable {
             panel_edicion.getChildren().remove(btnEditar);
             panel_edicion.getChildren().remove(btnEliminar);
         }else if (type == 3) {
-            panel_edicion.getChildren().remove(btnNuevo);
-            panel_edicion.getChildren().remove(btnGuardar);
-            panel_edicion.getChildren().remove(btnEditar);
-            panel_edicion.getChildren().remove(btnEliminar);
+            boxContenedor.getChildren().remove(boxCambios);
         }
         
     }

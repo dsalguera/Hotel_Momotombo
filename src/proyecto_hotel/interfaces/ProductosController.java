@@ -116,6 +116,12 @@ public class ProductosController implements Initializable {
 
     @FXML
     private JFXButton btnEliminar;
+    
+    @FXML
+    private HBox boxContenedor;
+    
+    @FXML
+    private VBox boxCambios;
 
     //Importante: De aqui se obtiene la ruta de la imagen
     String nombre_img;
@@ -259,10 +265,14 @@ public class ProductosController implements Initializable {
         check_estado.setSelected(true);
         screen_img.setImage(null);
         txtprecio.setText("");
+        txtcantidad.setText("");
         
     }
-
+    
+    String d = "src\\proyecto_hotel\\imagenes\\login\\";
+        
     void Nuevo(){
+        screen_img.setImage(new Image(new File(d+"no_image.jpg").toURI().toString()));
         btnCambiarImagen.setText("Seleccionar Imagen");
         btnNuevo.setDisable(false);
         btnGuardar.setDisable(false);
@@ -461,10 +471,7 @@ public class ProductosController implements Initializable {
             panel_edicion.getChildren().remove(btnEditar);
             panel_edicion.getChildren().remove(btnEliminar);
         }else if (type == 3) {
-            panel_edicion.getChildren().remove(btnNuevo);
-            panel_edicion.getChildren().remove(btnGuardar);
-            panel_edicion.getChildren().remove(btnEditar);
-            panel_edicion.getChildren().remove(btnEliminar);
+            boxContenedor.getChildren().remove(boxCambios);
         }
         
     }

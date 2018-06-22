@@ -48,6 +48,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import javax.swing.Action;
 import proyecto_hotel.FXMLDocumentController;
 import proyecto_hotel.*;
 import proyecto_hotel.clases.*;
@@ -93,6 +94,9 @@ public class MenuController implements Initializable {
 
     @FXML
     private JFXButton btnCerrar_sesion;
+    
+    @FXML
+    private VBox menuBtns;
     
     @FXML
     private JFXButton btnMinimizar;
@@ -150,6 +154,8 @@ public class MenuController implements Initializable {
     
     @FXML
     void Cerrar(ActionEvent event) {
+        
+        
         try {
             
         FXMLLoader fxmlLoader = new FXMLLoader();
@@ -185,6 +191,12 @@ public class MenuController implements Initializable {
             txttipo.setText("Secretario");
         }else if (this.type == 3) {
             txttipo.setText("Visitante");
+            
+            menuBtns.getChildren().remove(btnDetalle_servicio);
+            menuBtns.getChildren().remove(btnEstancias);
+            menuBtns.getChildren().remove(btnServicio_cuarto);
+            menuBtns.getChildren().remove(btnBitacora);
+            
         }
         
         tipo_usuario = type;

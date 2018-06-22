@@ -145,12 +145,15 @@ alter table Detalle_servicio_al_cuarto add foreign key (Id_servicio_cuarto) refe
 alter table Detalle_servicio_al_cuarto  add foreign key (Id_producto) references Producto(Id_producto);
 
 
-insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado) values ('Fresco de cacao', 30, 'Bebida', 25, 1);
-insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado) values ('Vodka', 75, 'Bebida', 16, 2);
-insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado) values ('Tres leches', 20, 'Postre', 22, 1);
-insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado) values ('Pina colada', 62, 'Bebida', 26, 1);
-insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado) values ('Heineken Beer', 125, 'Bebida', 17, 2);
-insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado) values ('French Brownie', 200, 'Postre', 20, 1);
+insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado,Imagen) values ('Fresco de cacao', 30, 'Bebida', 25, 1,'fresco de cacao.jpg');
+insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado,Imagen) values ('Vodka', 75, 'Bebida', 16, 2,'vodka.jpg');
+insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado,Imagen) values ('Tres leches', 20, 'Postre', 22, 1, 'tres leches.jpg');
+insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado,Imagen) values ('Pina colada', 62, 'Bebida', 26, 1, 'pina colada.jpg');
+insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado,Imagen) values ('Heineken Beer', 125, 'Bebida', 17, 2, 'heineken.jpg');
+insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado,Imagen) values ('French Brownie', 200, 'Postre', 20, 1, 'french brownie.jpg');
+insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado,Imagen) values ('Snicker Barra', 60, 'Dulce', 150, 1, 'snicker.jpg');
+
+
 
 update Producto set Eliminado = 0;
 
@@ -164,19 +167,19 @@ insert into Habitacion (Nombre, Tipo, Tarifa, Telefono, Estado, Descripcion,Imag
 values ('Sweet Dreams Room','Doble',120.55,'+ 505 22786591',1,'La mejor para disfrutar en pareja','cuarto 3.jpg');
 
 insert into Habitacion (Nombre, Tipo, Tarifa, Telefono, Estado, Descripcion,Imagen)
-values ('Sweet Dreams Room','Doble',120.55,'+ 505 22786591',2,'La mejor para disfrutar en pareja','cuarto 4.jpg');
+values ('Ocean Room','Familiar',250.00,'+ 505 22786591',2,'La mejor para disfrutar en pareja','cuarto 4.jpg');
 
 insert into Habitacion (Nombre, Tipo, Tarifa, Telefono, Estado, Descripcion,Imagen)
-values ('Sweet Dreams Room','Doble',120.55,'+ 505 22786591',1,'La mejor para disfrutar en pareja','cuarto 5.jpg');
+values ('Couple Room','Doble',180.00,'+ 505 22786591',1,'La mejor para disfrutar en pareja','cuarto 5.jpg');
 
 insert into Habitacion (Nombre, Tipo, Tarifa, Telefono, Estado, Descripcion,Imagen)
-values ('Sweet Dreams Room','Doble',120.55,'+ 505 22786591',2,'La mejor para disfrutar en pareja','cuarto 6.jpg');
+values ('Super Party Room','Deluxe',330.00,'+ 505 22786591',2,'La mejor para disfrutar en pareja','cuarto 6.jpg');
 
 update Habitacion set Eliminado = 0;
 
-insert into Usuario (Nombre_usuario, Contrasena, Tipo_cuenta, Estado, Imagen) values ('David','Salguera',1,1,'user 2.png');
-insert into Usuario (Nombre_usuario, Contrasena, Tipo_cuenta, Estado, Imagen) values ('Sergio','Lopez',3,1,'user 1.png');
-insert into Usuario (Nombre_usuario, Contrasena, Tipo_cuenta, Estado, Imagen) values ('Manuel','Lopez',2,1,'user 3.png');
+insert into Usuario (Nombre_usuario, Contrasena, Tipo_cuenta, Estado, Imagen) values ('David','Salguera',1,1,'jarry.png');
+insert into Usuario (Nombre_usuario, Contrasena, Tipo_cuenta, Estado, Imagen) values ('Sergio','Lopez',3,1,'jonathan.png');
+insert into Usuario (Nombre_usuario, Contrasena, Tipo_cuenta, Estado, Imagen) values ('Manuel','Lopez',2,1,'bob.png');
 
 insert into Cliente 
 (Primer_nombre,Segundo_nombre,Primer_apellido,Segundo_apellido,Identificacion,Tipo_identificacion,Pais_origen,Numero_reserva,Numero_estancia,GPA,
@@ -375,7 +378,6 @@ CREATE TRIGGER Registrar_Eliminar_Servicio after delete ON servicio_al_cuarto
 		END;//
 DELIMITER ;
 
-select * from Bitacora;
 
 
 

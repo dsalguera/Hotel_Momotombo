@@ -121,6 +121,11 @@ public class ClientesController implements Initializable {
     @FXML
     private JFXTextField txtpais;
 
+    @FXML
+    private HBox boxContenedor;
+    
+    @FXML
+    private VBox boxCambios;
     
     @FXML
     private JFXTextField txttelefono;
@@ -618,7 +623,10 @@ public class ClientesController implements Initializable {
         
     }
     
+    String d = "src\\proyecto_hotel\\imagenes\\login\\";
+    
     void Nuevo(){
+        screen_img.setImage(new Image(new File(d+"no_image.jpg").toURI().toString()));
         btnCambiarImagen.setText("Seleccionar Imagen");
         screen_img.setImage(null);
         Fecha_hoy();
@@ -643,10 +651,7 @@ public class ClientesController implements Initializable {
             panel_edicion.getChildren().remove(btnEditar);
             panel_edicion.getChildren().remove(btnEliminar);
         }else if (type == 3) {
-            panel_edicion.getChildren().remove(btnNuevo);
-            panel_edicion.getChildren().remove(btnGuardar);
-            panel_edicion.getChildren().remove(btnEditar);
-            panel_edicion.getChildren().remove(btnEliminar);
+            boxContenedor.getChildren().remove(boxCambios);
         }
         
     }
