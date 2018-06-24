@@ -1,4 +1,5 @@
 
+
 drop database Hotel;
 create database Hotel;
 use Hotel;
@@ -133,7 +134,14 @@ create table Pago (id_pago int primary key auto_increment,
  );
  
  /*Si es en Efectivo es null*/
- /*Tipo pago es "Tarjeta de credito" y "Efectivo"*/
+ /*Tipo pago es Tarjeta de credito y Efectivo*/
+ create table Certificados(
+ Id_Certificado varchar(30) primary key,
+ Id_Origen int,
+ Origen varchar(30),
+ Cantidad int
+ );
+
 
 alter table Pago add foreign key (id_cliente) references Cliente(id_cliente);
 alter table Reserva add foreign key (Id_cliente) references Cliente(Id_cliente);
@@ -146,7 +154,183 @@ alter table Servicio_al_cuarto add foreign key (Id_estancia) references Estancia
 alter table Detalle_servicio_al_cuarto add foreign key (Id_servicio_cuarto) references Servicio_al_cuarto(Id_servicio_cuarto);
 alter table Detalle_servicio_al_cuarto  add foreign key (Id_producto) references Producto(Id_producto);
 
+-----------------------------Triggers -------------------------
+1. 
+DELIMITER //
+CREATE TRIGGER Registrar_Nueva_Reserva AFTER INSERT ON Reserva
+		FOR EACH ROW
+		BEGIN
+set @cadena=concat('El cliente ha contratado la reserva (',new.Id_reserva,')  en el hotel del ',cast(new.Fecha_inicio as date),' al ',cast(new.Fecha_final as date));
+insert Acciones(Nombre,Descripcion,Fecha_hora,Tipo,Id_cliente) 
+values('Contrato de Reserva',@cadena,
+ now() ,'Protocolar',new.Id_cliente);
+ 
+		END;//
+DELIMITER ;
 
+
+2.
+
+DELIMITER //
+CREATE TRIGGER Registrar_Nueva_Estancia AFTER INSERT ON Estancia
+		FOR EACH ROW
+		BEGIN
+set @cadena=concat('El cliente ha contratado la estancia (',new.Id_estancia,')  en el hotel del ',cast(new.Fecha_inicio as date),' al ',cast(new.Fecha_final as date));
+insert Acciones(Nombre,Descripcion,Fecha_hora,Tipo,Id_cliente) 
+values('Contrato de Estancia',@cadena,
+ now() ,'Protocolar',new.Id_cliente);
+ 
+		END;//
+DELIMITER ;
+
+3.
+
+DELIMITER //
+CREATE TRIGGER Registrar_Update_Estancia AFTER UPDATE ON Estancia
+		FOR EACH ROW
+		BEGIN
+
+		IF lower(New.Estado)=lower('Cancelado') or lower(New.Estado)=lower('Cancelada') then
+         set @cadena=concat('El cliente ha Pagado la estancia (',new.Id_estancia,')  en el hotel del ',cast(new.Fecha_inicio as date),' al ',cast(new.Fecha_final as date),' Con un monto de C$',new.Costo_total);
+          insert Acciones(Nombre,Descripcion,Fecha_hora,Tipo,Id_cliente) 
+          values('Cancelacion de Estancia',@cadena, now() ,'Protocolar',new.Id_cliente);
+         end if;
+         IF lower(New.Estado)=lower('Inactivo') or lower(New.Estado)=lower('Inactiva') then
+         set @cadena=concat('El cliente ha Eliminado ó no la Pago la estancia(',new.Id_estancia,')  en el hotel del ',cast(new.Fecha_inicio as date),' al ',cast(new.Fecha_final as date));
+        insert Acciones(Nombre,Descripcion,Fecha_hora,Tipo,Id_cliente) 
+          values('Eliminar Estancia',@cadena, now() ,'Aviso',new.Id_cliente);
+        end if;
+
+ 
+		END;//
+DELIMITER ;
+
+
+4.
+
+DELIMITER //
+CREATE TRIGGER Registrar_Update_Reserva AFTER UPDATE ON Reserva
+		FOR EACH ROW
+		BEGIN
+
+		IF lower(New.Estado)=lower('Cancelado') or lower(New.Estado)=lower('Cancelada') then
+		 set @aux=Round(new.Costo_total*0.3,2);
+         set @cadena=concat('El cliente ha Concretado la reserva (',new.Id_reserva,') del ',cast(new.Fecha_inicio as date),' al ',cast(new.Fecha_final as date),'. Con adelanto C$',@aux);
+          insert Acciones(Nombre,Descripcion,Fecha_hora,Tipo,Id_cliente) 
+          values('Confirmacion de Reserva',@cadena, now() ,'Protocolar',new.Id_cliente);
+         end if;
+         IF lower(New.Estado)=lower('Perdido') or lower(New.Estado)=lower('Perdida') then
+         set @cadena=concat('El cliente ha Eliminado ? no la Pago la reserva (',new.Id_reserva,')  en el hotel del ',cast(new.Fecha_inicio as date),' al ',cast(new.Fecha_final as date));
+        insert Acciones(Nombre,Descripcion,Fecha_hora,Tipo,Id_cliente) 
+          values('Eliminar Reserva',@cadena, now() ,'Aviso',new.Id_cliente);
+        end if;
+
+ 
+		END;//
+DELIMITER ;
+
+5.
+
+DELIMITER //
+CREATE TRIGGER Registrar_Nuevo_Cliente AFTER INSERT ON Cliente
+		FOR EACH ROW
+		BEGIN
+         set @cadena=concat('Se ha incrito el cliente ',new.Primer_nombre,' ',new.Primer_apellido,' con  ID: ',new.Id_cliente);
+		 insert Acciones(Nombre,Descripcion,Fecha_hora,Tipo,Id_cliente) 
+		 values('Nuevo Cliente',@cadena, now() ,'Protocolar',new.Id_cliente);
+		END;//
+DELIMITER ;
+
+6. 
+
+DELIMITER //
+CREATE TRIGGER Registrar_Eliminar_Cliente after delete ON Cliente
+		FOR EACH ROW
+		BEGIN
+         set @cadena=concat('Se ha Eliminado el cliente ',old.Primer_nombre,' ',old.Primer_apellido,' con  ID: ',old.Id_cliente);
+		 insert Acciones(Nombre,Descripcion,Fecha_hora,Tipo,Id_cliente) 
+		 values('Eliminar Cliente',@cadena, now() ,'Aviso',old.Id_cliente);
+		END;//
+DELIMITER ;
+
+7.
+
+DELIMITER //
+CREATE TRIGGER Registrar_Nuevo_Pago after insert ON Pago
+		FOR EACH ROW
+		BEGIN
+         set @cadena=concat('El cliente ha realizado : ',new.concepto,' en ',new.tipo_pago,' con un importe de C$ ',new.monto, '. Pago(',new.Id_pago,')');
+		 insert Acciones(Nombre,Descripcion,Fecha_hora,Tipo,Id_cliente) 
+		 values('Pago de Cliente',@cadena, now() ,'Protocolar',new.Id_cliente);
+		END;//
+DELIMITER ;
+
+8.
+
+DELIMITER //
+CREATE TRIGGER Registrar_Eliminar_Pago after delete ON Pago
+		FOR EACH ROW
+		BEGIN
+         set @cadena=concat('Se ha eliminado : ',old.concepto,' en ',old.tipo_pago,' con un importe de C$ ',old.monto, '. Pago(',old.Id_pago,')');
+		 insert Acciones(Nombre,Descripcion,Fecha_hora,Tipo,Id_cliente) 
+		 values('Eliminar pago de cliente',@cadena, now() ,'Aviso',old.Id_cliente);
+		END;//
+DELIMITER ;
+
+9.
+
+
+DELIMITER //
+CREATE TRIGGER Registrar_Modificacion_Cliente after update ON Cliente
+		FOR EACH ROW
+		BEGIN
+		set @cadena=concat('Se ha modificado datos cliente : ',old.Id_cliente,' (',old.Primer_nombre, ',',old.Primer_apellido,',',old.Tipo_identificacion,',',old.Identificacion,',',old.Pais_origen,',',old.Imagen,')');
+        if old.Imagen=new.Imagen then
+         set @cadena=concat('Se ha modificado datos cliente : ',old.Id_cliente,' (',old.Primer_nombre,',',old.Segundo_nombre, ',',old.Primer_apellido,',',old.Segundo_apellido,',',old.Tipo_identificacion,',',old.Identificacion,',',old.Pais_origen,')');
+        end if;
+		 insert Acciones(Nombre,Descripcion,Fecha_hora,Tipo,Id_cliente) 
+		 values('Modificar Cliente',@cadena, now() ,'Protocolar',old.Id_cliente);
+		END;//
+DELIMITER ;
+
+10.
+
+
+
+DELIMITER //
+
+CREATE FUNcTION Id_cliente_para_Servicio( id int) RETURNS VARCHAR(20)
+BEGIN
+    RETURN  (select Id_cliente from Estancia where Id_estancia=id);
+END ;//
+
+DELIMITER //
+CREATE TRIGGER Registrar_Nuevo_Servicio after insert ON servicio_al_cuarto
+		FOR EACH ROW
+		BEGIN
+        set @Id_cliente=Id_cliente_para_Servicio(new.Id_estancia);
+		set @cadena=concat('Se ha registrado un  servivio al cuarto : ID(',New.Id_servicio_cuarto,') con un monto de C$ ',new.Costo_total);
+		 insert Acciones(Nombre,Descripcion,Fecha_hora,Tipo,Id_cliente) 
+		 values('Servicio al Cuarto',@cadena, now() ,'Protocolar',@Id_cliente);
+		END;//
+DELIMITER ;
+
+11.
+
+
+DELIMITER //
+CREATE TRIGGER Registrar_Eliminar_Servicio after delete ON servicio_al_cuarto
+		FOR EACH ROW
+		BEGIN
+        set @Id_cliente=Id_cliente_para_Servicio(old.Id_estancia);
+         set @cadena=concat('Se ha eliminado Servicio : ID(',old.Id_servicio_cuarto,') con un importe de C$ ',old.Costo_total, '. Estancia(',old.Id_estancia,')');
+		 insert Acciones(Nombre,Descripcion,Fecha_hora,Tipo,Id_cliente) 
+		 values('Eliminar Servicio al cuarto',@cadena, now() ,'Aviso', @Id_cliente);
+		END;//
+DELIMITER ;
+
+
+-----------------------------------Insert------------------------------------------
 insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado,Imagen) values ('Fresco de cacao', 30, 'Bebida', 25, 1,'fresco de cacao.jpg');
 insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado,Imagen) values ('Vodka', 75, 'Bebida', 16, 2,'vodka.jpg');
 insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado,Imagen) values ('Tres leches', 20, 'Postre', 22, 1, 'tres leches.jpg');
@@ -154,7 +338,7 @@ insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado,Imagen) va
 insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado,Imagen) values ('Heineken Beer', 125, 'Bebida', 17, 2, 'heineken.jpg');
 insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado,Imagen) values ('French Brownie', 200, 'Postre', 20, 1, 'french brownie.jpg');
 insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado,Imagen) values ('Snicker Barra', 60, 'Dulce', 150, 1, 'snicker.jpg');
-
+SET SQL_SAFE_UPDATES = 0;
 
 
 update Producto set Eliminado = 0;
@@ -204,186 +388,7 @@ insert into servicio_al_cuarto (Id_estancia,Fecha_hora,Costo_total)
 values (1,now(),200);
 
 
-
------------------------------Triggers -------------------------
-1. 
-DELIMITER //
-CREATE TRIGGER Registrar_Nueva_Reserva AFTER INSERT ON Reserva
-		FOR EACH ROW
-		BEGIN
-set @cadena=concat('El cliente ha contratado la reserva (',new.Id_reserva,')  en el hotel del ',cast(new.Fecha_inicio as date),' al ',cast(new.Fecha_final as date));
-insert Acciones(Nombre,Descripcion,Fecha_hora,Tipo,Id_cliente) 
-values('Contrato de Reserva',@cadena,
- now() ,'Protocolar',new.Id_cliente);
- 
-		END;//
-DELIMITER ;
-
-
-2.
-Drop Trigger hotel.Registrar_Nueva_Estancia
-DELIMITER //
-CREATE TRIGGER Registrar_Nueva_Estancia AFTER INSERT ON Estancia
-		FOR EACH ROW
-		BEGIN
-set @cadena=concat('El cliente ha contratado la estancia (',new.Id_estancia,')  en el hotel del ',cast(new.Fecha_inicio as date),' al ',cast(new.Fecha_final as date));
-insert Acciones(Nombre,Descripcion,Fecha_hora,Tipo,Id_cliente) 
-values('Contrato de Estancia',@cadena,
- now() ,'Protocolar',new.Id_cliente);
- 
-		END;//
-DELIMITER ;
-
-3.
-Drop Trigger hotel.Registrar_Update_Estancia
-DELIMITER //
-CREATE TRIGGER Registrar_Update_Estancia AFTER UPDATE ON Estancia
-		FOR EACH ROW
-		BEGIN
-
-		IF lower(New.Estado)=lower('Cancelado') or lower(New.Estado)=lower('Cancelada') then
-         set @cadena=concat('El cliente ha Pagado la estancia (',new.Id_estancia,')  en el hotel del ',cast(new.Fecha_inicio as date),' al ',cast(new.Fecha_final as date),' Con un monto de C$',new.Costo_total);
-          insert Acciones(Nombre,Descripcion,Fecha_hora,Tipo,Id_cliente) 
-          values('Cancelacion de Estancia',@cadena, now() ,'Protocolar',new.Id_cliente);
-         end if;
-         IF lower(New.Estado)=lower('Inactivo') or lower(New.Estado)=lower('Inactiva') then
-         set @cadena=concat('El cliente ha Eliminado ó no la Pago la estancia(',new.Id_estancia,')  en el hotel del ',cast(new.Fecha_inicio as date),' al ',cast(new.Fecha_final as date));
-        insert Acciones(Nombre,Descripcion,Fecha_hora,Tipo,Id_cliente) 
-          values('Eliminar Estancia',@cadena, now() ,'Aviso',new.Id_cliente);
-        end if;
-
- 
-		END;//
-DELIMITER ;
-
-
-4.
-Drop Trigger hotel.Registrar_Update_Reserva
-DELIMITER //
-CREATE TRIGGER Registrar_Update_Reserva AFTER UPDATE ON Reserva
-		FOR EACH ROW
-		BEGIN
-
-		IF lower(New.Estado)=lower('Cancelado') or lower(New.Estado)=lower('Cancelada') then
-		 set @aux=Round(new.Costo_total*0.3,2);
-         set @cadena=concat('El cliente ha Concretado la reserva (',new.Id_reserva,') del ',cast(new.Fecha_inicio as date),' al ',cast(new.Fecha_final as date),'. Con adelanto C$',@aux);
-          insert Acciones(Nombre,Descripcion,Fecha_hora,Tipo,Id_cliente) 
-          values('Confirmacion de Reserva',@cadena, now() ,'Protocolar',new.Id_cliente);
-         end if;
-         IF lower(New.Estado)=lower('Perdido') or lower(New.Estado)=lower('Perdida') then
-         set @cadena=concat('El cliente ha Eliminado ? no la Pago la reserva (',new.Id_reserva,')  en el hotel del ',cast(new.Fecha_inicio as date),' al ',cast(new.Fecha_final as date));
-        insert Acciones(Nombre,Descripcion,Fecha_hora,Tipo,Id_cliente) 
-          values('Eliminar Reserva',@cadena, now() ,'Aviso',new.Id_cliente);
-        end if;
-
- 
-		END;//
-DELIMITER ;
-
-5.
-Drop Trigger hotel.Registrar_Nuevo_Cliente 
-DELIMITER //
-CREATE TRIGGER Registrar_Nuevo_Cliente AFTER INSERT ON Cliente
-		FOR EACH ROW
-		BEGIN
-         set @cadena=concat('Se ha incrito el cliente ',new.Primer_nombre,' ',new.Primer_apellido,' con  ID: ',new.Id_cliente);
-		 insert Acciones(Nombre,Descripcion,Fecha_hora,Tipo,Id_cliente) 
-		 values('Nuevo Cliente',@cadena, now() ,'Protocolar',new.Id_cliente);
-		END;//
-DELIMITER ;
-
-6. 
-Drop Trigger hotel.Registrar_Eliminar_Cliente 
-DELIMITER //
-CREATE TRIGGER Registrar_Eliminar_Cliente after delete ON Cliente
-		FOR EACH ROW
-		BEGIN
-         set @cadena=concat('Se ha Eliminado el cliente ',old.Primer_nombre,' ',old.Primer_apellido,' con  ID: ',old.Id_cliente);
-		 insert Acciones(Nombre,Descripcion,Fecha_hora,Tipo,Id_cliente) 
-		 values('Eliminar Cliente',@cadena, now() ,'Aviso',old.Id_cliente);
-		END;//
-DELIMITER ;
-
-7.
-Drop Trigger hotel.Registrar_Nuevo_Pago
-DELIMITER //
-CREATE TRIGGER Registrar_Nuevo_Pago after insert ON Pago
-		FOR EACH ROW
-		BEGIN
-         set @cadena=concat('El cliente ha realizado : ',new.concepto,' en ',new.tipo_pago,' con un importe de C$ ',new.monto, '. Pago(',new.Id_pago,')');
-		 insert Acciones(Nombre,Descripcion,Fecha_hora,Tipo,Id_cliente) 
-		 values('Pago de Cliente',@cadena, now() ,'Protocolar',new.Id_cliente);
-		END;//
-DELIMITER ;
-
-8.
-Drop Trigger hotel.Registrar_Eliminar_Pago
-DELIMITER //
-CREATE TRIGGER Registrar_Eliminar_Pago after delete ON Pago
-		FOR EACH ROW
-		BEGIN
-         set @cadena=concat('Se ha eliminado : ',old.concepto,' en ',old.tipo_pago,' con un importe de C$ ',old.monto, '. Pago(',old.Id_pago,')');
-		 insert Acciones(Nombre,Descripcion,Fecha_hora,Tipo,Id_cliente) 
-		 values('Eliminar pago de cliente',@cadena, now() ,'Aviso',old.Id_cliente);
-		END;//
-DELIMITER ;
-
-9.
-
-Drop Trigger hotel.Registrar_Modificacion_Cliente
-DELIMITER //
-CREATE TRIGGER Registrar_Modificacion_Cliente after update ON Cliente
-		FOR EACH ROW
-		BEGIN
-		set @cadena=concat('Se ha modificado datos cliente : ',old.Id_cliente,' (',old.Primer_nombre, ',',old.Primer_apellido,',',old.Tipo_identificacion,',',old.Identificacion,',',old.Pais_origen,',',old.Imagen,')');
-        if old.Imagen=new.Imagen then
-         set @cadena=concat('Se ha modificado datos cliente : ',old.Id_cliente,' (',old.Primer_nombre,',',old.Segundo_nombre, ',',old.Primer_apellido,',',old.Segundo_apellido,',',old.Tipo_identificacion,',',old.Identificacion,',',old.Pais_origen,')');
-        end if;
-		 insert Acciones(Nombre,Descripcion,Fecha_hora,Tipo,Id_cliente) 
-		 values('Modificar Cliente',@cadena, now() ,'Protocolar',old.Id_cliente);
-		END;//
-DELIMITER ;
-
-10.
-
-Drop Trigger hotel.Registrar_Nuevo_Servicio
-
-DELIMITER //
-
-CREATE FUNcTION Id_cliente_para_Servicio( id int) RETURNS VARCHAR(20)
-BEGIN
-    RETURN  (select Id_cliente from Estancia where Id_estancia=id);
-END ;//
-
-DELIMITER //
-CREATE TRIGGER Registrar_Nuevo_Servicio after insert ON servicio_al_cuarto
-		FOR EACH ROW
-		BEGIN
-        set @Id_cliente=Id_cliente_para_Servicio(new.Id_estancia);
-		set @cadena=concat('Se ha registrado un  servivio al cuarto : ID(',New.Id_servicio_cuarto,') con un monto de C$ ',new.Costo_total);
-		 insert Acciones(Nombre,Descripcion,Fecha_hora,Tipo,Id_cliente) 
-		 values('Servicio al Cuarto',@cadena, now() ,'Protocolar',@Id_cliente);
-		END;//
-DELIMITER ;
-
-11.
-
-Drop Trigger hotel.Registrar_Eliminar_Servicio
-DELIMITER //
-CREATE TRIGGER Registrar_Eliminar_Servicio after delete ON servicio_al_cuarto
-		FOR EACH ROW
-		BEGIN
-        set @Id_cliente=Id_cliente_para_Servicio(old.Id_estancia);
-         set @cadena=concat('Se ha eliminado Servicio : ID(',old.Id_servicio_cuarto,') con un importe de C$ ',old.Costo_total, '. Estancia(',old.Id_estancia,')');
-		 insert Acciones(Nombre,Descripcion,Fecha_hora,Tipo,Id_cliente) 
-		 values('Eliminar Servicio al cuarto',@cadena, now() ,'Aviso', @Id_cliente);
-		END;//
-DELIMITER ;
-
-
-
-
--------------------------------------------------------------------------
+---------------------------Procedimientos----------------------------------------------
 
 //Procedimiento para que agreges una reserva
 
@@ -394,7 +399,7 @@ el 10% eso lo hace el procedimiento solo mandale "Efectivo" y null si es Secreta
 es el visitante o cliente*/
 
 1.
-DROP PROCEDURE IF EXISTS setReserva;
+
 DELIMITER //
 
 CREATE FUNcTION get_Verificar_Reserva(DId_habitacion int,DFecha_inicio date,DFecha_Final date) RETURNS int
@@ -410,7 +415,7 @@ BEGIN
     RETURN  (select Id_reserva from Reserva order by Id_reserva desc limit 1);
 END ;//
 
-
+DROP PROCEDURE IF EXISTS setReserva;
 
 DELIMITER $$
  
@@ -420,12 +425,12 @@ set @dias=  datediff(DFecha_Final,DFecha_inicio)+1;
  set @errores=0;
   iF @dias<=0 or datediff(DFecha_inicio,cast( now() as date))<5 then
   set @errores=1;
-  Select "Verificar las fechas, puede que una o ambas sean invalidas.";
+  Select "Verificar las fechas, puede que una o ambas sean invalidas."as mensaje;
   end if;
   set @Reservas_conflictivas=get_Verificar_Reserva(DId_habitacion ,DFecha_inicio,DFecha_Final);
   if @Reservas_conflictivas>0 then
   set @errores=1;
-  Select "Seleccione Otra habitacion o modifique las fechas, existe conflicto con las reservas.";
+  Select "Seleccione Otra habitacion o modifique las fechas, existe conflicto con las reservas."as mensaje;
   end if;
   
   if @errores=0 then
@@ -436,16 +441,103 @@ insert Reserva(Id_cliente,Id_habitacion,Fecha_inicio,Fecha_final,Fecha_reserva,E
 values(DId_cliente,DId_habitacion,DFecha_inicio,DFecha_Final,cast( now() as date),'Espera',@costo);
 insert into Pago(monto,concepto,fecha,id_origen,id_cliente,tipo_pago,Tarjeta) 
 values(@costo*0.1,"Pago de Reserva",now(),get_Ultima_Reserva(),DId_cliente,DTipo_pago,DTarjeta);
-select "La Reserva fue contratada con exito.";
+select "La Reserva fue contratada con exito." as mensaje;
   end if;
 
 END $$
 DELIMITER ;
 
 
-call setReserva(2,1,"2018-07-2","2018-07-2","Efectivo",null);
+call setReserva(2,3,"2018-07-2","2018-07-2","Efectivo",null);
 
 
 
 
 
+2.
+
+DELIMITER //
+
+CREATE FUNcTION get_ID_Certificado(DId_reserva int) RETURNS varchar(30)
+BEGIN
+    RETURN  (select concat(Reserva.Id_reserva,Cliente.Id_cliente,Reserva.Id_habitacion,Pago.Id_pago) from Reserva
+inner join Habitacion on Habitacion.Id_habitacion=Reserva.Id_habitacion
+inner join Cliente on Cliente.Id_cliente=Reserva.Id_cliente
+inner join Pago on Pago.Id_origen=Reserva.Id_reserva and upper(Pago.concepto)=upper("Pago de Reserva")
+ where Reserva.Id_reserva=DId_reserva);
+END ;//
+
+
+DELIMITER //
+
+CREATE FUNcTION get_Cantidad_Certificado(DId_Certificado varchar(30)) RETURNS int
+BEGIN
+
+    RETURN  (select Cantidad from Certificados where Certificados.Id_Certificado=DId_Certificado);
+END ;//
+
+
+DROP PROCEDURE IF EXISTS getCertificado_Reserva; 
+DELIMITER $$
+CREATE PROCEDURE getCertificado_Reserva(DId_reserva int,Tipo_User varchar (40),permiso int)
+BEGIN
+set @documento="Oficial";
+SET lc_time_names = 'es_ES';
+if permiso=1 then 
+if upper(Tipo_User)=upper("Administrador") then
+set @max_cant=5;
+elseif upper(Tipo_User)=upper("Secretario") then
+set @max_cant=2;
+elseif  upper(Tipo_User)=upper("Visitante") then
+set @max_cant=1;
+end if;
+set @Id_certificado=get_ID_Certificado(DId_reserva);
+if @Id_certificado is not null then
+set @cantidad=get_Cantidad_Certificado(@Id_certificado);
+ if @cantidad is null then
+insert into Certificados(Id_Certificado,Id_Origen,Origen,Cantidad)
+values(@Id_certificado,DId_reserva,"Certificado de Reserva",1);
+ select *,@documento,concat(day(Reserva.Fecha_inicio)," de ",monthname(Reserva.Fecha_inicio)," del ",year( Reserva.Fecha_inicio)) as fecha_incio,
+concat(day(Reserva.Fecha_final)," de ",monthname(Reserva.Fecha_final)," del ",year( Reserva.Fecha_final)) as fecha_finall,
+concat(day(now())," de ",monthname(now())," del ",year( now())) as fecha_hoy, DATE_FORMAT(NOW( ), "%H:%I:%S" ) as hora_hoy from Reserva
+inner join Habitacion on Habitacion.Id_habitacion=Reserva.Id_habitacion
+inner join Cliente on Cliente.Id_cliente=Reserva.Id_cliente
+inner join Pago on Pago.Id_origen=Reserva.Id_reserva and upper(Pago.concepto)=upper("Pago de Reserva")
+inner join Certificados on Certificados.Id_Origen= Reserva.Id_reserva and upper(Certificados.Origen)=upper("Certificado de Reserva")
+ where Reserva.Id_reserva=DId_reserva  ;
+elseif  @cantidad<@max_cant  then
+ update Certificados set Cantidad=Cantidad+1 where Id_Certificado=@Id_certificado;
+ select *,@documento,concat(day(Reserva.Fecha_inicio)," de ",monthname(Reserva.Fecha_inicio)," del ",year( Reserva.Fecha_inicio)) as fecha_incio,
+concat(day(Reserva.Fecha_final)," de ",monthname(Reserva.Fecha_final)," del ",year( Reserva.Fecha_final)) as fecha_finall,
+concat(day(now())," de ",monthname(now())," del ",year( now())) as fecha_hoy, DATE_FORMAT(NOW( ), "%H:%I:%S" ) as hora_hoy from Reserva
+ inner join Habitacion on Habitacion.Id_habitacion=Reserva.Id_habitacion
+ inner join Cliente on Cliente.Id_cliente=Reserva.Id_cliente
+ inner join Pago on Pago.Id_origen=Reserva.Id_reserva and upper(Pago.concepto)=upper("Pago de Reserva")
+ inner join Certificados on Certificados.Id_Origen= Reserva.Id_reserva and upper(Certificados.Origen)=upper("Certificado de Reserva")
+ where Reserva.Id_reserva=DId_reserva  ;
+ else 
+ select concat( "Se ha excedido el numero de replica permitidos para ",Tipo_User);
+ end if;
+   else
+   select "La Reserva no existe o el pago no se registro.";
+end if;
+else
+set @documento="Copia";
+select *,@documento,concat(day(Reserva.Fecha_inicio)," de ",monthname(Reserva.Fecha_inicio)," del ",year( Reserva.Fecha_inicio)) as fecha_incio,
+concat(day(Reserva.Fecha_final)," de ",monthname(Reserva.Fecha_final)," del ",year( Reserva.Fecha_final)) as fecha_finall,
+concat(day(now())," de ",monthname(now())," del ",year( now())) as fecha_hoy, DATE_FORMAT(NOW( ), "%H:%I:%S" ) as hora_hoy from Reserva
+inner join Habitacion on Habitacion.Id_habitacion=Reserva.Id_habitacion
+inner join Cliente on Cliente.Id_cliente=Reserva.Id_cliente
+inner join Pago on Pago.Id_origen=Reserva.Id_reserva and upper(Pago.concepto)=upper("Pago de Reserva")
+inner join Certificados on Certificados.Id_Origen= Reserva.Id_reserva and upper(Certificados.Origen)=upper("Certificado de Reserva")
+ where Reserva.Id_reserva=DId_reserva  ;
+
+end if;
+
+END $$
+DELIMITER ;
+
+
+call getCertificado_Reserva(1,"Administrador",1);
+call getCertificado_Reserva(3,"Secretario",1);
+call getCertificado_Reserva(3,"Visitante",0);

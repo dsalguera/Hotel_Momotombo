@@ -25,6 +25,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -44,13 +45,12 @@ import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.AutoCompletionBinding.AutoCompletionEvent;
 import org.controlsfx.control.textfield.TextFields;
 import proyecto_hotel.Conexion;
-import proyecto_hotel.clases.*;
+import proyecto_hotel.clases.Acciones;
 
 public class BitacoraController implements Initializable {
     Conexion c=new Conexion();
     Connection connection ;
     List<String> posiblesWords;
-    
     int id=-1;
     AutoCompletionBinding<String> TextfieldAutocomplete;
     String dir = "src\\proyecto_hotel\\imagenes\\clientes\\";
@@ -83,8 +83,9 @@ public class BitacoraController implements Initializable {
     @FXML
     private Button btn_agregar;
     
+  
     @FXML
-    private TextField txt_fecha;
+    private DatePicker txt_fecha;
     @FXML
     private RadioButton Radio_Aviso;
 
@@ -107,7 +108,7 @@ public class BitacoraController implements Initializable {
     @FXML
     void Accion_Agregar(ActionEvent event) {
 //Agregar Comentario
-if (lista_acciones.getItems().size()!=0) {
+if (id!=-1) {
         if (!txt_titulo.getText().equals("") && !txt_descripcion.getText().equals("")) {
         if (JOptionPane.showConfirmDialog(null, "Esta seguro que quiere agregar este comentario al cliente.", "Confirmar Aviso", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
             try {
@@ -136,30 +137,42 @@ if (lista_acciones.getItems().size()!=0) {
     @FXML
     void Solo_Aviso(ActionEvent event) throws SQLException {
           if (id!=-1) {
-             Ver_historial_compuesto(id,txt_fecha.getText(),"Aviso");
+              String date="";
+            if (txt_fecha.getValue()!=null) {
+                date=txt_fecha.getValue().toString();
+            }
+             Ver_historial_compuesto(id,date,"Aviso");
         }
     }
 
     @FXML
     void Solo_Protocolar(ActionEvent event) throws SQLException {
         if (id!=-1) {
-             Ver_historial_compuesto(id,txt_fecha.getText(),"Protocolar");
+            String date="";
+            if (txt_fecha.getValue()!=null) {
+                date=txt_fecha.getValue().toString();
+            }
+             Ver_historial_compuesto(id,date,"Protocolar");
         }
     }
 
     @FXML
     void Todo(ActionEvent event) throws SQLException {
         if (id!=-1) {
-           
-            Ver_historial_compuesto(id,txt_fecha.getText(),"Todo");
+            String date="";
+            if (txt_fecha.getValue()!=null) {
+                date=txt_fecha.getValue().toString();
+            }
+            Ver_historial_compuesto(id,date,"Todo");
         }
     }
         @FXML
     void Accioin_Filtrar_Fecha(ActionEvent event) throws SQLException {
-            if (id!=-1) {
+       
+            if (id!=-1 &&  txt_fecha.getValue()!=null) {
   connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
  Statement stm = (Statement) connection.createStatement();
- String query="SELECT Cast( '"+txt_fecha.getText()+"' as date) as Fecha_convertida";
+ String query="SELECT Cast( '"+txt_fecha.getValue().toString()+"' as date) as Fecha_convertida";
  ResultSet rs = stm.executeQuery(query);
 boolean Error_fecha=true;
 
@@ -172,22 +185,26 @@ if (rs.getString("Fecha_convertida")!=null) {
 
             if (Error_fecha) {
                JOptionPane.showMessageDialog(null,"Fecha Invalida");
-               txt_fecha.setText("");
+               txt_fecha.setValue(null);
             }else{
               
             if (Radio_Todo.isSelected()) {
            
-            Ver_historial_compuesto(id,txt_fecha.getText(),"Todo");
+            Ver_historial_compuesto(id,txt_fecha.getValue().toString(),"Todo");
             }else if(Radio_Protocolar.isSelected()){
-            Ver_historial_compuesto(id,txt_fecha.getText(),"protocolar");
+            Ver_historial_compuesto(id,txt_fecha.getValue().toString(),"protocolar");
             }else if(Radio_Aviso.isSelected()){
-              Ver_historial_compuesto(id,txt_fecha.getText(),"aviso");
+              Ver_historial_compuesto(id,txt_fecha.getValue().toString(),"aviso");
             }
                 
                 
             }
             }else{
-            JOptionPane.showMessageDialog(null, "Seleccione el historial del cliente primero.");
+                if (id==-1) {
+                    JOptionPane.showMessageDialog(null, "Seleccione el historial del cliente primero.");
+                }else {
+                JOptionPane.showMessageDialog(null,"Fecha Invalida");
+                }
             }
             connection.close();
     }
@@ -231,6 +248,7 @@ if (rs.getString("Fecha_convertida")!=null) {
         //Si no existe en la lista renueva la busqueda.
     TextfieldAutocomplete=TextFields.bindAutoCompletion(txtbuscar_cliente, posiblesWords);       
     TextfieldAutocomplete.setPrefWidth(tamaño_buscador);
+    TextfieldAutocomplete.setVisibleRowCount(10);
     TextfieldAutocomplete.setOnAutoCompleted(new EventHandler<AutoCompletionEvent<String>>() {
             @Override
             public void handle(AutoCompletionEvent<String> event) {
@@ -304,6 +322,7 @@ if (rs.getString("Fecha_convertida")!=null) {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+       
       Hbox_principal.prefHeightProperty().addListener(new ChangeListener(){
           @Override
           public void changed(ObservableValue observable, Object oldValue, Object newValue) {
@@ -320,21 +339,7 @@ if (rs.getString("Fecha_convertida")!=null) {
           Radio_Protocolar.setDisable(true);
           Radio_Todo.setDisable(true);
        
-               txt_fecha.setOnKeyTyped(new EventHandler<KeyEvent>() {
-                @Override
-                public void handle(KeyEvent event) {
-                  
-                    
-                     if (event.getCharacter().charAt(0)=='-' || Character.isDigit(event.getCharacter().charAt(0))) {
-                        
-                     }else {
-                     event.consume();
-                     }
-                       String string =  txt_fecha.getText();
-        if (string.length() > 9) {
-           event.consume();
-        }
-                } } );
+             
           
             txt_titulo.setOnKeyTyped(event -> {
         String string =  txt_titulo.getText();
@@ -379,6 +384,7 @@ if (rs.getString("Fecha_convertida")!=null) {
     panel_identificacion.setText("");
     TextfieldAutocomplete=TextFields.bindAutoCompletion(txtbuscar_cliente, posiblesWords);       
     TextfieldAutocomplete.setPrefWidth(tamaño_buscador);
+    TextfieldAutocomplete.setVisibleRowCount(10);
     TextfieldAutocomplete.setOnAutoCompleted(new EventHandler<AutoCompletionEvent<String>>() {
             @Override
             public void handle(AutoCompletionEvent<String> event) {
@@ -394,7 +400,7 @@ if (rs.getString("Fecha_convertida")!=null) {
    
     
     void Ver_historial(int Id_cliente_elegido) throws SQLException {
-    
+      Radio_Todo.setSelected(true);
       connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
        Statement stm = (Statement) connection.createStatement();
        String query = "select * from Acciones where Id_cliente="+Id_cliente_elegido;
@@ -478,6 +484,10 @@ if (rs.getString("Fecha_convertida")!=null) {
 
         });
      connection.close();
+        if (data.isEmpty()) {
+            JOptionPane.showMessageDialog(null,"El usuario no cuenta con un historial.");
+            id=-1;
+        }
     }
    
      void Ver_historial_compuesto(int Id_cliente_elegido,String fecha,String tipo) throws SQLException {
@@ -548,7 +558,7 @@ if (rs.getString("Fecha_convertida")!=null) {
          
    lista_acciones.getItems().clear();        
    lista_acciones.getItems().addAll(data);
-   lista_acciones.setCellFactory(new Callback<ListView<Acciones>, ListCell<Acciones>>() {
+    lista_acciones.setCellFactory(new Callback<ListView<Acciones>, ListCell<Acciones>>() {
 
         @Override
         public ListCell<Acciones> call(ListView<Acciones> arg0) {
@@ -594,6 +604,7 @@ if (rs.getString("Fecha_convertida")!=null) {
 
         });
      connection.close();
+         System.out.println(" "+id);
     }
     
 }
