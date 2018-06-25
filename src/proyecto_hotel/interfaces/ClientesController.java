@@ -26,6 +26,7 @@ import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,10 +36,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -508,12 +508,47 @@ public class ClientesController implements Initializable {
         
         click = 0;
         stm.executeUpdate(query);
-        Crear_Lista("select * from Cliente;");
+        Crear_Lista("select * from Cliente where Eliminado = 0;");
     }
 
     @FXML
-    void Eliminar_Registro(ActionEvent event) {
+    void Eliminar_Registro(ActionEvent event) throws SQLException {
+        
+        String primerNombre = txtp_nombre.getText().toString();
+        String segundoNombre = txts_nombre.getText().toString();
+        String primerApellido = txtp_apellido.getText().toString();
+        String segundoApellido = txts_apellido.getText().toString();
+        
 
+        Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
+        Statement stm = (Statement) connection.createStatement();
+        String query = null;
+        
+        Alert alert = new Alert(AlertType.WARNING);
+        alert.setTitle("Confirmar Accion");
+        alert.setHeaderText("Eliminar Registro");
+        alert.setContentText("Esta seguro que desea eliminar el cliente "+primerNombre+"?");
+        
+        ButtonType buttonTypeCancel = new ButtonType("Cancelar", ButtonData.CANCEL_CLOSE);
+        ButtonType buttonTypeOk = new ButtonType("Aceptar", ButtonData.OK_DONE);
+        
+        alert.getButtonTypes().setAll(buttonTypeCancel,buttonTypeOk);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == buttonTypeOk){
+            // ... user chose OK
+            query = "Update Cliente set Eliminado = "+1+" "
+                   +"where Id_cliente = "+id+" and Primer_nombre = '"+primerNombre+"';";
+            click = 0;
+            stm.executeUpdate(query);
+            Crear_Lista("select * from Cliente where Eliminado = 0;");
+            
+        } else if(result.get() == buttonTypeCancel){
+            // ... user chose CANCEL or closed the dialog
+            alert.close();
+        }
+        
+        
     }
     
     @FXML
@@ -600,7 +635,7 @@ public class ClientesController implements Initializable {
   
         stm.executeUpdate(query);
         
-        Crear_Lista("select * from Cliente;");
+        Crear_Lista("select * from Cliente where Eliminado = 0;");
         
     }
     
@@ -679,7 +714,7 @@ public class ClientesController implements Initializable {
         txtestancia.setEditable(false);
         fecha_inscripcion.setEditable(false);
         
-        Crear_Lista("select * from Cliente;");
+        Crear_Lista("select * from Cliente where Eliminado = 0;");
         
         Nuevo();
     }    
