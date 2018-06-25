@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package proyecto_hotel.interfaces;
 
 import com.jfoenix.controls.*;
@@ -49,6 +45,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import javax.swing.Action;
+import javax.swing.JOptionPane;
 import proyecto_hotel.FXMLDocumentController;
 import proyecto_hotel.*;
 import proyecto_hotel.clases.*;
@@ -140,19 +137,7 @@ public class MenuController implements Initializable {
         lienzo.getScene().getWindow().setY(event.getScreenY() + yOffset);
     }
     
-    @FXML
-    void Maximizar(ActionEvent event) {
-        Stage stage = (Stage) ((Node)(event.getSource())).getScene().getWindow();
-        stage.setFullScreen(true);
-    }
-
-    @FXML
-    void Minimizar(ActionEvent event) {
-        Stage stage = (Stage) ((Node)(event.getSource())).getScene().getWindow();
-        stage.setIconified(true);
-    }
-    
-    @FXML
+   
     void Cerrar(ActionEvent event) {
         
         
@@ -234,10 +219,21 @@ public class MenuController implements Initializable {
 
     @FXML
     void Bitacora(ActionEvent event) throws IOException {
-        
+        if (lienzo.getChildren().size()==2) {
         Pane bitacora = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Bitacora.fxml"));
         AjustePagina(bitacora);
-        lienzo.getChildren().add(bitacora);
+        lienzo.getChildren().add(bitacora);   
+        }else{
+            int  n= lienzo.getChildren().size()-1;
+            for (int i = 2; i <=n; i++) {
+                lienzo.getChildren().remove(2);
+            }
+        Pane bitacora = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Bitacora.fxml"));
+        AjustePagina(bitacora);
+        lienzo.getChildren().add(bitacora);  
+        
+        }
+ 
         
     }
 
@@ -250,55 +246,130 @@ public class MenuController implements Initializable {
     @FXML
     void Clientes(ActionEvent event) throws IOException {
         
+        
+        if (lienzo.getChildren().size()==2) {
         Pane clientes = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Clientes.fxml"));
         AjustePagina(clientes);
         lienzo.getChildren().add(clientes);
+        }else{
+        int  n= lienzo.getChildren().size()-1;
+            for (int i = 2; i <=n; i++) {
+                lienzo.getChildren().remove(2);
+            }
+        Pane clientes = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Clientes.fxml"));
+        AjustePagina(clientes);
+        lienzo.getChildren().add(clientes);
+       
+        }
+    
         
     }
 
     @FXML
     void Detalle_servicio(ActionEvent event) throws IOException {
         
-        Pane detalle_servicio = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Detalle_servicio.fxml"));
-        AjustePagina(detalle_servicio);
-        lienzo.getChildren().add(detalle_servicio);
+//        if (lienzo.getChildren().size()==2) {
+//        Pane detalle_servicio = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Detalle_servicio.fxml"));
+//        AjustePagina(detalle_servicio);
+//        lienzo.getChildren().add(detalle_servicio);
+//            
+//        }else{
+//       int  n= lienzo.getChildren().size()-1;
+//            for (int i = 2; i <=n; i++) {
+//                lienzo.getChildren().remove(2);
+//            }
+//            
+//        Pane detalle_servicio = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Detalle_servicio.fxml"));
+//        AjustePagina(detalle_servicio);
+//        lienzo.getChildren().add(detalle_servicio);
+//        }
+        
+          JOptionPane.showMessageDialog(null,"En construccion");
         
     }
 
     @FXML
     void Estancias(ActionEvent event) throws IOException {
         
-        Pane estancias = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Estancias.fxml"));
-        AjustePagina(estancias);
-        lienzo.getChildren().add(estancias);
-        
+//          if (lienzo.getChildren().size()==2) {
+//        Pane estancias = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Estancias.fxml"));
+//        AjustePagina(estancias);
+//        lienzo.getChildren().add(estancias);  
+//            
+//        }else{
+//       int  n= lienzo.getChildren().size()-1;
+//            for (int i = 2; i <=n; i++) {
+//                lienzo.getChildren().remove(2);
+//            }
+//        Pane estancias = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Estancias.fxml"));
+//        AjustePagina(estancias);
+//        lienzo.getChildren().add(estancias); 
+//        }
+       
+   JOptionPane.showMessageDialog(null,"En construccion");        
     }
 
     @FXML
     void Inicio(ActionEvent event) throws IOException {
-        
+          if (lienzo.getChildren().size()==2) {
+        Pane inicio = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Inicio.fxml"));
+        AjustePagina(inicio);
+        lienzo.getChildren().add(inicio); 
+            
+        }else{
+         int  n= lienzo.getChildren().size()-1;
+            for (int i = 2; i <=n; i++) {
+                lienzo.getChildren().remove(2);
+            }
         Pane inicio = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Inicio.fxml"));
         AjustePagina(inicio);
         lienzo.getChildren().add(inicio);
+        }
+        
+     
         
     }
 
     @FXML
     void Reservas(ActionEvent event) throws IOException {
-        
+          if (lienzo.getChildren().size()==2) { 
         Pane reservas = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Reserva.fxml"));
         AjustePagina(reservas);
         lienzo.getChildren().add(reservas);
+        }else{
+         int  n= lienzo.getChildren().size()-1;
+            for (int i = 2; i <=n; i++) {
+                lienzo.getChildren().remove(2);
+            }
+        Pane reservas = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Reserva.fxml"));
+        AjustePagina(reservas);
+        lienzo.getChildren().add(reservas);
+        }
+        
+        
+       
         
     }
 
     @FXML
     void Servicio_cuarto(ActionEvent event) throws IOException {
-        
-        Pane servicio_cuarto = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Servicio_cuarto.fxml"));
-        AjustePagina(servicio_cuarto);
-        lienzo.getChildren().add(servicio_cuarto);
-        
+//          if (lienzo.getChildren().size()==2) {
+//        Pane servicio_cuarto = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Servicio_cuarto.fxml"));
+//        AjustePagina(servicio_cuarto);
+//        lienzo.getChildren().add(servicio_cuarto); 
+//            
+//        }else{
+//        int  n= lienzo.getChildren().size()-1;
+//            for (int i = 2; i <=n; i++) {
+//                lienzo.getChildren().remove(2);
+//            }
+//        Pane servicio_cuarto = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Servicio_cuarto.fxml"));
+//        AjustePagina(servicio_cuarto);
+//        lienzo.getChildren().add(servicio_cuarto);
+//        }
+//        
+      
+        JOptionPane.showMessageDialog(null,"En construccion");
     }
      
     
@@ -313,18 +384,42 @@ public class MenuController implements Initializable {
     @FXML
     void Habitaciones(ActionEvent event) throws IOException, SQLException {
         
+          if (lienzo.getChildren().size()==2) {
         Pane Habitaciones = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Habitaciones.fxml"));
         AjustePagina(Habitaciones);
-        lienzo.getChildren().add(Habitaciones); 
+        lienzo.getChildren().add(Habitaciones);
+            
+        }else{
+     int  n= lienzo.getChildren().size()-1;
+            for (int i = 2; i <=n; i++) {
+                lienzo.getChildren().remove(2);
+            }
+        Pane Habitaciones = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Habitaciones.fxml"));
+        AjustePagina(Habitaciones);
+        lienzo.getChildren().add(Habitaciones);
+        }
+        
+  
         
     }
     
     @FXML
     void Productos(ActionEvent event) throws IOException {
-        
+          if (lienzo.getChildren().size()==2) {
+        Pane Productos = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Productos.fxml"));
+        AjustePagina(Productos);
+        lienzo.getChildren().add(Productos);     
+        }else{
+        int  n= lienzo.getChildren().size()-1;
+            for (int i = 2; i <=n; i++) {
+                lienzo.getChildren().remove(2);
+            }
         Pane Productos = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Productos.fxml"));
         AjustePagina(Productos);
         lienzo.getChildren().add(Productos); 
+        }
+        
+    
         
     }
     

@@ -37,7 +37,7 @@
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Button fx:id="btnVer_Historial" layoutX="364.0" layoutY="81.0" mnemonicParsing="false" onAction="#Ver_Historial" text="Ver Histotial" />
+                  <Button fx:id="btnVer_Historial" layoutX="341.0" layoutY="76.0" mnemonicParsing="false" onAction="#Ver_Historial" text="Ver Histotial" />
                   <Label fx:id="label1" layoutX="591.0" layoutY="6.0" minHeight="16" minWidth="31.0" prefHeight="17.0" prefWidth="31.0" text="Foto" textFill="#fcf9f9" />
                   <ImageView fx:id="Foto_Cliente" fitHeight="88.0" fitWidth="116.0" layoutX="554.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="554.0" AnchorPane.rightAnchor="139.0" AnchorPane.topAnchor="29.0" />
                   <Label fx:id="panel_nombre_cliente" layoutX="702.0" layoutY="25.0" prefHeight="17.0" prefWidth="297.0" textFill="#fffbfb" AnchorPane.leftAnchor="702.0" AnchorPane.rightAnchor="38.0" />

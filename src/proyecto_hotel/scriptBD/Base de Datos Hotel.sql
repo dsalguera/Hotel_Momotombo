@@ -541,3 +541,37 @@ DELIMITER ;
 call getCertificado_Reserva(1,"Administrador",1);
 call getCertificado_Reserva(3,"Secretario",1);
 call getCertificado_Reserva(3,"Visitante",0);
+
+
+
+
+3.
+
+DROP PROCEDURE IF EXISTS getVerificar; 
+DELIMITER $$
+CREATE PROCEDURE  getVerificar(fecha_inicio date,fecha_final date)
+BEGIN
+
+SET lc_time_names = 'es_ES';
+select datediff(fecha_final,fecha_inicio) as diferencia_rango, datediff(fecha_inicio ,cast( now() as date)) as diferencia_actual, concat(day(ADDDATE(now(), INTERVAL 5 DAY))," de ",monthname(ADDDATE(now(), INTERVAL 5 DAY))," del ",year( ADDDATE(now(), INTERVAL 5 DAY))) as fecha_permitida;
+
+
+
+END $$
+DELIMITER ;
+
+call  getVerificar('2018-07-2','2018-07-11');
+
+
+4.
+DROP PROCEDURE IF EXISTS getHabitaciones_disponibles; 
+DELIMITER $$
+CREATE PROCEDURE   getHabitaciones_disponibles(DFecha_inicio date,DFecha_Final  date)
+BEGIN
+select * from Habitacion where Eliminado=0 and get_Verificar_Reserva(Id_habitacion,DFecha_inicio,DFecha_Final)=0;
+
+END $$
+DELIMITER ;
+
+ call getHabitaciones_disponibles('2018-07-2','2018-07-11');
+

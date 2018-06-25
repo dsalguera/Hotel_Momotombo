@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorpane" prefHeight="611.0" prefWidth="772.0" style="-fx-background-color: #fff;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto_hotel.interfaces.ReservaController">
+<AnchorPane id="AnchorPane" fx:id="anchorpane" prefHeight="611.0" prefWidth="772.0" style="-fx-background-color: #fff;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto_hotel.interfaces.ReservaController">
    <children>
       <HBox layoutX="10.0" layoutY="45.0" prefHeight="601.0" prefWidth="772.0" stylesheets="@../estilos/Estilos.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -48,6 +48,16 @@
                         <Font name="The Dodger Inky Regular" size="18.0" />
                      </font>
                   </JFXToggleButton>
+                  <JFXDatePicker fx:id="fecha_inicio" defaultColor="#00bfe9" editable="false" prefHeight="25.0" prefWidth="246.0" promptText="Fecha de Inicio" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets bottom="20.0" left="20.0" right="20.0" />
+                     </VBox.margin>
+                  </JFXDatePicker>
+                  <JFXDatePicker fx:id="fecha_final" defaultColor="#00bfe9" editable="false" prefHeight="25.0" prefWidth="246.0" promptText="Fecha de Final" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets bottom="20.0" left="20.0" right="20.0" />
+                     </VBox.margin>
+                  </JFXDatePicker>
                   <ImageView fx:id="screen_img" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <VBox.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" />
@@ -72,16 +82,6 @@
                         <FontAwesomeIconView glyphName="SEARCH" size="18" styleClass="icon-color" />
                      </graphic>
                   </JFXButton>
-                  <JFXDatePicker fx:id="fecha_inicio" defaultColor="#00bfe9" prefHeight="25.0" prefWidth="246.0" promptText="Fecha de Inicio" VBox.vgrow="ALWAYS">
-                     <VBox.margin>
-                        <Insets bottom="20.0" left="20.0" right="20.0" />
-                     </VBox.margin>
-                  </JFXDatePicker>
-                  <JFXDatePicker fx:id="fecha_final" defaultColor="#00bfe9" prefHeight="25.0" prefWidth="246.0" promptText="Fecha de Final" VBox.vgrow="ALWAYS">
-                     <VBox.margin>
-                        <Insets bottom="20.0" left="20.0" right="20.0" />
-                     </VBox.margin>
-                  </JFXDatePicker>
                   <JFXTextField fx:id="txtdias" focusColor="#00bfe9" maxHeight="43.0" maxWidth="200.0" prefHeight="25.0" prefWidth="172.0" promptText="Cantidad de Dias" styleClass="campos" stylesheets="@../estilos/Estilos.css">
                      <font>
                         <Font name="The Dodger Inky Regular" size="18.0" />

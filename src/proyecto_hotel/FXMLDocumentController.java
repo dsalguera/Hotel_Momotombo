@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package proyecto_hotel;
 
 import com.jfoenix.controls.*;
@@ -113,7 +109,7 @@ public class FXMLDocumentController implements Initializable {
                     fxmlLoader.setLocation(getClass().getResource("/proyecto_hotel/interfaces/Menu.fxml"));
                     
                     Stage stage = new Stage();
-                    stage.initStyle(StageStyle.TRANSPARENT);
+                    //stage.initStyle(StageStyle.TRANSPARENT);
                     
                     Scene scene = new Scene(fxmlLoader.load(),Color.TRANSPARENT);
                     
@@ -134,30 +130,42 @@ public class FXMLDocumentController implements Initializable {
         
     }
     
-    void Conexion(ActionEvent event) throws SQLException{ 
-              
+    void Conexion(ActionEvent event) { 
+        if (txtuser.getText().trim().equals("") || txtpass.getText().trim().equals("")) {
+              JOptionPane.showMessageDialog(null,"Usuario Ó contraceña Invalida");
+            return;
+        }
+        try {
         String dir = "src\\proyecto_hotel\\imagenes\\usuarios\\";
         
         connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
         Statement stm = (Statement) connection.createStatement();
         
         ResultSet rs = stm.executeQuery("select * from usuario where Nombre_usuario = '"+txtuser.getText()+"';");
-                
+            boolean usuario_encontrado=false;    
         while (rs.next()) {
                 String nombre = rs.getString("nombre_usuario");
                 int tipo = rs.getInt("tipo_cuenta");
                 int estado = rs.getInt("estado");
                 String imagen = rs.getString("imagen");
                 String contra = rs.getString("contrasena"); 
-                
+                usuario_encontrado=true;
                 if(txtuser.getText().toString().equals(nombre) && txtpass.getText().toString().equals(contra)){
                     
                     Siguiente(nombre,tipo,event);
                     
                 }else{
-                    
+                    JOptionPane.showMessageDialog(null,"Usuario Ó contraceña Invalida");
                 } 
         }
+            if (usuario_encontrado==false) {
+               JOptionPane.showMessageDialog(null,"Usuario Ó contraceña Invalida");
+            }
+            
+        } catch ( SQLException e) {
+          JOptionPane.showMessageDialog(null,"Usuario Ó contraceña Invalida");
+        }
+              
          
     }
     

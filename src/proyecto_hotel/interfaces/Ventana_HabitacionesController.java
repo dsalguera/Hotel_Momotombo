@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package proyecto_hotel.interfaces;
 
 import com.jfoenix.controls.*;
@@ -39,11 +35,7 @@ import javafx.util.Callback;
 import proyecto_hotel.clases.Habitaciones;
 import proyecto_hotel.Conexion;
 
-/**
- * FXML Controller class
- *
- * @author David Salguera
- */
+
 public class Ventana_HabitacionesController implements Initializable {
 
     @FXML
@@ -66,20 +58,18 @@ public class Ventana_HabitacionesController implements Initializable {
 
     @FXML
     private JFXButton btnCancelar;
-    
-
+   
     public static String HabitacionInfoCopia;
     
     @FXML
     void Aceptar(ActionEvent event) throws SQLException, IOException {
-        
+         ReservaController.Id_habitacion=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getId();
+        ((Node)(event.getSource())).getScene().getWindow().hide(); 
     }
 
     @FXML
     void Cancelar(ActionEvent event) {
-
-        
-        
+    ((Node)(event.getSource())).getScene().getWindow().hide(); 
     }
     
     Conexion c = new Conexion();
@@ -263,7 +253,7 @@ public class Ventana_HabitacionesController implements Initializable {
         
         combo_buscar.getItems().addAll(busquedas);
         
-        Crear_Lista("select * from habitacion where Estado = 1;");
+        Crear_Lista(" call getHabitaciones_disponibles('"+ReservaController.Fecha_Inicial+"','"+ReservaController.Fecha_Final+"');");
     }    
     
 }

@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package proyecto_hotel.interfaces;
 
 import com.jfoenix.controls.*;
@@ -22,6 +18,8 @@ import java.nio.file.StandardCopyOption;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,6 +29,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.*;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -60,6 +59,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javax.swing.JOptionPane;
 import proyecto_hotel.clases.CustomThing;
@@ -124,26 +124,73 @@ public class ReservaController implements Initializable {
     @FXML
     private JFXButton btnEliminar;
     
-    public static String HabitacionInfo;
-    
-    
+    public static int Id_habitacion=-1;
+    public static String Fecha_Inicial;
+    public static String Fecha_Final;
+    Conexion c = new Conexion();
+    Connection connection ;    
+    Stage stage_buscar=new Stage();
     @FXML
     void Buscar_habitacion(ActionEvent event) throws SQLException, IOException {
         
+        stage_buscar.close();
+        if (Fecha_valida() && !stage_buscar.isShowing()) {
+        Fecha_Inicial=fecha_inicio.getValue().toString();
+        Fecha_Final=fecha_final.getValue().toString();
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("/proyecto_hotel/interfaces/Ventana_Habitaciones.fxml"));
-                    
-        Stage stage = new Stage();
-        //stage.initStyle(StageStyle.TRANSPARENT);
-                    
-        Scene scene = new Scene(fxmlLoader.load(),Color.TRANSPARENT);
-                    
-        stage.setTitle("Buscar Habitación");
-        stage.setScene(scene);
-        stage.show();
+        fxmlLoader.setLocation(getClass().getResource("/proyecto_hotel/interfaces/Ventana_Habitaciones.fxml"));            
+       stage_buscar = new Stage();          
+        Scene scene = new Scene(fxmlLoader.load(),Color.TRANSPARENT);       
+        stage_buscar.setTitle("Buscar Habitación");
+       stage_buscar.setScene(scene);
+        Id_habitacion=-1;
+        stage_buscar.show();
+        stage_buscar.setOnHidden(new EventHandler<WindowEvent> (){
+            @Override
+            public void handle(WindowEvent event) {
+                if (Id_habitacion!=-1) {
+                     JOptionPane.showMessageDialog(null, Id_habitacion);
+                }
+        }});
         
+        
+        
+        }
+ 
     }
+ 
+    boolean Fecha_valida() throws SQLException{
+   
+        if (fecha_inicio.getValue()==null || fecha_final.getValue()==null) {
+            JOptionPane.showMessageDialog(null, "Complete la fecha de inicio y final.");
+            return false;
+        }
+        Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
+        Statement stm = (Statement) connection.createStatement();
+       
+        String query = "call  getVerificar('"+fecha_inicio.getValue()+"','"+fecha_final.getValue()+"');";
+       
+        int diff1=0,diff2=0;
+        String fecha_permitida="";
+        ResultSet rs = stm.executeQuery(query);
+        while (rs.next()) {
+                 diff1 = rs.getInt("diferencia_rango");   
+                 diff2 = rs.getInt("diferencia_actual"); 
+                 fecha_permitida=rs.getString("fecha_permitida");
+        }
+       
+        if (diff1<0) {
+            JOptionPane.showMessageDialog(null,"Fechas Invalidas");
+            return false;
+        }
+   if (diff2<5) {
+            JOptionPane.showMessageDialog(null,"Las politicas del hotel expresan que el contrator de la reserva \npuede hacerse desde "+fecha_permitida);
+            return false;
+        }
+        
     
+    return true;
+    }
     
     @FXML
     void Sugerencia(KeyEvent event) {
@@ -200,9 +247,26 @@ public class ReservaController implements Initializable {
         busquedas.add("Nombre");
         busquedas.add("Tipo_Producto");
         busquedas.add("Precio");
-        combo_buscar.getItems().addAll(busquedas);
-    
+        combo_buscar.getItems().addAll(busquedas); 
+        Fecha_Defauld();
     }  
+    
+    void Fecha_Defauld(){
+     try {
+        Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
+        Statement stm = (Statement) connection.createStatement();
+        String query = "select cast(ADDDATE(now(), INTERVAL 5 DAY) as date) as Fecha_defauld;";
+        String Fecha="";
+        ResultSet rs = stm.executeQuery(query);
+        while (rs.next()) {
+            Fecha=rs.getString("Fecha_defauld");
+        }   
+        fecha_inicio.setValue(LocalDate.parse(Fecha, DateTimeFormatter.ISO_LOCAL_DATE));
+        fecha_final.setValue(LocalDate.parse(Fecha, DateTimeFormatter.ISO_LOCAL_DATE));
+        } catch (Exception e) {
+            System.out.println("Error Fecha por defecto");
+        }
+    }
     
     
     

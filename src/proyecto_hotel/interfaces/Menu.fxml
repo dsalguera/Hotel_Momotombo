@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="lienzo" prefHeight="710.0" prefWidth="1141.0" styleClass="back" stylesheets="@../estilos/Estilos.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto_hotel.interfaces.MenuController">
+<AnchorPane id="AnchorPane" fx:id="lienzo" prefHeight="710.0" prefWidth="1141.0" styleClass="back" stylesheets="@../estilos/Estilos.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto_hotel.interfaces.MenuController">
    <children>
       <VBox fx:id="menuBtns" layoutX="41.0" layoutY="59.0" onMouseDragged="#Arrastrar" onMousePressed="#Presionar" prefHeight="608.0" prefWidth="205.0" styleClass="side-panel" stylesheets="@../estilos/Estilos.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -250,32 +250,6 @@
                </children>
             </HBox>
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <JFXButton fx:id="btnMinimizar" alignment="CENTER_RIGHT" contentDisplay="GRAPHIC_ONLY" onAction="#Minimizar" styleClass="button-skyblue">
-                     <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="MINUS" size="15" styleClass="icon-color" />
-                     </graphic>
-                     <HBox.margin>
-                        <Insets left="3.0" right="3.0" />
-                     </HBox.margin>
-                  </JFXButton>
-                  <JFXButton fx:id="btnMaximizar" alignment="CENTER_RIGHT" contentDisplay="GRAPHIC_ONLY" onAction="#Maximizar" styleClass="button-skyblue">
-                     <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="PLUS" size="15" styleClass="icon-color" />
-                     </graphic>
-                     <HBox.margin>
-                        <Insets left="3.0" right="3.0" />
-                     </HBox.margin>
-                  </JFXButton>
-                  <JFXButton fx:id="btnCerrar" alignment="CENTER_RIGHT" contentDisplay="GRAPHIC_ONLY" onAction="#Cerrar" styleClass="button-skyblue">
-                     <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="TIMES" size="15" styleClass="icon-color" />
-                     </graphic>
-                     <HBox.margin>
-                        <Insets left="3.0" right="3.0" />
-                     </HBox.margin>
-                  </JFXButton>
-               </children>
                <HBox.margin>
                   <Insets right="20.0" />
                </HBox.margin>
