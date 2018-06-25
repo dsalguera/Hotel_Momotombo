@@ -1,5 +1,4 @@
 
-
 drop database Hotel;
 create database Hotel;
 use Hotel;
