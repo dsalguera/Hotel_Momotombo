@@ -23,6 +23,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -64,7 +65,9 @@ public class Ventana_HabitacionesController implements Initializable {
     @FXML
     void Aceptar(ActionEvent event) throws SQLException, IOException {
          ReservaController.Id_habitacion=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getId();
-        ((Node)(event.getSource())).getScene().getWindow().hide(); 
+         ReservaController.nombre=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getNombre();
+         ReservaController.imagen=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getImagen();
+         ((Node)(event.getSource())).getScene().getWindow().hide(); 
     }
 
     @FXML
@@ -104,41 +107,26 @@ public class Ventana_HabitacionesController implements Initializable {
         
     }
     
-    
-
-    @FXML
-    void buscar(KeyEvent event) throws SQLException {
-        consulta();
+       @FXML
+    void Accion_buscar(ActionEvent event) throws SQLException {
+    consulta("");
     }
+
+
     
     @FXML
-    void consulta() throws SQLException {
+    void consulta(String complemento) throws SQLException {
     
-        Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
-        Statement stm = (Statement) connection.createStatement();
-        
-        String busq = txtbuscar.getText();
+        if (combo_buscar.getSelectionModel().getSelectedIndex()!=-1 && txtbuscar.getText()!=null ) {
+        String busq = txtbuscar.getText()+complemento;
         String filtro = combo_buscar.getSelectionModel().getSelectedItem();
-        String query = "select * from Habitacion where "+filtro+" like '%"+(busq)+"%' and Estado = 1";
-        
-        ResultSet rs = stm.executeQuery(query);
-        
-        while (rs.next()) {
-                int id = rs.getInt("Id_habitacion");
-                String nombre = rs.getString("nombre");
-                String tipo = rs.getString("tipo");
-                double tarifa = rs.getDouble("tarifa");
-                String telefono = rs.getString("telefono");
-                int estado = rs.getInt("estado");
-                String descripcion = rs.getString("descripcion");
-                String imagen = rs.getString("imagen");
-                
-                Habitaciones habitacion = new Habitaciones(
-                        
-                new Image(new File(dir+imagen).toURI().toString()),id,nombre, tipo, tarifa,telefono,estado,descripcion);
-                data.add(habitacion);
-        }
+            System.out.println(""+filtro);
+        String query = "call getHabitaciones_disponibles_buscar('"+ReservaController.Fecha_Inicial+"','"+ReservaController.Fecha_Final+"','"+filtro+"','"+busq+"');";
+            System.out.println(""+query);
         Crear_Lista(query);
+        }else{
+         Crear_Lista("call getHabitaciones_disponibles('"+ReservaController.Fecha_Inicial+"','"+ReservaController.Fecha_Final+"');");
+        }
      
     }
 
@@ -202,8 +190,8 @@ public class Ventana_HabitacionesController implements Initializable {
                 Tipo = new Label("Tipo: "+item.getTipo()), 
                 Tarifa = new Label("Tarifa: $ "+item.getTarifa().toString()+" al mes."),
                 Telefono = new Label("Teléfono: "+item.getTelefono()),
-                Descripcion = new Label("Descripción: "+item.getDescripcion()),
-                Estado = new Label(""+estado)     
+                Descripcion = new Label("Descripción: "+item.getDescripcion())
+                    //,Estado = new Label(""+estado)     
                 );
              
                     Nombre.getStyleClass().add("espacio");
@@ -212,11 +200,11 @@ public class Ventana_HabitacionesController implements Initializable {
                     Telefono.getStyleClass().add("espacio");
                     Descripcion.getStyleClass().add("espacio");
                     
-                    if (estado == "   Disponible   ") {
-                        Estado.getStyleClass().add("round-green");
-                    }else{
-                        Estado.getStyleClass().add("round-red");
-                    }
+//                    if (estado == "   Disponible   ") {
+//                        Estado.getStyleClass().add("round-green");
+//                    }else{
+//                        Estado.getStyleClass().add("round-red");
+//                    }
                                                
                     HBox hBox = new HBox(
                             
@@ -240,17 +228,57 @@ public class Ventana_HabitacionesController implements Initializable {
         
     }
     
-    /**
-     * Initializes the controller class.
-     */
+  
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
         ObservableList busquedas = FXCollections.observableArrayList();
         busquedas.add("Nombre");
         busquedas.add("Tipo");
-        busquedas.add("Tarifa");
+        busquedas.add("Tarifa <=");
         
+        txtbuscar.setOnKeyPressed(event->{
+        System.out.println(""+event.getCode());
+         if (event.getCode().equals(KeyCode.BACK_SPACE) && combo_buscar.getSelectionModel().getSelectedIndex()==2) {
+             txtbuscar.selectAll();
+         }
+        
+        });
+        
+        
+          txtbuscar.setOnKeyTyped(event -> {     
+        String string =  txtbuscar.getText();
+              if (combo_buscar.getSelectionModel().getSelectedIndex()==2) {
+                  boolean isDigit=true;
+                  try {
+                      int aux=Integer.parseInt(event.getCharacter());
+                  } catch (Exception e) {
+                      isDigit=false;
+                  }
+                  
+                  if (  !isDigit && !event.getCharacter().equals(".")) {
+                      event.consume();
+                      return;
+                  }
+                  
+              }
+        
+        if (string.length() > 50) {
+           event.consume();
+           return;
+        } 
+            try {
+                if (event.getCharacter().toString().trim().equals("")) {
+                Crear_Lista(" call getHabitaciones_disponibles('"+ReservaController.Fecha_Inicial+"','"+ReservaController.Fecha_Final+"');");
+                }else{
+                consulta(event.getCharacter().toString());
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Ventana_HabitacionesController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+          
+          
+          });
         combo_buscar.getItems().addAll(busquedas);
         
         Crear_Lista(" call getHabitaciones_disponibles('"+ReservaController.Fecha_Inicial+"','"+ReservaController.Fecha_Final+"');");

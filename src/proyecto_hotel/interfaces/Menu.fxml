@@ -13,7 +13,7 @@
 
 <AnchorPane id="AnchorPane" fx:id="lienzo" prefHeight="710.0" prefWidth="1141.0" styleClass="back" stylesheets="@../estilos/Estilos.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto_hotel.interfaces.MenuController">
    <children>
-      <VBox fx:id="menuBtns" layoutX="41.0" layoutY="59.0" onMouseDragged="#Arrastrar" onMousePressed="#Presionar" prefHeight="608.0" prefWidth="205.0" styleClass="side-panel" stylesheets="@../estilos/Estilos.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox fx:id="menuBtns" layoutX="41.0" layoutY="59.0" onMouseDragged="#Arrastrar" onMousePressed="#Presionar" prefHeight="710.0" prefWidth="205.0" styleClass="side-panel" stylesheets="@../estilos/Estilos.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fx:id="img_logo" fitHeight="104.0" fitWidth="182.0" pickOnBounds="true" preserveRatio="true" smooth="false">
                <image>
@@ -69,7 +69,7 @@
                   <Insets left="20.0" />
                </padding>
                <font>
-                  <Font name="The Dodger Inky Regular" size="20.0" />
+                  <Font size="16.0" />
                </font></JFXButton>
             <JFXButton fx:id="btnHabitaciones" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="20.0" onAction="#Habitaciones" prefHeight="45.0" prefWidth="221.0" styleClass="button-selection" stylesheets="@../estilos/Estilos.css" text="HABITACIONES" VBox.vgrow="ALWAYS">
                <VBox.margin>
@@ -82,7 +82,7 @@
                   <FontAwesomeIconView glyphName="TICKET" size="25" styleClass="icon-color" />
                </graphic>
                <font>
-                  <Font name="The Dodger Inky Regular" size="20.0" />
+                  <Font size="16.0" />
                </font></JFXButton>
             <JFXButton fx:id="btnClientes" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="20.0" onAction="#Clientes" prefHeight="45.0" prefWidth="216.0" styleClass="button-selection" stylesheets="@../estilos/Estilos.css" text="CLIENTES" VBox.vgrow="ALWAYS">
                <graphic>
@@ -95,7 +95,7 @@
                   <Insets left="20.0" />
                </padding>
                <font>
-                  <Font name="The Dodger Inky Regular" size="20.0" />
+                  <Font size="16.0" />
                </font></JFXButton>
             <JFXButton fx:id="btnReservas" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="20.0" onAction="#Reservas" prefHeight="45.0" prefWidth="227.0" styleClass="button-selection" stylesheets="@../estilos/Estilos.css" text="RESERVAS" VBox.vgrow="ALWAYS">
                <graphic>
@@ -108,7 +108,7 @@
                   <Insets left="20.0" />
                </padding>
                <font>
-                  <Font name="The Dodger Inky Regular" size="20.0" />
+                  <Font size="16.0" />
                </font></JFXButton>
             <JFXButton fx:id="btnEstancias" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="20.0" onAction="#Estancias" prefHeight="45.0" prefWidth="232.0" styleClass="button-selection" stylesheets="@../estilos/Estilos.css" text="ESTANCIAS" VBox.vgrow="ALWAYS">
                <graphic>
@@ -121,7 +121,7 @@
                   <Insets left="20.0" />
                </padding>
                <font>
-                  <Font name="The Dodger Inky Regular" size="20.0" />
+                  <Font size="16.0" />
                </font></JFXButton>
             <JFXButton fx:id="btnDetalle_servicio" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="20.0" onAction="#Detalle_servicio" prefHeight="45.0" prefWidth="227.0" styleClass="button-selection" stylesheets="@../estilos/Estilos.css" text="DETALLE SERVICIO" VBox.vgrow="ALWAYS">
                <graphic>
@@ -134,7 +134,7 @@
                   <Insets left="20.0" />
                </padding>
                <font>
-                  <Font name="The Dodger Inky Regular" size="20.0" />
+                  <Font size="16.0" />
                </font>
             </JFXButton>
             <JFXButton fx:id="btnProductos" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="20.0" onAction="#Productos" prefHeight="45.0" prefWidth="227.0" styleClass="button-selection" stylesheets="@../estilos/Estilos.css" text="PRODUCTOS" VBox.vgrow="ALWAYS">
@@ -148,10 +148,10 @@
                   <FontAwesomeIconView glyphName="CUTLERY" size="25" styleClass="icon-color" />
                </graphic>
                <font>
-                  <Font name="The Dodger Inky Regular" size="20.0" />
+                  <Font size="16.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="btnServicio_cuarto" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="20.0" onAction="#Servicio_cuarto" prefHeight="45.0" prefWidth="227.0" styleClass="button-selection" stylesheets="@../estilos/Estilos.css" text="SERVICIO AL CUARTO" VBox.vgrow="ALWAYS">
+            <JFXButton fx:id="btnServicio_cuarto" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="20.0" onAction="#Servicio_cuarto" prefHeight="65.0" prefWidth="205.0" styleClass="button-selection" stylesheets="@../estilos/Estilos.css" text="SERVICIO AL CUARTO" wrapText="true" VBox.vgrow="ALWAYS">
                <graphic>
                   <FontAwesomeIconView glyphName="ROCKET" size="25" styleClass="icon-color" />
                </graphic>
@@ -162,10 +162,10 @@
                   <Insets left="20.0" />
                </padding>
                <font>
-                  <Font name="The Dodger Inky Regular" size="20.0" />
+                  <Font size="16.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="btnBitacora" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="20.0" onAction="#Bitacora" prefHeight="45.0" prefWidth="227.0" styleClass="button-selection" stylesheets="@../estilos/Estilos.css" text="BITÁCORA" VBox.vgrow="ALWAYS">
+            <JFXButton fx:id="btnBitacora" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="20.0" onAction="#Bitacora" prefHeight="49.0" prefWidth="227.0" styleClass="button-selection" stylesheets="@../estilos/Estilos.css" text="BITÁCORA" VBox.vgrow="ALWAYS">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
@@ -176,7 +176,7 @@
                   <FontAwesomeIconView glyphName="EDIT" size="25" styleClass="icon-color" />
                </graphic>
                <font>
-                  <Font name="The Dodger Inky Regular" size="20.0" />
+                  <Font size="16.0" />
                </font>
             </JFXButton>
             <JFXButton fx:id="btnCerrar_sesion" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="20.0" onAction="#Cerrar_sesion" prefHeight="45.0" prefWidth="227.0" styleClass="button-skyblue" stylesheets="@../estilos/Estilos.css" text="CERRAR SESIÓN" VBox.vgrow="ALWAYS">
@@ -190,16 +190,16 @@
                   <Insets left="20.0" />
                </padding>
                <font>
-                  <Font name="The Dodger Inky Regular" size="19.0" />
+                  <Font size="16.0" />
                </font>
             </JFXButton>
          </children>
       </VBox>
-      <HBox alignment="CENTER_RIGHT" layoutX="205.0" layoutY="244.0" onMouseDragged="#Arrastrar" onMousePressed="#Presionar" prefHeight="60.0" prefWidth="936.0" styleClass="top-panel" stylesheets="@../estilos/Estilos.css" AnchorPane.leftAnchor="205.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox alignment="CENTER_RIGHT" layoutX="200.0" layoutY="244.0" onMouseDragged="#Arrastrar" onMousePressed="#Presionar" prefHeight="60.0" prefWidth="941.0" styleClass="top-panel" stylesheets="@../estilos/Estilos.css" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox alignment="CENTER" onMouseDragged="#Arrastrar" onMousePressed="#Presionar" prefHeight="60.0" prefWidth="322.0">
+            <HBox alignment="CENTER_LEFT" onMouseDragged="#Arrastrar" onMousePressed="#Presionar" prefHeight="60.0" prefWidth="930.0">
                <children>
-                  <Label text=" Direccion: Pali P del H 3crs, al Sur 1/2c. Arriba.  |" textFill="WHITE">
+                  <Label prefHeight="25.0" prefWidth="361.0" text=" Direccion: Pali P del H 3crs, al Sur 1/2c. Arriba.  |" textFill="WHITE">
                      <font>
                         <Font name="The Dodger Inky Regular" size="16.0" />
                      </font>
@@ -210,11 +210,7 @@
                         <Insets left="15.0" />
                      </HBox.margin>
                   </Label>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="60.0" prefWidth="248.0">
-               <children>
-                  <Label text=" Fecha: " textFill="WHITE">
+                  <Label prefHeight="27.0" prefWidth="103.0" text=" Fecha: " textFill="WHITE">
                      <font>
                         <Font name="The Dodger Inky Regular" size="18.0" />
                      </font>
@@ -222,15 +218,11 @@
                         <FontAwesomeIconView glyphName="CALENDAR" size="15" style="-fx-fill: #FFF;" />
                      </graphic>
                   </Label>
-                  <Label fx:id="labFecha" prefWidth="162.0" text="25 de diciembre de 2018  |" textFill="WHITE">
+                  <Label fx:id="labFecha" prefHeight="27.0" prefWidth="232.0" text="25 de diciembre de 2018  |" textFill="WHITE">
                      <font>
                         <Font name="The Dodger Inky Regular" size="18.0" />
                      </font>
                   </Label>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
-               <children>
                   <Label text=" Hora:" textFill="#f8f8f8">
                      <font>
                         <Font name="The Dodger Inky Regular" size="20.0" />
@@ -242,17 +234,12 @@
                         <Insets />
                      </HBox.margin>
                   </Label>
-                  <Label fx:id="labHora" text="15:30  |" textFill="#f8f8f8">
+                  <Label fx:id="labHora" prefHeight="30.0" prefWidth="90.0" text="15:30  |" textFill="#f8f8f8">
                      <font>
                         <Font name="The Dodger Inky Regular" size="20.0" />
                      </font>
                   </Label>
                </children>
-            </HBox>
-            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
-               <HBox.margin>
-                  <Insets right="20.0" />
-               </HBox.margin>
             </HBox>
          </children>
       </HBox>

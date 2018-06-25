@@ -575,3 +575,21 @@ DELIMITER ;
 
  call getHabitaciones_disponibles('2018-07-2','2018-07-11');
 
+
+
+
+
+
+5.
+DROP PROCEDURE IF EXISTS getCosto_total; 
+DELIMITER $$
+CREATE PROCEDURE  getCosto_total(DFecha_inicio date,DFecha_Final  date,DId_habitacion int)
+BEGIN
+set @dias=  datediff(DFecha_Final,DFecha_inicio)+1;
+select @dias*Tarifa as Costo_total,@dias as dias from Habitacion where Id_habitacion=DId_habitacion;
+END $$
+DELIMITER ;
+
+
+
+call getCosto_total('2018-03-2','2018-04-4',1)

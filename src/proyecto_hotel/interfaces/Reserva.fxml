@@ -3,11 +3,9 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import com.jfoenix.controls.JFXToggleButton?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -16,38 +14,10 @@
 
 <AnchorPane id="AnchorPane" fx:id="anchorpane" prefHeight="611.0" prefWidth="772.0" style="-fx-background-color: #fff;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto_hotel.interfaces.ReservaController">
    <children>
-      <HBox layoutX="10.0" layoutY="45.0" prefHeight="601.0" prefWidth="772.0" stylesheets="@../estilos/Estilos.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox layoutX="10.0" layoutY="45.0" prefHeight="601.0" prefWidth="772.0" spacing="5.0" stylesheets="@../estilos/Estilos.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+            <VBox alignment="CENTER" prefHeight="611.0" prefWidth="335.0" styleClass="side-panel" stylesheets="@../estilos/Estilos.css">
                <children>
-                  <HBox alignment="CENTER" prefHeight="56.0" prefWidth="532.0" styleClass="top-panel" stylesheets="@../estilos/Estilos.css">
-                     <children>
-                        <ComboBox fx:id="combo_buscar" prefWidth="150.0" promptText="Buscar por:" styleClass="combo-box" stylesheets="@../estilos/Estilos.css">
-                           <HBox.margin>
-                              <Insets right="15.0" />
-                           </HBox.margin>
-                        </ComboBox>
-                        <JFXTextField fx:id="txtbuscar" onKeyTyped="#buscar" promptText="Buscar" styleClass="campos" />
-                        <JFXButton fx:id="btnBuscar" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" styleClass="button-skyblue" stylesheets="@../estilos/Estilos.css" text="Buscar">
-                           <graphic>
-                              <FontAwesomeIconView glyphName="SEARCH" size="15" styleClass="icon-color" text="" />
-                           </graphic>
-                        </JFXButton>
-                     </children>
-                  </HBox>
-                  <ListView fx:id="lista_reservas" onMouseClicked="#click" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-               </children>
-            </VBox>
-            <VBox alignment="CENTER" prefHeight="418.0" prefWidth="238.0" styleClass="side-panel" stylesheets="@../estilos/Estilos.css">
-               <children>
-                  <JFXToggleButton fx:id="check_estado" prefHeight="30.0" prefWidth="200.0" stylesheets="@../estilos/Estilos.css" text="Estado" textFill="WHITE" toggleColor="#00bfe9" toggleLineColor="#40deff" VBox.vgrow="ALWAYS">
-                     <VBox.margin>
-                        <Insets bottom="10.0" left="15.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font name="The Dodger Inky Regular" size="18.0" />
-                     </font>
-                  </JFXToggleButton>
                   <JFXDatePicker fx:id="fecha_inicio" defaultColor="#00bfe9" editable="false" prefHeight="25.0" prefWidth="246.0" promptText="Fecha de Inicio" VBox.vgrow="ALWAYS">
                      <VBox.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" />
@@ -71,7 +41,7 @@
                         <Font name="The Dodger Inky Regular" size="18.0" />
                      </font>
                   </JFXTextField>
-                  <JFXButton fx:id="btnBuscar_habitacion" graphicTextGap="10.0" onAction="#Buscar_habitacion" prefHeight="35.0" prefWidth="198.0" styleClass="button-skyblue" stylesheets="@../estilos/Estilos.css" text="Buscar Habitacion" VBox.vgrow="ALWAYS">
+                  <JFXButton fx:id="btnBuscar_habitacion" graphicTextGap="10.0" onAction="#Buscar_habitacion" prefHeight="44.0" prefWidth="225.0" styleClass="button-skyblue" stylesheets="@../estilos/Estilos.css" text="Buscar Habitacion" VBox.vgrow="ALWAYS">
                      <VBox.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" />
                      </VBox.margin>
@@ -82,22 +52,34 @@
                         <FontAwesomeIconView glyphName="SEARCH" size="18" styleClass="icon-color" />
                      </graphic>
                   </JFXButton>
-                  <JFXTextField fx:id="txtdias" focusColor="#00bfe9" maxHeight="43.0" maxWidth="200.0" prefHeight="25.0" prefWidth="172.0" promptText="Cantidad de Dias" styleClass="campos" stylesheets="@../estilos/Estilos.css">
-                     <font>
-                        <Font name="The Dodger Inky Regular" size="18.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets bottom="20.0" left="20.0" right="20.0" />
-                     </VBox.margin>
-                  </JFXTextField>
-                  <JFXTextField fx:id="txtcosto" focusColor="#00bfe9" maxHeight="43.0" maxWidth="200.0" prefHeight="25.0" prefWidth="172.0" promptText="Costo Total" styleClass="campos" stylesheets="@../estilos/Estilos.css" VBox.vgrow="ALWAYS">
-                     <VBox.margin>
-                        <Insets bottom="20.0" left="20.0" right="20.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font name="The Dodger Inky Regular" size="18.0" />
-                     </font>
-                  </JFXTextField>
+                  <HBox prefHeight="66.0" prefWidth="335.0">
+                     <children>
+                        <Label prefHeight="53.0" prefWidth="168.0" text="  Dias a reservar:" textFill="#fcf3f3">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                        <JFXTextField fx:id="txtdias" editable="false" focusColor="#00bfe9" maxHeight="43.0" maxWidth="200.0" prefHeight="43.0" prefWidth="158.0" promptText="Cantidad de Dias" styleClass="campos" stylesheets="@../estilos/Estilos.css">
+                           <font>
+                              <Font name="The Dodger Inky Regular" size="18.0" />
+                           </font>
+                        </JFXTextField>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="66.0" prefWidth="335.0">
+                     <children>
+                        <Label prefHeight="53.0" prefWidth="168.0" text="  Costo total:" textFill="#fcf3f3">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                        <JFXTextField fx:id="txtcosto" editable="false" focusColor="#00bfe9" maxHeight="43.0" maxWidth="200.0" prefHeight="43.0" prefWidth="162.0" promptText="Costo Total" styleClass="campos" stylesheets="@../estilos/Estilos.css">
+                           <font>
+                              <Font name="The Dodger Inky Regular" size="18.0" />
+                           </font>
+                        </JFXTextField>
+                     </children>
+                  </HBox>
                   <HBox alignment="CENTER" prefHeight="49.0" prefWidth="238.0" VBox.vgrow="ALWAYS">
                      <children>
                         <JFXButton fx:id="btnNuevo" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" onAction="#Nuevo_Registro" styleClass="button-skyblue" stylesheets="@../estilos/Estilos.css">
@@ -139,7 +121,14 @@
                   <Insets />
                </HBox.margin>
             </VBox>
+            <VBox alignment="CENTER" prefHeight="611.0" prefWidth="348.0" styleClass="side-panel" stylesheets="@../estilos/Estilos.css" />
          </children>
+         <opaqueInsets>
+            <Insets left="5.0" />
+         </opaqueInsets>
       </HBox>
    </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
 </AnchorPane>

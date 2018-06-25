@@ -62,35 +62,22 @@ import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javax.swing.JOptionPane;
+import static jdk.nashorn.internal.objects.NativeFunction.call;
 import proyecto_hotel.clases.CustomThing;
 import proyecto_hotel.clases.Habitaciones;
 import proyecto_hotel.*;
 import proyecto_hotel.clases.*;
-/**
- * FXML Controller class
- *
- * @author David Salguera
- */
+
 public class ReservaController implements Initializable {
     
      @FXML
     private AnchorPane anchorpane;
 
-    @FXML
-    private ComboBox<?> combo_buscar;
-
-    @FXML
-    private JFXTextField txtbuscar;
-
-    @FXML
-    private JFXButton btnBuscar;
 
     @FXML
     private ListView<Reserva> lista_reservas;
     
-    @FXML
-    private JFXToggleButton check_estado;
-
+ 
     @FXML
     private ImageView screen_img;
 
@@ -125,6 +112,8 @@ public class ReservaController implements Initializable {
     private JFXButton btnEliminar;
     
     public static int Id_habitacion=-1;
+    public static String nombre;
+    public static Image imagen;
     public static String Fecha_Inicial;
     public static String Fecha_Final;
     Conexion c = new Conexion();
@@ -139,19 +128,24 @@ public class ReservaController implements Initializable {
         Fecha_Final=fecha_final.getValue().toString();
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/proyecto_hotel/interfaces/Ventana_Habitaciones.fxml"));            
-       stage_buscar = new Stage();          
+        stage_buscar = new Stage();          
         Scene scene = new Scene(fxmlLoader.load(),Color.TRANSPARENT);       
         stage_buscar.setTitle("Buscar Habitación");
-       stage_buscar.setScene(scene);
+        stage_buscar.setScene(scene);
         Id_habitacion=-1;
         stage_buscar.show();
         stage_buscar.setOnHidden(new EventHandler<WindowEvent> (){
             @Override
             public void handle(WindowEvent event) {
                 if (Id_habitacion!=-1) {
-                     JOptionPane.showMessageDialog(null, Id_habitacion);
+                    try {
+                        Habitacion_Seleccionada();
+                    } catch (SQLException ex) {
+                        System.out.println(""+ex);
+                        Logger.getLogger(ReservaController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-        }});
+        }   });
         
         
         
@@ -159,10 +153,23 @@ public class ReservaController implements Initializable {
  
     }
  
+    void Habitacion_Seleccionada() throws SQLException{
+    screen_img.setImage(imagen);
+    txtnombre.setText(nombre);
+   
+        Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
+        Statement stm = (Statement) connection.createStatement();
+        String query = " call getCosto_total('"+Fecha_Inicial+"','"+Fecha_Final+"',"+Id_habitacion+")";
+        ResultSet rs = stm.executeQuery(query);
+        rs.next();
+        txtcosto.setText(""+rs.getDouble("Costo_total"));
+        txtdias.setText(""+rs.getInt("dias"));
+    }
+    
     boolean Fecha_valida() throws SQLException{
    
         if (fecha_inicio.getValue()==null || fecha_final.getValue()==null) {
-            JOptionPane.showMessageDialog(null, "Complete la fecha de inicio y final.");
+            JOptionPane.showMessageDialog(null,"Complete la fecha de inicio y final.");
             return false;
         }
         Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
@@ -198,8 +205,6 @@ public class ReservaController implements Initializable {
     }
     
     
-    Image imagen;
-    int id;
     
     
     @FXML
@@ -241,13 +246,7 @@ public class ReservaController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-       
-        txtdias.setEditable(false);
-        ObservableList busquedas = FXCollections.observableArrayList();
-        busquedas.add("Nombre");
-        busquedas.add("Tipo_Producto");
-        busquedas.add("Precio");
-        combo_buscar.getItems().addAll(busquedas); 
+     
         Fecha_Defauld();
     }  
     

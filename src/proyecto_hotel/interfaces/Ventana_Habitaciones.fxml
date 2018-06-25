@@ -24,7 +24,7 @@
                               <Insets right="15.0" />
                            </HBox.margin>
                         </ComboBox>
-                        <JFXTextField fx:id="txtbuscar" onKeyTyped="#buscar" promptText="Buscar" styleClass="campos" />
+                        <JFXTextField fx:id="txtbuscar" promptText="Buscar" styleClass="campos" />
                         <JFXButton fx:id="btnBuscar" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" styleClass="button-skyblue" stylesheets="@../estilos/Estilos.css" text="Buscar">
                            <graphic>
                               <FontAwesomeIconView glyphName="SEARCH" size="15" styleClass="icon-color" text="" />
