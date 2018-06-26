@@ -22,6 +22,7 @@ import java.nio.file.StandardCopyOption;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,6 +35,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -163,7 +167,8 @@ public class ProductosController implements Initializable {
                 click = 1;
             }
     }
-
+    
+    
     @FXML
     void Editar_Registro(ActionEvent event) throws SQLException {
         
@@ -187,72 +192,157 @@ public class ProductosController implements Initializable {
             estado = 2;
         }
         
-        data.add(new Productos(imagenP,id,nombre,precio,tipo,cantidad,estado));
-        
         Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
         Statement stm = (Statement) connection.createStatement();
         String query = null;
         
-        if (click == 1) {
-            
-            query = "update Producto set Nombre = '"+nombre+"', Tipo_producto = '"+tipo+"', Precio = "+precio+" , "
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("¿Confirmar Acción?");
+        alert.setHeaderText("¿Está seguro que desea editar el registro "+nombre+" de C$"+precio+" de la base?");
+        alert.setContentText("Se reescribirá la información con los datos introcucidos en los campos.\nPara Editar, presione aceptar.");
+        
+        ButtonType buttonTypeCancel = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType buttonTypeOk = new ButtonType("Aceptar", ButtonBar.ButtonData.OK_DONE);
+        
+        alert.getButtonTypes().setAll(buttonTypeCancel,buttonTypeOk);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == buttonTypeOk){
+            // ... user chose OK
+            data.add(new Productos(imagenP,id,nombre,precio,tipo,cantidad,estado));
+        
+            if (click == 1) {  
+                query = "update Producto set Nombre = '"+nombre+"', Tipo_producto = '"+tipo+"', Precio = "+precio+" , "
                     + "Estado = "+estado+", Cantidad = "+cantidad+", Imagen = '"+nombre_img+"' " 
                     + "where Id_producto = "+id+";";
-
-            
-        }else{
-            
-            query = "update Producto set Nombre = '"+nombre+"', Tipo_producto = '"+tipo+"', Precio = "+precio+" , "
+            }else{         
+                query = "update Producto set Nombre = '"+nombre+"', Tipo_producto = '"+tipo+"', Precio = "+precio+" , "
                     + "Estado = "+estado+",  Cantidad = "+cantidad+" " 
-                    + "where Id_producto = "+id+";";
+                    + "where Id_producto = "+id+";";    
+            }
             
+            click = 0;
+            stm.executeUpdate(query);
+            Crear_Lista("select * from Producto where Eliminado = 0;");
+            
+        } else if(result.get() == buttonTypeCancel){
+            // ... user chose CANCEL or closed the dialog
+            alert.close();
         }
         
-        click = 0;
-        stm.executeUpdate(query);
-        Crear_Lista("select * from Producto where Eliminado = 0;");
+        
         
     }
 
     @FXML
-    void Eliminar_Registro(ActionEvent event) {
-
-    }
-
-    @FXML
-    void Guardar_Registro(ActionEvent event) throws SQLException {
+    void Eliminar_Registro(ActionEvent event) throws SQLException {
         
         String nombre, tipo, telefono, descripcion;
-        int cantidad;
         double precio;
+        int ident,cantidad;
         
+        ident = id;
         nombre = txtnombre.getText().toString();
         tipo = txttipo.getText().toString();
-        precio = Double.parseDouble(txtprecio.getText().toString());
         cantidad = Integer.parseInt(txtcantidad.getText().toString());
-        
-        Image imagen = screen_img.getImage();
-        String dir = imagen.impl_getUrl();
+        precio = Double.parseDouble(txtprecio.getText().toString());
+       
+        Image imagenP = screen_img.getImage();
         
         int estado;
-        
+                
         if (check_estado.isSelected()) {
             estado = 1;
         }else{
             estado = 2;
         }
         
-        data.add(new Productos(imagen,id,nombre,precio,tipo,cantidad,estado));
-        
         Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
         Statement stm = (Statement) connection.createStatement();
+        String query = null;
         
-        String query = "insert into Producto (Nombre, Tipo_producto, Precio, Estado,Cantidad,Imagen) " +
-        "values ('"+nombre+"','"+tipo+"',"+precio+","+estado+","+cantidad+",'"+nombre_img+"');";
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("¿Confirmar Acción?");
+        alert.setHeaderText("¿Está seguro que desea eliminar el registro "+nombre+" de C$"+precio+" de la base?");
+        alert.setContentText("Si lo elimina, no podrá acceder luego a este registro.");
         
-        stm.executeUpdate(query);
+        ButtonType buttonTypeCancel = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType buttonTypeOk = new ButtonType("Aceptar", ButtonBar.ButtonData.OK_DONE);
         
-        Crear_Lista("select * from Producto where Eliminado = 0;");
+        alert.getButtonTypes().setAll(buttonTypeCancel,buttonTypeOk);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == buttonTypeOk){
+            // ... user chose OK
+            query = "update Producto set Eliminado = "+1+" "
+                    +"where Id_producto = "+id+" and Nombre = '"+nombre+"';";
+            click = 0;
+            stm.executeUpdate(query);
+            Crear_Lista("select * from Producto where Eliminado = 0;");
+            
+        } else if(result.get() == buttonTypeCancel){
+            // ... user chose CANCEL or closed the dialog
+            alert.close();
+        }
+
+    }
+
+    @FXML
+    void Guardar_Registro(ActionEvent event) throws SQLException {
+        
+        if (Valida() == true) {
+            
+            String nombre, tipo, telefono, descripcion;
+            int cantidad;
+            double precio;
+
+            nombre = txtnombre.getText().toString();
+            tipo = txttipo.getText().toString();
+            precio = Double.parseDouble(txtprecio.getText().toString());
+            cantidad = Integer.parseInt(txtcantidad.getText().toString());
+
+            Image imagen = screen_img.getImage();
+            String dir = imagen.impl_getUrl();
+
+            int estado;
+
+            if (check_estado.isSelected()) {
+                estado = 1;
+            }else{
+                estado = 2;
+            }
+
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("¿Confirmar Acción?");
+            alert.setHeaderText("¿Está seguro que desea guardar el registro "+nombre+" de C$"+precio+" a la base?");
+            alert.setContentText("Se guardará la información con los datos introcucidos en los campos.\nPara Guardar, presione aceptar.");
+
+            ButtonType buttonTypeCancel = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+            ButtonType buttonTypeOk = new ButtonType("Aceptar", ButtonBar.ButtonData.OK_DONE);
+
+            alert.getButtonTypes().setAll(buttonTypeCancel,buttonTypeOk);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == buttonTypeOk){
+                // ... user chose OK
+                data.add(new Productos(imagen,id,nombre,precio,tipo,cantidad,estado));
+
+                Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
+                Statement stm = (Statement) connection.createStatement();
+
+                String query = "insert into Producto (Nombre, Tipo_producto, Precio, Estado,Cantidad,Imagen) " +
+                "values ('"+nombre+"','"+tipo+"',"+precio+","+estado+","+cantidad+",'"+nombre_img+"');";
+
+                stm.executeUpdate(query);
+
+                Crear_Lista("select * from Producto where Eliminado = 0;");
+
+            } else if(result.get() == buttonTypeCancel){
+                // ... user chose CANCEL or closed the dialog
+                alert.close();
+            }
+        }
+        
     }
 
     @FXML
@@ -383,6 +473,40 @@ public class ProductosController implements Initializable {
         }
         
     }
+    
+    boolean Valida(){
+        if (txtnombre.getText().equals("") || txttipo.getText().equals("")
+                || txtprecio.getText().equals("") || txtcantidad.getText().equals("")) {
+            
+            Dialogo("Al parecer hay algunos campos que necesitan ser rellenados.", "¡Necesita rellenar todos los campos!",
+                    "Error", Alert.AlertType.ERROR);
+            
+        }else{
+            
+            return true;
+            
+        }
+        
+        return false;
+    }
+    
+    void Dialogo(String mensaje, String cabecera, String titulo, Alert.AlertType e){
+        
+        Alert alert = new Alert(e);
+        alert.setTitle(titulo);
+        alert.setHeaderText(cabecera);
+        alert.setContentText(mensaje);
+        
+        ButtonType buttonTypeOk = new ButtonType("Aceptar", ButtonBar.ButtonData.OK_DONE);
+        
+        alert.getButtonTypes().setAll(buttonTypeOk);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == buttonTypeOk){
+                alert.close();
+        }
+        
+    }
+    
     
     void Crear_Lista(String query){
         

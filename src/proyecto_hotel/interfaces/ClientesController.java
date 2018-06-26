@@ -52,6 +52,7 @@ import javafx.util.Callback;
 import proyecto_hotel.Conexion;
 import proyecto_hotel.clases.Clientes;
 import proyecto_hotel.clases.Habitaciones;
+import proyecto_hotel.clases.Productos;
 
 /**
  * FXML Controller class
@@ -146,7 +147,7 @@ public class ClientesController implements Initializable {
     private JFXButton btnEliminar;
     
     // Variables universales
-    int id;
+    int id = 0;
     Image imagen;
     
 
@@ -348,20 +349,30 @@ public class ClientesController implements Initializable {
             
             VBox vBox = new VBox(
                     
-                Nombres = new Label("Nombres: "+item.getPrimerNombre()+" "+item.getSegundoNombre()),
-                Apellidos = new Label("Apellidos: "+item.getPrimerApellido()+" "+item.getSegundoApellido()),    
-                Identificacion = new Label("Identificacion: "+item.getIdentificacion()),
-                Tipo = new Label("Tipo: "+item.getTipo()), 
+                Nombres = new Label("Nombre Completo : "+item.getPrimerNombre()+" "+item.getSegundoNombre()+" "+item.getPrimerApellido()+" "+item.getSegundoApellido()),
+                Identificacion = new Label("Identificacion: "+item.getIdentificacion()+" Tipo: "+item.getTipo()),
                 Pais = new Label("Pais: "+item.getPais()),
-                NumeroReserva = new Label("# Reserva: "+item.getNumero_reserva()), 
-                NumeroEstancia = new Label("# Estancia: "+item.getNumero_estancia()), 
                 Inscripcion = new Label("Fecha de Inscripcion: "+item.getFecha_inscripcion()), 
                 Nacimiento = new Label("Fecha de Nacimiento: "+item.getFecha_nacimiento()),      
                 Telefono = new Label("Telefono: "+item.getTelefono()),     
-                Correo = new Label("Correo: "+item.getCorreo())        
+                Correo = new Label("Correo: "+item.getCorreo()),
+                NumeroReserva = new Label("Número de Reserva: "+item.getNumero_reserva()),
+                NumeroEstancia = new Label("Número de Estancia: "+item.getNumero_estancia())
                         
                 );
-                                               
+                             
+                    if (item.getNumero_reserva() > 0) {
+                        NumeroReserva.getStyleClass().add("round-green");
+                    }else{
+                        NumeroReserva.getStyleClass().add("round-red");
+                    }
+                    
+                    if (item.getNumero_estancia()> 0) {
+                        NumeroEstancia.getStyleClass().add("round-green");
+                    }else{
+                        NumeroEstancia.getStyleClass().add("round-red");
+                    }
+                    
                     HBox hBox = new HBox(
                             
                     imagen = new ImageView(item.getImagen()), vBox);
@@ -462,54 +473,81 @@ public class ClientesController implements Initializable {
         
         Image imagen = screen_img.getImage();
         
-        data.add(new Clientes(imagen,id,primerNombre,segundoNombre,primerApellido,segundoApellido,
-        
-        identificacion,tipo,pais,numero_reserva,numero_estancia,fecha_inscripcion,fecha_nacimiento,telefono,correo));
-
         Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
         Statement stm = (Statement) connection.createStatement();
         String query = null;
         
-        if (click == 1) {
+        String pNombre = lista_clientes.getSelectionModel().getSelectedItem().getPrimerNombre();
+        String pApellido = lista_clientes.getSelectionModel().getSelectedItem().getPrimerApellido();
+        
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("¿Confirmar Acción?");
+        alert.setHeaderText("¿Está seguro que desea editar el cliente "+pNombre+" "+pApellido+" de la base?");
+        alert.setContentText("Se reescribirá la información con los datos introcucidos en los campos.\nPara Editar, presione aceptar.");
+        
+        ButtonType buttonTypeCancel = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType buttonTypeOk = new ButtonType("Aceptar", ButtonBar.ButtonData.OK_DONE);
+        
+        alert.getButtonTypes().setAll(buttonTypeCancel,buttonTypeOk);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == buttonTypeOk){
+            // ... user chose OK
+            data.add(new Clientes(imagen,id,primerNombre,segundoNombre,primerApellido,segundoApellido,
+            identificacion,tipo,pais,numero_reserva,numero_estancia,fecha_inscripcion,fecha_nacimiento,telefono,correo));
             
-            query = "Update Cliente set Primer_nombre = '"+primerNombre+"',"
-		   +"Segundo_nombre = '"+segundoNombre+"',"
-                   +"Primer_apellido = '"+primerApellido+"',"
-                   +"Segundo_apellido = '"+segundoApellido+"',"
-                   +"Identificacion = '"+identificacion+"',"
-                   +"Tipo_identificacion = '"+tipo+"',"
-                   +"Pais_origen = '"+pais+"',"
-                   +"Numero_reserva = '"+numero_reserva+"',"
-                   +"Numero_estancia = '"+numero_estancia+"',"
-                   +"Fecha_inscripcion = '"+fecha_inscripcion+"',"
-                   +"Fecha_nacimiento = '"+fecha_nacimiento+"',"
-                   +"Telefono = '"+telefono+"',"
-                   +"Correo = '"+correo+"',"
-                   +"Imagen = '"+nombre_img+"' where Id_cliente = "+id+";";
+            if (click == 1) {
             
-        }else{
+                    query = "Update Cliente set Primer_nombre = '"+primerNombre+"',"
+                           +"Segundo_nombre = '"+segundoNombre+"',"
+                           +"Primer_apellido = '"+primerApellido+"',"
+                           +"Segundo_apellido = '"+segundoApellido+"',"
+                           +"Identificacion = '"+identificacion+"',"
+                           +"Tipo_identificacion = '"+tipo+"',"
+                           +"Pais_origen = '"+pais+"',"
+                           +"Numero_reserva = '"+numero_reserva+"',"
+                           +"Numero_estancia = '"+numero_estancia+"',"
+                           +"Fecha_inscripcion = '"+fecha_inscripcion+"',"
+                           +"Fecha_nacimiento = '"+fecha_nacimiento+"',"
+                           +"Telefono = '"+telefono+"',"
+                           +"Correo = '"+correo+"',"
+                           +"Imagen = '"+nombre_img+"' where Id_cliente = "+id+";";
+
+            }else{
             
-            query = "Update Cliente set Primer_nombre = '"+primerNombre+"',"
-		   +"Segundo_nombre = '"+segundoNombre+"',"
-                   +"Primer_apellido = '"+primerApellido+"',"
-                   +"Segundo_apellido = '"+segundoApellido+"',"
-                   +"Identificacion = '"+identificacion+"',"
-                   +"Tipo_identificacion = '"+tipo+"',"
-                   +"Pais_origen = '"+pais+"',"
-                   +"Numero_reserva = '"+numero_reserva+"',"
-                   +"Numero_estancia = '"+numero_estancia+"',"
-                   +"Fecha_inscripcion = '"+fecha_inscripcion+"',"
-                   +"Fecha_nacimiento = '"+fecha_nacimiento+"',"
-                   +"Telefono = '"+telefono+"',"
-                   +"Correo = '"+correo+"' "
-                   +"where Id_cliente = "+id+";";
+                    query = "Update Cliente set Primer_nombre = '"+primerNombre+"',"
+                           +"Segundo_nombre = '"+segundoNombre+"',"
+                           +"Primer_apellido = '"+primerApellido+"',"
+                           +"Segundo_apellido = '"+segundoApellido+"',"
+                           +"Identificacion = '"+identificacion+"',"
+                           +"Tipo_identificacion = '"+tipo+"',"
+                           +"Pais_origen = '"+pais+"',"
+                           +"Numero_reserva = '"+numero_reserva+"',"
+                           +"Numero_estancia = '"+numero_estancia+"',"
+                           +"Fecha_inscripcion = '"+fecha_inscripcion+"',"
+                           +"Fecha_nacimiento = '"+fecha_nacimiento+"',"
+                           +"Telefono = '"+telefono+"',"
+                           +"Correo = '"+correo+"' "
+                           +"where Id_cliente = "+id+";";
+
+            }
+        
+            click = 0;
+            stm.executeUpdate(query);
+            Crear_Lista("select * from Cliente where Eliminado = 0;");
             
+            Dialogo("Se ha editado el registro.", "Exito al Editar!",
+            "Operación Realizada", Alert.AlertType.CONFIRMATION);
+            
+            
+        } else if(result.get() == buttonTypeCancel){
+            // ... user chose CANCEL or closed the dialog
+            alert.close();
         }
         
-        click = 0;
-        stm.executeUpdate(query);
-        Crear_Lista("select * from Cliente where Eliminado = 0;");
     }
+    
+    
 
     @FXML
     void Eliminar_Registro(ActionEvent event) throws SQLException {
@@ -525,9 +563,9 @@ public class ClientesController implements Initializable {
         String query = null;
         
         Alert alert = new Alert(AlertType.WARNING);
-        alert.setTitle("Confirmar Accion");
-        alert.setHeaderText("Eliminar Registro");
-        alert.setContentText("Esta seguro que desea eliminar el cliente "+primerNombre+"?");
+        alert.setTitle("¿Confirmar Acción?");
+        alert.setHeaderText("¿Está seguro que desea eliminar el cliente "+primerNombre+" "+primerApellido+" de la base?");
+        alert.setContentText("Si lo elimina, no podrá acceder luego a este registro.");
         
         ButtonType buttonTypeCancel = new ButtonType("Cancelar", ButtonData.CANCEL_CLOSE);
         ButtonType buttonTypeOk = new ButtonType("Aceptar", ButtonData.OK_DONE);
@@ -542,6 +580,11 @@ public class ClientesController implements Initializable {
             click = 0;
             stm.executeUpdate(query);
             Crear_Lista("select * from Cliente where Eliminado = 0;");
+            
+            
+            Dialogo("Se ha eliminado el registro.", "Exito al Borrar!",
+            "Operación Realizada", Alert.AlertType.CONFIRMATION);
+            
             
         } else if(result.get() == buttonTypeCancel){
             // ... user chose CANCEL or closed the dialog
@@ -575,69 +618,94 @@ public class ClientesController implements Initializable {
     @FXML
     void Guardar_Registro(ActionEvent event) throws SQLException {
         
-        String primerNombre = txtp_nombre.getText();
-        String segundoNombre = txts_nombre.getText();
-        String primerApellido = txtp_apellido.getText();
-        String segundoApellido = txts_apellido.getText();
-        
-        String identificacion = txtidentificacion.getText();
-        String tipo = combo_tipo.getSelectionModel().getSelectedItem();
-        String pais = txtpais.getText();
+        if (Valida() == true) {
+            
+            String primerNombre = txtp_nombre.getText();
+            String segundoNombre = txts_nombre.getText();
+            String primerApellido = txtp_apellido.getText();
+            String segundoApellido = txts_apellido.getText();
+
+            String identificacion = txtidentificacion.getText();
+            String tipo = combo_tipo.getSelectionModel().getSelectedItem();
+            String pais = txtpais.getText();
+
+
+            int numero_reserva = 0, numero_estancia = 0;
+
+            if (txtreserva.getText().equals("") && txtestancia.getText().equals("")) {
+                numero_reserva = 0;
+                numero_estancia = 0;
+            }else{
+                numero_reserva = Integer.parseInt(txtreserva.getText());
+                numero_estancia = Integer.parseInt(txtestancia.getText());
+            }
+
+            String fecha_inscripcion = fechanac.getValue().toString();
+            String fecha_nacimiento = this.fecha_inscripcion.getValue().toString();
+
+            int[] nacimiento = Arrays.stream(fecha_nacimiento.trim().split("-"))
+                          .mapToInt(Integer::parseInt)
+                          .toArray();
+
+            int[] inscripcion = Arrays.stream(fecha_inscripcion.trim().split("-"))
+                          .mapToInt(Integer::parseInt)
+                          .toArray();
+
+
+            fecha_nacimiento = (""+nacimiento[0]+"-"+nacimiento[1]+"-"+nacimiento[2]);
+            fecha_inscripcion = (""+inscripcion[0]+"-"+inscripcion[1]+"-"+inscripcion[2]);
+
+            System.out.println(""+fecha_nacimiento);
+            System.out.println(""+fecha_inscripcion);
+
+            String telefono = txttelefono.getText();
+            String correo = txtcorreo.getText();
+
+            Image imagen = screen_img.getImage();
+
+            Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
+            Statement stm = (Statement) connection.createStatement();
+            String query = null;
+
+
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("¿Confirmar Acción?");
+            alert.setHeaderText("¿Está seguro que desea guardar el cliente "+primerNombre+" "+primerApellido+" a la base?");
+            alert.setContentText("Se guardará la información con los datos introcucidos en los campos.\nPara Guardar, presione aceptar.");
+
+            ButtonType buttonTypeCancel = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+            ButtonType buttonTypeOk = new ButtonType("Aceptar", ButtonBar.ButtonData.OK_DONE);
+
+            alert.getButtonTypes().setAll(buttonTypeCancel,buttonTypeOk);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == buttonTypeOk){
+                // ... user chose OK
+                data.add(new Clientes(imagen,id,primerNombre,segundoNombre,primerApellido,segundoApellido,
+                identificacion,tipo,pais,numero_reserva,numero_estancia,fecha_inscripcion,fecha_nacimiento,telefono,correo));
+
+                query = "insert into Cliente " 
+                    +"(Primer_nombre,Segundo_nombre,Primer_apellido,Segundo_apellido,Identificacion,Tipo_identificacion,Pais_origen,Numero_reserva,Numero_estancia,\n" 
+                    +" Fecha_inscripcion,Fecha_nacimiento,Telefono,Correo,Imagen,Eliminado) values " 
+                    +"('"+primerNombre+"','"+segundoNombre+"','"+primerApellido+"','"+segundoApellido+"','"+identificacion+"','"+tipo+"','"+pais+"',"
+                    + ""+numero_reserva+","+numero_estancia+",'"+fecha_inscripcion+"','"+fecha_nacimiento+"','"+telefono+"','"+correo+"','"+nombre_img+"',0);";
+
+                stm.executeUpdate(query);
+
+                Crear_Lista("select * from Cliente where Eliminado = 0;");
                 
-        
-        int numero_reserva = 0, numero_estancia = 0;
-        
-        if (txtreserva.getText().equals("") && txtestancia.getText().equals("")) {
-            numero_reserva = 0;
-            numero_estancia = 0;
-        }else{
-            numero_reserva = Integer.parseInt(txtreserva.getText());
-            numero_estancia = Integer.parseInt(txtestancia.getText());
+                Dialogo("Se ha guardado el registro.", "Exito al Guardar!",
+                    "Operación Realizada", Alert.AlertType.CONFIRMATION);
+
+            } else if(result.get() == buttonTypeCancel){
+                // ... user chose CANCEL or closed the dialog
+                alert.close();
+            }
+            
         }
         
-        String fecha_inscripcion = fechanac.getValue().toString();
-        String fecha_nacimiento = this.fecha_inscripcion.getValue().toString();
-        
-        int[] nacimiento = Arrays.stream(fecha_nacimiento.trim().split("-"))
-                      .mapToInt(Integer::parseInt)
-                      .toArray();
-        
-        int[] inscripcion = Arrays.stream(fecha_inscripcion.trim().split("-"))
-                      .mapToInt(Integer::parseInt)
-                      .toArray();
-                
-        
-        fecha_nacimiento = (""+nacimiento[0]+"-"+nacimiento[1]+"-"+nacimiento[2]);
-        fecha_inscripcion = (""+inscripcion[0]+"-"+inscripcion[1]+"-"+inscripcion[2]);
-        
-        System.out.println(""+fecha_nacimiento);
-        System.out.println(""+fecha_inscripcion);
-        
-        String telefono = txttelefono.getText();
-        String correo = txtcorreo.getText();
-        
-        Image imagen = screen_img.getImage();
-        
-        data.add(new Clientes(imagen,id,primerNombre,segundoNombre,primerApellido,segundoApellido,
-        
-        identificacion,tipo,pais,numero_reserva,numero_estancia,fecha_inscripcion,fecha_nacimiento,telefono,correo));
-
-        Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
-        Statement stm = (Statement) connection.createStatement();
-        String query = null;
-        
-        
-        query = "insert into Cliente " 
-                +"(Primer_nombre,Segundo_nombre,Primer_apellido,Segundo_apellido,Identificacion,Tipo_identificacion,Pais_origen,Numero_reserva,Numero_estancia,\n" 
-                +" Fecha_inscripcion,Fecha_nacimiento,Telefono,Correo,Imagen) values " 
-                +"('"+primerNombre+"','"+segundoNombre+"','"+primerApellido+"','"+segundoApellido+"','"+identificacion+"','"+tipo+"','"+pais+"',"
-                + ""+numero_reserva+","+numero_estancia+",'"+fecha_inscripcion+"','"+fecha_nacimiento+"','"+telefono+"','"+correo+"','"+nombre_img+"');";
-  
-        stm.executeUpdate(query);
-        
-        Crear_Lista("select * from Cliente where Eliminado = 0;");
-        
     }
+    
     
     String s;
     Format formatter;
@@ -690,6 +758,43 @@ public class ClientesController implements Initializable {
         }
         
     }
+    
+    boolean Valida(){
+        if (txtp_nombre.getText().equals("") || txtp_apellido.getText().equals("")
+                || txts_nombre.getText().equals("") || txts_apellido.getText().equals("")
+                || txtidentificacion.getText().equals("") || txtpais.getText().equals("")
+                || txttelefono.getText().equals("") || txtcorreo.getText().equals("")
+                || combo_tipo.getSelectionModel().isEmpty()
+                || fechanac.getValue() == null) {
+            
+            Dialogo("Al parecer hay algunos campos que necesitan ser rellenados.", "¡Necesita rellenar todos los campos!",
+                    "Error", Alert.AlertType.ERROR);
+            
+        }else{
+            
+            return true;
+            
+        }
+        
+        return false;
+    }
+    
+    void Dialogo(String mensaje, String cabecera, String titulo, Alert.AlertType e){
+        
+        Alert alert = new Alert(e);
+        alert.setTitle(titulo);
+        alert.setHeaderText(cabecera);
+        alert.setContentText(mensaje);
+        
+        ButtonType buttonTypeOk = new ButtonType("Aceptar", ButtonBar.ButtonData.OK_DONE);
+        
+        alert.getButtonTypes().setAll(buttonTypeOk);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == buttonTypeOk){
+                alert.close();
+        }
+        
+    }
 
 
     @Override
@@ -713,6 +818,7 @@ public class ClientesController implements Initializable {
         txtreserva.setEditable(false);
         txtestancia.setEditable(false);
         fecha_inscripcion.setEditable(false);
+        fecha_inscripcion.setDisable(true);
         
         Crear_Lista("select * from Cliente where Eliminado = 0;");
         

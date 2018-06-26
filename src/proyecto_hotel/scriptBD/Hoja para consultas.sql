@@ -1,6 +1,11 @@
+/* 
+    Esta hoja puede ser usada para realizar consultas y evitar que se use la de 
+    la base de datos
+*/
 
 use Hotel;
 
 select * from Cliente;
 
-update Cliente set Eliminado = 0 where id_cliente = 2;
+
+

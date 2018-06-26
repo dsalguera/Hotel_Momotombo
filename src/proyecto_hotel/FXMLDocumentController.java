@@ -10,6 +10,7 @@ import java.net.URL;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +23,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -130,9 +134,53 @@ public class FXMLDocumentController implements Initializable {
         
     }
     
+    // Aqui mostras un dialogo... donde dice AlertType definis de que tipo es
+    //Ejemplo e.ERROR e.INFORMATION
+    //Si solo queres que salga OK pones 1
+    void Dialogo(String mensaje, String cabecera, String titulo, Alert.AlertType e, int SoloOk){
+        
+        Alert alert = new Alert(e);
+        alert.setTitle(titulo);
+        alert.setHeaderText(cabecera);
+        alert.setContentText(mensaje);
+        
+        ButtonType buttonTypeOk = new ButtonType("Aceptar", ButtonBar.ButtonData.OK_DONE);
+        
+        if (SoloOk == 1) {
+            
+            alert.getButtonTypes().setAll(buttonTypeOk);
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == buttonTypeOk){
+                alert.close();
+            }
+            
+        }else{
+            
+            ButtonType buttonTypeCancel = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+            alert.getButtonTypes().setAll(buttonTypeCancel,buttonTypeOk);
+            
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == buttonTypeOk){
+                // ... user chose OK
+                Accion_Dialogo();
+
+            } else if(result.get() == buttonTypeCancel){
+                // ... user chose CANCEL or closed the dialog
+                alert.close();
+            }
+        }
+        
+    }
+    
+    void Accion_Dialogo(){
+        // Lo que hara el dialog en Aceptar
+    }
+    
+     boolean usuario_encontrado=false;    
+     
     void Conexion(ActionEvent event) { 
         if (txtuser.getText().trim().equals("") || txtpass.getText().trim().equals("")) {
-              JOptionPane.showMessageDialog(null,"Usuario Ó contraceña Invalida");
+              Dialogo("Asegúrese de ingresar corretamente sus credenciales.", "Usuario o Contraseña Inválidos!", "Error", Alert.AlertType.ERROR, 1);
             return;
         }
         try {
@@ -142,7 +190,7 @@ public class FXMLDocumentController implements Initializable {
         Statement stm = (Statement) connection.createStatement();
         
         ResultSet rs = stm.executeQuery("select * from usuario where Nombre_usuario = '"+txtuser.getText()+"';");
-            boolean usuario_encontrado=false;    
+           
         while (rs.next()) {
                 String nombre = rs.getString("nombre_usuario");
                 int tipo = rs.getInt("tipo_cuenta");
@@ -155,15 +203,15 @@ public class FXMLDocumentController implements Initializable {
                     Siguiente(nombre,tipo,event);
                     
                 }else{
-                    JOptionPane.showMessageDialog(null,"Usuario Ó contraceña Invalida");
+                    Dialogo("Asegúrese de ingresar corretamente sus credenciales.", "Usuario o Contraseña Inválidos!", "Error", Alert.AlertType.ERROR, 1);
                 } 
         }
             if (usuario_encontrado==false) {
-               JOptionPane.showMessageDialog(null,"Usuario Ó contraceña Invalida");
+               Dialogo("Asegúrese de ingresar corretamente sus credenciales.", "Usuario o Contraseña Inválidos!", "Error", Alert.AlertType.ERROR, 1);
             }
             
         } catch ( SQLException e) {
-          JOptionPane.showMessageDialog(null,"Usuario Ó contraceña Invalida");
+          Dialogo("Asegúrese de ingresar corretamente sus credenciales.", "Usuario o Contraseña Inválidos!", "Error", Alert.AlertType.ERROR, 1);
         }
               
          
