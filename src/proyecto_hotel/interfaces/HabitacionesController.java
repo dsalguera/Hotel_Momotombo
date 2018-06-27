@@ -500,7 +500,7 @@ public class HabitacionesController implements Initializable {
             
         }else{
             
-            if (screen_img.getImage().equals(null)) {
+            if (screen_img.getImage() == null) {
                 Dialogo("Al parecer necesita agregar una imagen.", "¡No imagen!",
                     "Error", Alert.AlertType.ERROR);
             }else{
@@ -588,8 +588,8 @@ public class HabitacionesController implements Initializable {
                     // ... user chose OK
                     data.add(new Habitaciones(imagen,id,nombre,tipo,tarifa,telefono,estado,descripcion));
 
-                    String query = "insert into Habitacion (Nombre, Tipo, Tarifa, Telefono, Estado, Descripcion,Imagen) " +
-                    "values ('"+nombre+"','"+tipo+"',"+tarifa+",'"+telefono+"',"+estado+",'"+descripcion+"','"+nombre_img+"');";
+                    String query = "insert into Habitacion (Nombre, Tipo, Tarifa, Telefono, Estado, Descripcion,Imagen,Eliminado) " +
+                    "values ('"+nombre+"','"+tipo+"',"+tarifa+",'"+telefono+"',"+estado+",'"+descripcion+"','"+nombre_img+"',0);";
 
                     stm.executeUpdate(query);
 

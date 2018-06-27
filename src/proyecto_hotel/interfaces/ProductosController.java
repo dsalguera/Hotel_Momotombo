@@ -335,8 +335,8 @@ public class ProductosController implements Initializable {
                 Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
                 Statement stm = (Statement) connection.createStatement();
 
-                String query = "insert into Producto (Nombre, Tipo_producto, Precio, Estado,Cantidad,Imagen) " +
-                "values ('"+nombre+"','"+tipo+"',"+precio+","+estado+","+cantidad+",'"+nombre_img+"');";
+                String query = "insert into Producto (Nombre, Tipo_producto, Precio, Estado,Cantidad,Imagen,Eliminado) " +
+                "values ('"+nombre+"','"+tipo+"',"+precio+","+estado+","+cantidad+",'"+nombre_img+"',0);";
 
                 stm.executeUpdate(query);
 
@@ -491,7 +491,7 @@ public class ProductosController implements Initializable {
             
         }else{
             
-            if (screen_img.getImage().equals(null)) {
+            if (screen_img.getImage() == null) {
                 Dialogo("Al parecer necesita agregar una imagen.", "¡No imagen!",
                     "Error", Alert.AlertType.ERROR);
             }else{
