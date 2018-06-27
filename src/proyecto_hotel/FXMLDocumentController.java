@@ -93,7 +93,27 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     void Registrarse(ActionEvent event) {
-        
+        try {
+            
+                    FXMLLoader fxmlLoader = new FXMLLoader();
+                    fxmlLoader.setLocation(getClass().getResource("/proyecto_hotel/interfaces/Registro.fxml"));
+                    
+                    Stage stage = new Stage();
+                    //stage.initStyle(StageStyle.TRANSPARENT);
+                    
+                    Scene scene = new Scene(fxmlLoader.load(),Color.TRANSPARENT);
+                    
+                    stage.setTitle("Registro de Cliente");
+                    stage.setScene(scene);
+                    stage.show();
+                    
+                    ((Node)(event.getSource())).getScene().getWindow().hide();
+
+        } catch (IOException e) {
+            
+            Dialogo("Al parecer hay un error de acceso al sistema.\n\n"+e.getMessage()+"", "Error al Acceder!", "Error", Alert.AlertType.ERROR, 1);
+                        
+        }
     }
     
     @FXML
@@ -128,7 +148,7 @@ public class FXMLDocumentController implements Initializable {
 
         } catch (IOException e) {
             
-            JOptionPane.showMessageDialog(null,"Ocurrio un error al acceder!");
+            Dialogo("Al parecer hay un error de acceso al sistema.\n"+e.getMessage()+"", "Error al Acceder!", "Error", Alert.AlertType.ERROR, 1);
                         
         }
         

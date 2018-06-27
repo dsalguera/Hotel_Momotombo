@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" fx:id="anchorpane" prefHeight="586.0" prefWidth="742.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto_hotel.interfaces.RegistroController">
+   <children>
+      <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox fx:id="boxCambios" alignment="CENTER" prefHeight="586.0" prefWidth="534.0" styleClass="side-panel" stylesheets="@../estilos/Estilos.css">
+               <children>
+                  <HBox fx:id="box_estancia_reserva" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="15.0" right="15.0" top="5.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <VBox alignment="TOP_CENTER" prefHeight="59.0" prefWidth="500.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="43.0" prefWidth="166.0" text="Información Básica" textFill="WHITE">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="15.0" />
+                     </VBox.margin>
+                  </VBox>
+                  <ImageView fx:id="screen_img" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <VBox.margin>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
+                     </VBox.margin>
+                     <image>
+                        <Image url="@../imagenes/login/no_Image.jpg" />
+                     </image>
+                  </ImageView>
+                  <JFXButton fx:id="btnCambiarImagen" graphicTextGap="10.0" onAction="#Cambiar_Imagen" prefHeight="35.0" prefWidth="198.0" styleClass="button-skyblue" stylesheets="@../estilos/Estilos.css" text="CAMBIAR IMAGEN" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets bottom="20.0" left="20.0" right="20.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font name="The Dodger Inky Regular" size="20.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView glyphName="PHOTO" size="18" styleClass="icon-color" />
+                     </graphic>
+                  </JFXButton>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <JFXTextField fx:id="txtp_nombre" focusColor="#00bfe9" maxHeight="43.0" maxWidth="200.0" prefHeight="25.0" prefWidth="246.0" promptText="Primer Nombre" styleClass="campos" stylesheets="@../estilos/Estilos.css">
+                           <font>
+                              <Font name="The Dodger Inky Regular" size="18.0" />
+                           </font>
+                        </JFXTextField>
+                        <JFXTextField fx:id="txts_nombre" focusColor="#00bfe9" maxHeight="43.0" maxWidth="200.0" prefHeight="25.0" prefWidth="246.0" promptText="Segundo Nombre" styleClass="campos" stylesheets="@../estilos/Estilos.css">
+                           <font>
+                              <Font name="The Dodger Inky Regular" size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="15.0" />
+                           </HBox.margin>
+                        </JFXTextField>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <JFXTextField fx:id="txtp_apellido" focusColor="#00bfe9" maxHeight="43.0" maxWidth="200.0" prefHeight="25.0" prefWidth="246.0" promptText="Primer Apellido" styleClass="campos" stylesheets="@../estilos/Estilos.css">
+                           <font>
+                              <Font name="The Dodger Inky Regular" size="18.0" />
+                           </font>
+                        </JFXTextField>
+                        <JFXTextField fx:id="txts_apellido" focusColor="#00bfe9" maxHeight="43.0" maxWidth="200.0" prefHeight="25.0" prefWidth="246.0" promptText="Segundo Apellido" styleClass="campos" stylesheets="@../estilos/Estilos.css">
+                           <font>
+                              <Font name="The Dodger Inky Regular" size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="15.0" />
+                           </HBox.margin>
+                        </JFXTextField>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <JFXTextField fx:id="txtidentificacion" focusColor="#00bfe9" maxHeight="43.0" maxWidth="200.0" prefHeight="32.0" prefWidth="246.0" promptText="Identificación" styleClass="campos" stylesheets="@../estilos/Estilos.css">
+                           <font>
+                              <Font name="The Dodger Inky Regular" size="18.0" />
+                           </font>
+                        </JFXTextField>
+                        <ComboBox fx:id="combo_tipo" prefHeight="31.0" prefWidth="200.0" promptText="Tipo de Identific.">
+                           <HBox.margin>
+                              <Insets left="15.0" />
+                           </HBox.margin>
+                        </ComboBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <JFXDatePicker fx:id="fecha_inscripcion" defaultColor="#00bfe9" editable="false" prefHeight="25.0" prefWidth="200.0" promptText="Fecha de Inscripcion">
+                           <HBox.margin>
+                              <Insets right="15.0" />
+                           </HBox.margin>
+                        </JFXDatePicker>
+                        <JFXDatePicker fx:id="fechanac" defaultColor="#00bfe9" prefHeight="25.0" prefWidth="200.0" promptText="Fecha de Nacimiento" />
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <JFXTextField fx:id="txtpais" focusColor="#00bfe9" maxHeight="43.0" maxWidth="200.0" prefHeight="25.0" prefWidth="246.0" promptText="País de Origen" styleClass="campos" stylesheets="@../estilos/Estilos.css">
+                           <font>
+                              <Font name="The Dodger Inky Regular" size="18.0" />
+                           </font>
+                        </JFXTextField>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                     </VBox.margin>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox prefHeight="586.0" prefWidth="277.0" styleClass="top-panel" stylesheets="@../estilos/Estilos.css">
+               <children>
+                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label alignment="CENTER" text="Información de Sesión" textFill="WHITE">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="50.0" />
+                           </VBox.margin>
+                        </Label>
+                        <JFXTextField fx:id="txtnombreuser" focusColor="#00bfe9" maxHeight="43.0" maxWidth="200.0" prefHeight="25.0" prefWidth="246.0" promptText="Nombre de Usuario" styleClass="campos" stylesheets="@../estilos/Estilos.css">
+                           <font>
+                              <Font name="The Dodger Inky Regular" size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="100.0" />
+                           </VBox.margin>
+                        </JFXTextField>
+                        <JFXPasswordField fx:id="txtpassword" maxHeight="43.0" maxWidth="200.0" prefHeight="25.0" prefWidth="200.0" promptText="Contraseña" styleClass="campos" stylesheets="@../estilos/Estilos.css">
+                           <VBox.margin>
+                              <Insets top="15.0" />
+                           </VBox.margin>
+                        </JFXPasswordField>
+                        <JFXPasswordField fx:id="txtpassword2" maxHeight="43.0" maxWidth="200.0" prefHeight="25.0" prefWidth="200.0" promptText="Confirmar Contraseña" styleClass="campos" stylesheets="@../estilos/Estilos.css">
+                           <VBox.margin>
+                              <Insets top="15.0" />
+                           </VBox.margin>
+                        </JFXPasswordField>
+                        <JFXTextField fx:id="txtcorreo" focusColor="#00bfe9" maxHeight="43.0" maxWidth="200.0" prefHeight="25.0" prefWidth="200.0" promptText="Correo Electrónico" styleClass="campos" stylesheets="@../estilos/Estilos.css">
+                           <font>
+                              <Font name="The Dodger Inky Regular" size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="15.0" />
+                           </VBox.margin>
+                        </JFXTextField>
+                        <JFXTextField fx:id="txttelefono" focusColor="#00bfe9" maxHeight="43.0" maxWidth="200.0" prefHeight="25.0" prefWidth="246.0" promptText="Teléfono" styleClass="campos" stylesheets="@../estilos/Estilos.css">
+                           <font>
+                              <Font name="The Dodger Inky Regular" size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="15.0" />
+                           </VBox.margin>
+                        </JFXTextField>
+                        <HBox fx:id="panel_edicion" alignment="CENTER" prefHeight="49.0" prefWidth="238.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <JFXButton fx:id="btnGuardar" onAction="#Guardar_Registro" prefHeight="38.0" prefWidth="150.0" styleClass="button-skyblue" stylesheets="@../estilos/Estilos.css" text="Guardar Usuario">
+                                 <HBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </HBox.margin>
+                                 <graphic>
+                                    <FontAwesomeIconView glyphName="SAVE" size="25" styleClass="icon-color" />
+                                 </graphic>
+                                 <font>
+                                    <Font name="The Dodger Inky Regular" size="18.0" />
+                                 </font>
+                              </JFXButton>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="25.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox fx:id="panel_edicion1" alignment="CENTER" prefHeight="49.0" prefWidth="238.0">
+                           <children>
+                              <JFXButton fx:id="btnLimpiar" onAction="#Nuevo_Registro" prefWidth="150.0" styleClass="button-skyblue" stylesheets="@../estilos/Estilos.css" text="Limpiar Campos">
+                                 <HBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </HBox.margin>
+                                 <graphic>
+                                    <FontAwesomeIconView glyphName="PLUS" size="25" styleClass="icon-color" />
+                                 </graphic>
+                                 <font>
+                                    <Font name="The Dodger Inky Regular" size="18.0" />
+                                 </font>
+                              </JFXButton>
+                           </children>
+                        </HBox>
+                        <HBox fx:id="panel_edicion11" alignment="CENTER" prefHeight="49.0" prefWidth="238.0">
+                           <children>
+                              <JFXButton fx:id="btnRegresar" onAction="#Regresar" prefWidth="150.0" styleClass="button-skyblue" stylesheets="@../estilos/Estilos.css" text="Regresar">
+                                 <HBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </HBox.margin>
+                                 <graphic>
+                                    <FontAwesomeIconView glyphName="HOME" size="25" styleClass="icon-color" />
+                                 </graphic>
+                                 <font>
+                                    <Font name="The Dodger Inky Regular" size="18.0" />
+                                 </font>
+                              </JFXButton>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

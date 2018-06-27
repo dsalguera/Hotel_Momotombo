@@ -344,6 +344,8 @@ public class ProductosController implements Initializable {
                 
                 Dialogo("Se ha guardado el registro.", "Exito al Guardar!",
                 "Operación Realizada", Alert.AlertType.CONFIRMATION);
+                
+                Nuevo();
 
             } else if(result.get() == buttonTypeCancel){
                 // ... user chose CANCEL or closed the dialog

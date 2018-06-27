@@ -11,6 +11,7 @@ create table Usuario (
     Tipo_cuenta int,
     Estado int,
     Eliminado int,
+    Id_cliente int,
     Imagen varchar(500)
 );
 
@@ -143,6 +144,7 @@ create table Pago (id_pago int primary key auto_increment,
 Create Table Tarjeta(Id_tarjeta int primary key auto_increment,
 monto double);
 
+alter table Usuario add foreign key (id_cliente) references Cliente(id_cliente);
 alter table Pago add foreign key (id_cliente) references Cliente(id_cliente);
 alter table Reserva add foreign key (Id_cliente) references Cliente(Id_cliente);
 alter table Reserva add foreign key (Id_habitacion) references Habitacion(Id_habitacion);
