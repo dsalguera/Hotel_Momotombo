@@ -592,3 +592,18 @@ DELIMITER ;
 
 
 call getCosto_total('2018-03-2','2018-04-4',1)
+
+/*
+    Trigger para reservas
+*/
+
+DELIMITER //
+CREATE TRIGGER Conteo_Reservas after insert ON cliente
+	FOR EACH ROW
+	BEGIN
+
+        set @conteoReservas = (select count(Numero_reserva) from Cliente where Id_cliente = old.Id_cliente);
+        update Cliente set Numero_reserva = @conteoReservas where Id_cliente = old.Id_cliente;
+
+	END;//
+DELIMITER ;

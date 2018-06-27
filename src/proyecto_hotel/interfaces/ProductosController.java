@@ -168,7 +168,6 @@ public class ProductosController implements Initializable {
             }
     }
     
-    
     @FXML
     void Editar_Registro(ActionEvent event) throws SQLException {
         
@@ -225,6 +224,9 @@ public class ProductosController implements Initializable {
             stm.executeUpdate(query);
             Crear_Lista("select * from Producto where Eliminado = 0;");
             
+            Dialogo("Se ha editado el registro.", "Exito al Editar!",
+            "Operación Realizada", Alert.AlertType.CONFIRMATION);
+            
         } else if(result.get() == buttonTypeCancel){
             // ... user chose CANCEL or closed the dialog
             alert.close();
@@ -279,6 +281,9 @@ public class ProductosController implements Initializable {
             click = 0;
             stm.executeUpdate(query);
             Crear_Lista("select * from Producto where Eliminado = 0;");
+            
+            Dialogo("Se ha eliminado el registro.", "Exito al Eliminar!",
+            "Operación Realizada", Alert.AlertType.CONFIRMATION);
             
         } else if(result.get() == buttonTypeCancel){
             // ... user chose CANCEL or closed the dialog
@@ -336,6 +341,9 @@ public class ProductosController implements Initializable {
                 stm.executeUpdate(query);
 
                 Crear_Lista("select * from Producto where Eliminado = 0;");
+                
+                Dialogo("Se ha guardado el registro.", "Exito al Guardar!",
+                "Operación Realizada", Alert.AlertType.CONFIRMATION);
 
             } else if(result.get() == buttonTypeCancel){
                 // ... user chose CANCEL or closed the dialog
@@ -483,8 +491,14 @@ public class ProductosController implements Initializable {
             
         }else{
             
-            return true;
+            if (screen_img.getImage().equals(null)) {
+                Dialogo("Al parecer necesita agregar una imagen.", "¡No imagen!",
+                    "Error", Alert.AlertType.ERROR);
+            }else{
             
+                return true;
+                
+            }
         }
         
         return false;

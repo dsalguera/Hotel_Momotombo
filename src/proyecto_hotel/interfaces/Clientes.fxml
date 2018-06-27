@@ -42,7 +42,7 @@
             </VBox>
             <VBox fx:id="boxCambios" alignment="CENTER" prefHeight="645.0" prefWidth="395.0" styleClass="side-panel" stylesheets="@../estilos/Estilos.css">
                <children>
-                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                  <HBox fx:id="box_estancia_reserva" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <JFXTextField fx:id="txtreserva" focusColor="#00bfe9" maxHeight="43.0" maxWidth="200.0" prefHeight="35.0" prefWidth="246.0" promptText="Numero de Reserva" styleClass="campos" stylesheets="@../estilos/Estilos.css">
                            <font>

@@ -22,6 +22,7 @@ import java.nio.file.StandardCopyOption;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,6 +37,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -63,6 +67,7 @@ import proyecto_hotel.clases.Habitaciones;
 import proyecto_hotel.interfaces.MenuController;
 import proyecto_hotel.Conexion;
 import proyecto_hotel.*;
+import proyecto_hotel.clases.Productos;
 
 /**
  * FXML Controller class
@@ -378,35 +383,152 @@ public class HabitacionesController implements Initializable {
             estado = 2;
         }
         
-        data.add(new Habitaciones(imagenP,id,nombre,tipo,tarifa,telefono,estado,descripcion));
+        Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
+        Statement stm = (Statement) connection.createStatement();
+        String query = null;
+        
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("¿Confirmar Acción?");
+        alert.setHeaderText("¿Está seguro que desea editar el registro "+nombre+" de Tipo "+tipo+" de la base?");
+        alert.setContentText("Se reescribirá la información con los datos introcucidos en los campos.\nPara Editar, presione aceptar.");
+        
+        ButtonType buttonTypeCancel = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType buttonTypeOk = new ButtonType("Aceptar", ButtonBar.ButtonData.OK_DONE);
+        
+        alert.getButtonTypes().setAll(buttonTypeCancel,buttonTypeOk);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        
+        if (result.get() == buttonTypeOk){
+            // ... user chose OK
+            data.add(new Habitaciones(imagenP,id,nombre,tipo,tarifa,telefono,estado,descripcion));
+        
+            if (click == 1) {
+            
+                query = "update Habitacion set Nombre = '"+nombre+"', Tipo = '"+tipo+"', Tarifa = "+tarifa+" , "
+                        + "Telefono = '"+telefono+"' , Estado = "+estado+", Descripcion = '"+descripcion+"' ,Imagen = '"+nombre_img+"' " 
+                        + "where Id_habitacion = "+id+";";
+
+
+            }else{
+
+                query = "update Habitacion set Nombre = '"+nombre+"', Tipo = '"+tipo+"', Tarifa = "+tarifa+" , "
+                        + "Telefono = '"+telefono+"' , Estado = "+estado+", Descripcion = '"+descripcion+"' " 
+                        + "where Id_habitacion = "+id+";";
+
+            }
+
+            click = 0;
+            stm.executeUpdate(query);
+            Crear_Lista("select * from habitacion;");
+            
+            Dialogo("Se ha editado el registro.", "Exito al Editar!",
+            "Operación Realizada", Alert.AlertType.CONFIRMATION);
+            
+        } else if(result.get() == buttonTypeCancel){
+            // ... user chose CANCEL or closed the dialog
+            alert.close();
+        }
+        
+        
+    }
+
+    @FXML
+    void Eliminar_Registro(ActionEvent event) throws SQLException {
+
+        String nombre, tipo, telefono, descripcion;
+        double tarifa;
+        int ident;
+        
+        ident = id;
+        nombre = txtnombre.getText().toString();
+        tipo = txttipo.getText().toString();
+        tarifa = Double.parseDouble(txttarifa.getText().toString());
+        telefono = txttelefono.getText().toString();
+        descripcion = txtdesc.getText().toString();
+        Image imagenP = screen_img.getImage();
+        
+        int estado;
+                
+        if (check_estado.isSelected()) {
+            estado = 1;
+        }else{
+            estado = 2;
+        }
         
         Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
         Statement stm = (Statement) connection.createStatement();
         String query = null;
         
-        if (click == 1) {
-            
-            query = "update Habitacion set Nombre = '"+nombre+"', Tipo = '"+tipo+"', Tarifa = "+tarifa+" , "
-                    + "Telefono = '"+telefono+"' , Estado = "+estado+", Descripcion = '"+descripcion+"' ,Imagen = '"+nombre_img+"' " 
-                    + "where Id_habitacion = "+id+";";
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("¿Confirmar Acción?");
+        alert.setHeaderText("¿Está seguro que desea eliminar el registro "+nombre+" de Tipo "+tipo+" de la base?");
+        alert.setContentText("Si lo elimina, no podrá acceder luego a este registro.");
+        
+        ButtonType buttonTypeCancel = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType buttonTypeOk = new ButtonType("Aceptar", ButtonBar.ButtonData.OK_DONE);
+        
+        alert.getButtonTypes().setAll(buttonTypeCancel,buttonTypeOk);
 
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == buttonTypeOk){
+            // ... user chose OK
+            query = "update Habitacion set Eliminado = "+1+" "
+                    +"where Id_habitacion = "+id+" and Nombre = '"+nombre+"';";
+            click = 0;
+            stm.executeUpdate(query);
+            Crear_Lista("select * from Habitacion where Eliminado = 0;");
+            
+            Dialogo("Se ha eliminado el registro.", "Exito al Eliminar!",
+            "Operación Realizada", Alert.AlertType.CONFIRMATION);
+            
+        } else if(result.get() == buttonTypeCancel){
+            // ... user chose CANCEL or closed the dialog
+            alert.close();
+        }
+        
+        
+    }
+    
+    boolean Valida(){
+        if (txtnombre.getText().equals("") || txttipo.getText().equals("")
+                || txttarifa.getText().equals("") || txtdesc.getText().equals("")
+                || txttelefono.getText().equals("")) {
+            
+            Dialogo("Al parecer hay algunos campos que necesitan ser rellenados.", "¡Necesita rellenar todos los campos!",
+                    "Error", Alert.AlertType.ERROR);
             
         }else{
             
-            query = "update Habitacion set Nombre = '"+nombre+"', Tipo = '"+tipo+"', Tarifa = "+tarifa+" , "
-                    + "Telefono = '"+telefono+"' , Estado = "+estado+", Descripcion = '"+descripcion+"' " 
-                    + "where Id_habitacion = "+id+";";
+            if (screen_img.getImage().equals(null)) {
+                Dialogo("Al parecer necesita agregar una imagen.", "¡No imagen!",
+                    "Error", Alert.AlertType.ERROR);
+            }else{
+            
+                return true;
+                
+            }
             
         }
         
-        click = 0;
-        stm.executeUpdate(query);
-        Crear_Lista("select * from habitacion;");
+        return false;
     }
-
-    @FXML
-    void Eliminar_Registro(ActionEvent event) {
-
+    
+    void Dialogo(String mensaje, String cabecera, String titulo, Alert.AlertType e){
+        
+        Alert alert = new Alert(e);
+        alert.setTitle(titulo);
+        alert.setHeaderText(cabecera);
+        alert.setContentText(mensaje);
+        
+        ButtonType buttonTypeOk = new ButtonType("Aceptar", ButtonBar.ButtonData.OK_DONE);
+        
+        alert.getButtonTypes().setAll(buttonTypeOk);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == buttonTypeOk){
+                alert.close();
+        }
+        
     }
     
     @FXML
@@ -426,37 +548,61 @@ public class HabitacionesController implements Initializable {
     @FXML
     void Guardar_Registro(ActionEvent event) throws SQLException {
         
-        String nombre, tipo, telefono, descripcion;
-        double tarifa;
-        
-        nombre = txtnombre.getText().toString();
-        tipo = txttipo.getText().toString();
-        tarifa = Double.parseDouble(txttarifa.getText().toString());
-        telefono = txttelefono.getText().toString();
-        descripcion = txtdesc.getText().toString();
-        
-        Image imagen = screen_img.getImage();
-        String dir = imagen.impl_getUrl();
-        
-        int estado;
-        
-        if (check_estado.isSelected()) {
-            estado = 1;
-        }else{
-            estado = 2;
+        if (Valida() == true) {
+            
+            String nombre, tipo, telefono, descripcion;
+            double tarifa;
+
+            nombre = txtnombre.getText().toString();
+            tipo = txttipo.getText().toString();
+            tarifa = Double.parseDouble(txttarifa.getText().toString());
+            telefono = txttelefono.getText().toString();
+            descripcion = txtdesc.getText().toString();
+
+            Image imagen = screen_img.getImage();
+            String dir = imagen.impl_getUrl();
+
+            int estado;
+
+            if (check_estado.isSelected()) {
+                estado = 1;
+            }else{
+                estado = 2;
+            }
+
+            Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
+            Statement stm = (Statement) connection.createStatement();
+
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("¿Confirmar Acción?");
+                alert.setHeaderText("¿Está seguro que desea guardar el registro "+nombre+" de Tipo "+tipo+" a la base?");
+                alert.setContentText("Se guardará la información con los datos introcucidos en los campos.\nPara Guardar, presione aceptar.");
+
+                ButtonType buttonTypeCancel = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+                ButtonType buttonTypeOk = new ButtonType("Aceptar", ButtonBar.ButtonData.OK_DONE);
+
+                alert.getButtonTypes().setAll(buttonTypeCancel,buttonTypeOk);
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == buttonTypeOk){
+                    // ... user chose OK
+                    data.add(new Habitaciones(imagen,id,nombre,tipo,tarifa,telefono,estado,descripcion));
+
+                    String query = "insert into Habitacion (Nombre, Tipo, Tarifa, Telefono, Estado, Descripcion,Imagen) " +
+                    "values ('"+nombre+"','"+tipo+"',"+tarifa+",'"+telefono+"',"+estado+",'"+descripcion+"','"+nombre_img+"');";
+
+                    stm.executeUpdate(query);
+
+                    Crear_Lista("select * from habitacion where Eliminado = 0;");
+
+                    Dialogo("Se ha guardado el registro.", "Exito al Guardar!",
+                    "Operación Realizada", Alert.AlertType.CONFIRMATION);
+
+                } else if(result.get() == buttonTypeCancel){
+                    // ... user chose CANCEL or closed the dialog
+                    alert.close();
+                }
         }
-        
-        data.add(new Habitaciones(imagen,id,nombre,tipo,tarifa,telefono,estado,descripcion));
-        
-        Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
-        Statement stm = (Statement) connection.createStatement();
-        
-        String query = "insert into Habitacion (Nombre, Tipo, Tarifa, Telefono, Estado, Descripcion,Imagen) " +
-        "values ('"+nombre+"','"+tipo+"',"+tarifa+",'"+telefono+"',"+estado+",'"+descripcion+"','"+nombre_img+"');";
-        
-        stm.executeUpdate(query);
-        
-        Crear_Lista("select * from habitacion;");
         
     }
     

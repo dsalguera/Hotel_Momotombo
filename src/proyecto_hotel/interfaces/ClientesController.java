@@ -88,6 +88,9 @@ public class ClientesController implements Initializable {
 
     @FXML
     private JFXTextField txtestancia;
+    
+    @FXML
+    private HBox box_estancia_reserva;
 
     @FXML
     private ImageView screen_img;
@@ -198,8 +201,8 @@ public class ClientesController implements Initializable {
                         pais, 
                         numero_reserva, 
                         numero_estancia, 
-                        fecha_inscripcion, 
                         fecha_nacimiento, 
+                        fecha_inscripcion, 
                         telefono, 
                         correo);
                 
@@ -234,6 +237,9 @@ public class ClientesController implements Initializable {
         String correo = lista_clientes.getSelectionModel().getSelectedItem().getCorreo();
         
         Image imagen = lista_clientes.getSelectionModel().getSelectedItem().getImagen();
+        
+        pNombre = lista_clientes.getSelectionModel().getSelectedItem().getPrimerNombre();
+        pApellido = lista_clientes.getSelectionModel().getSelectedItem().getPrimerApellido();
         
         txtp_nombre.setText(primerNombre);
         txts_nombre.setText(segundoNombre);
@@ -361,18 +367,6 @@ public class ClientesController implements Initializable {
                         
                 );
                              
-                    if (item.getNumero_reserva() > 0) {
-                        NumeroReserva.getStyleClass().add("round-green");
-                    }else{
-                        NumeroReserva.getStyleClass().add("round-red");
-                    }
-                    
-                    if (item.getNumero_estancia()> 0) {
-                        NumeroEstancia.getStyleClass().add("round-green");
-                    }else{
-                        NumeroEstancia.getStyleClass().add("round-red");
-                    }
-                    
                     HBox hBox = new HBox(
                             
                     imagen = new ImageView(item.getImagen()), vBox);
@@ -437,6 +431,8 @@ public class ClientesController implements Initializable {
             }
     }
     
+    String pNombre, pApellido;
+    
     @FXML
     void Editar_Registro(ActionEvent event) throws SQLException {
         
@@ -476,9 +472,6 @@ public class ClientesController implements Initializable {
         Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
         Statement stm = (Statement) connection.createStatement();
         String query = null;
-        
-        String pNombre = lista_clientes.getSelectionModel().getSelectedItem().getPrimerNombre();
-        String pApellido = lista_clientes.getSelectionModel().getSelectedItem().getPrimerApellido();
         
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("¿Confirmar Acción?");
@@ -772,7 +765,14 @@ public class ClientesController implements Initializable {
             
         }else{
             
-            return true;
+            if (screen_img.getImage().equals(null)) {
+                Dialogo("Al parecer necesita agregar una imagen.", "¡No imagen!",
+                    "Error", Alert.AlertType.ERROR);
+            }else{
+            
+                return true;
+                
+            }
             
         }
         
@@ -802,6 +802,8 @@ public class ClientesController implements Initializable {
         
         Tipo_usuario_copia = MenuController.tipo_usuario;
         Botones(Tipo_usuario_copia);
+        
+        boxCambios.getChildren().remove(box_estancia_reserva);
         
         ObservableList busquedas = FXCollections.observableArrayList();
         ObservableList tipoID = FXCollections.observableArrayList();
