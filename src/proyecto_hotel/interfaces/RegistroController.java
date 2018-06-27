@@ -17,6 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -25,6 +26,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -200,77 +203,139 @@ public class RegistroController implements Initializable {
     void Guardar_Registro(ActionEvent event) throws SQLException {
         
         if (Valida() == true) {
-            
-            String primerNombre = txtp_nombre.getText();
-            String segundoNombre = txts_nombre.getText();
-            String primerApellido = txtp_apellido.getText();
-            String segundoApellido = txts_apellido.getText();
 
-            String identificacion = txtidentificacion.getText();
-            String tipo = (String) combo_tipo.getSelectionModel().getSelectedItem();
-            String pais = txtpais.getText();
-
-            String fecha_inscripcion = fechanac.getValue().toString();
-            String fecha_nacimiento = this.fecha_inscripcion.getValue().toString();
-
-            int[] nacimiento = Arrays.stream(fecha_nacimiento.trim().split("-"))
-                          .mapToInt(Integer::parseInt)
-                          .toArray();
-
-            int[] inscripcion = Arrays.stream(fecha_inscripcion.trim().split("-"))
-                          .mapToInt(Integer::parseInt)
-                          .toArray();
-
-
-            fecha_nacimiento = (""+nacimiento[0]+"-"+nacimiento[1]+"-"+nacimiento[2]);
-            fecha_inscripcion = (""+inscripcion[0]+"-"+inscripcion[1]+"-"+inscripcion[2]);
-
-            System.out.println(""+fecha_nacimiento);
-            System.out.println(""+fecha_inscripcion);
-
-            String telefono = txttelefono.getText();
-            String correo = txtcorreo.getText();
-
-            Image imagen = screen_img.getImage();
-
-            Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
-            Statement stm = (Statement) connection.createStatement();
-            String query = null;
-
-
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("¿Confirmar Acción?");
-            alert.setHeaderText("¿Está seguro que desea guardar el cliente "+primerNombre+" "+primerApellido+" a la base?");
-            alert.setContentText("Se guardará la información con los datos introcucidos en los campos.\nPara Guardar, presione aceptar.");
-
-            ButtonType buttonTypeCancel = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
-            ButtonType buttonTypeOk = new ButtonType("Aceptar", ButtonBar.ButtonData.OK_DONE);
-
-            alert.getButtonTypes().setAll(buttonTypeCancel,buttonTypeOk);
-
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == buttonTypeOk){
-                // ... user chose OK
+                String primerNombre = txtp_nombre.getText();
+                String segundoNombre = txts_nombre.getText();
+                String primerApellido = txtp_apellido.getText();
+                String segundoApellido = txts_apellido.getText();
                 
-                query = "insert into Cliente " 
-                    +"(Primer_nombre,Segundo_nombre,Primer_apellido,Segundo_apellido,Identificacion,Tipo_identificacion,Pais_origen,Numero_reserva,Numero_estancia,\n" 
-                    +" Fecha_inscripcion,Fecha_nacimiento,Telefono,Correo,Imagen,Eliminado) values " 
-                    +"('"+primerNombre+"','"+segundoNombre+"','"+primerApellido+"','"+segundoApellido+"','"+identificacion+"','"+tipo+"','"+pais+"',"
-                    + ""+0+","+0+",'"+fecha_inscripcion+"','"+fecha_nacimiento+"','"+telefono+"','"+correo+"','"+nombre_img+"',0);";
+                String identificacion = txtidentificacion.getText();
+                String tipo = (String) combo_tipo.getSelectionModel().getSelectedItem();
+                String pais = txtpais.getText();
+                
+                String fecha_inscripcion = fechanac.getValue().toString();
+                String fecha_nacimiento = this.fecha_inscripcion.getValue().toString();
+                
+                int[] nacimiento = Arrays.stream(fecha_nacimiento.trim().split("-"))
+                        .mapToInt(Integer::parseInt)
+                        .toArray();
+                
+                int[] inscripcion = Arrays.stream(fecha_inscripcion.trim().split("-"))
+                        .mapToInt(Integer::parseInt)
+                        .toArray();
+                
+                
+                fecha_nacimiento = (""+nacimiento[0]+"-"+nacimiento[1]+"-"+nacimiento[2]);
+                fecha_inscripcion = (""+inscripcion[0]+"-"+inscripcion[1]+"-"+inscripcion[2]);
+                
+                System.out.println(""+fecha_nacimiento);
+                System.out.println(""+fecha_inscripcion);
+                
+                String telefono = txttelefono.getText();
+                String correo = txtcorreo.getText();
+                
+                Image imagen = screen_img.getImage();
+                
+                Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
+                Statement stm = (Statement) connection.createStatement();
+                String query = null;
+                String query2 = null;
+                
+                if (Usuario_existe(txtnombreuser.getText()) == true) {
+                    
+                    Dialogo("No se ha guardado el usuario por que ya existe, pruebe con otro.", "Usuario no valido!",
+                            "Error", Alert.AlertType.ERROR);
+                    
+                }else{
+                    
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("¿Confirmar Acción?");
+                    alert.setHeaderText("¿Está seguro que desea guardar el cliente "+primerNombre+" "+primerApellido+" a la base?");
+                    alert.setContentText("Se guardará la información con los datos introcucidos en los campos.\nPara Guardar, presione aceptar.");
+                    
+                    ButtonType buttonTypeCancel = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+                    ButtonType buttonTypeOk = new ButtonType("Aceptar", ButtonBar.ButtonData.OK_DONE);
+                    
+                    alert.getButtonTypes().setAll(buttonTypeCancel,buttonTypeOk);
+                    
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if (result.get() == buttonTypeOk){
+                        try {
+                            // ... user chose OK
+                            query = " insert into Cliente "
+                            +"(Primer_nombre,Segundo_nombre,Primer_apellido,Segundo_apellido,Identificacion,Tipo_identificacion,Pais_origen,Numero_reserva,Numero_estancia,"
+                            +" Fecha_inscripcion,Fecha_nacimiento,Telefono,Correo,Imagen,Eliminado) values "
+                            +"('"+primerNombre+"','"+segundoNombre+"','"+primerApellido+"','"+segundoApellido+"','"+identificacion+"','"+tipo+"','"+pais+"',"
+                            + ""+0+","+0+",'"+fecha_inscripcion+"','"+fecha_nacimiento+"','"+telefono+"','"+correo+"','"+nombre_img+"',0);";
 
-                stm.executeUpdate(query);
+                            stm.executeUpdate(query);
+                            stm.close();
+                            
+                            Inserta_user(primerNombre, segundoNombre, primerApellido, segundoApellido, identificacion, 
+                                    tipo, pais,fecha_inscripcion, fecha_nacimiento, telefono, correo);
+                            
+                            Dialogo("Se ha guardado el registro.", "Exito al Guardar!",
+                                    "Operación Realizada", Alert.AlertType.CONFIRMATION);
+                            
+                        } catch (SQLException ex) {
+                            Dialogo("Ha ocurrido un error al guardar el registro.\n\n"+ex.getMessage()+"\n\n"+ex.getSQLState()+"", "Error al Guardar!",
+                                    "Error", Alert.AlertType.CONFIRMATION);
+                        }
+                        
+                    } else if(result.get() == buttonTypeCancel){
+                        // ... user chose CANCEL or closed the dialog
+                        alert.close();
+                    }
 
-                Dialogo("Se ha guardado el registro.", "Exito al Guardar!",
-                    "Operación Realizada", Alert.AlertType.CONFIRMATION);
-
-            } else if(result.get() == buttonTypeCancel){
-                // ... user chose CANCEL or closed the dialog
-                alert.close();
-            }
+                }
             
         }
         
     }
+    
+    void Inserta_user(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, String identificacion,
+            String tipo, String pais,String fecha_inscripcion, String fecha_nacimiento, String telefono, String correo ) throws SQLException{
+        
+        Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
+        Statement stm = (Statement) connection.createStatement();
+        
+        String query = "insert into usuario "
+        + "(Nombre_usuario,Contrasena,Tipo_cuenta,estado,eliminado,Imagen) values "
+        + "('"+txtnombreuser.getText()+"','"+txtpassword.getText()+"',3,1,0,'"+nombre_img+"');";
+                         
+        stm.executeUpdate(query);
+        stm.close();
+        
+        query = "update Usuario set Id_cliente = (select count(*) from Cliente) where Nombre_usuario = '"+txtnombreuser.getText()+"'";
+        
+        stm.executeUpdate(query);
+        stm.close();
+        
+    }
+    
+    boolean Usuario_existe(String usuario) throws SQLException{
+        
+            String dir = "src\\proyecto_hotel\\imagenes\\usuarios\\";
+            connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
+            Statement stm = (Statement) connection.createStatement();
+            ResultSet rs = stm.executeQuery("select * from usuario where Nombre_usuario = '"+usuario+"';");
+            String nombre = null,contra;
+            int tipo,estado;
+            while (rs.next()) {
+                nombre = rs.getString("nombre_usuario");
+                tipo = rs.getInt("tipo_cuenta");
+            }   
+            
+            if (nombre == null) {
+                return false;
+            }
+        
+        return true;
+    }
+    
+    
+        
+        
     
     boolean Valida(){
         
@@ -290,7 +355,7 @@ public class RegistroController implements Initializable {
             
         }else{
             
-            if (screen_img.getImage() == null) {
+            if (screen_img.getImage() == null || screen_img.getImage().impl_getUrl() == deflt) {
                 Dialogo("Al parecer necesita agregar una imagen.", "¡No imagen!",
                     "Error", Alert.AlertType.ERROR);
             }else{
@@ -406,6 +471,7 @@ public class RegistroController implements Initializable {
         
     }
     
+    String deflt = "";
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -417,6 +483,8 @@ public class RegistroController implements Initializable {
         
         tipoID.add("Cedula");
         tipoID.add("Nacionalidad");
+        
+        deflt = screen_img.getImage().impl_getUrl();
         
         combo_tipo.getItems().addAll(tipoID);
     }    

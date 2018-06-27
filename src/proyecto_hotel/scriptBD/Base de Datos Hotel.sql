@@ -5,8 +5,7 @@ use Hotel;
 
 
 create table Usuario (
-    Id_usuario int primary key not null auto_increment,
-    Nombre_usuario varchar(30) not null,
+    Nombre_usuario varchar(30) primary key not null,
     Contrasena varchar(30) not null,
     Tipo_cuenta int,
     Estado int,
@@ -106,9 +105,9 @@ create table Producto(
 	Nombre varchar(30),
 	Precio double,
 	Tipo_producto varchar(30),
-        Cantidad int,
+	Cantidad int,
 	Estado int,
-        Eliminado int,
+    Eliminado int,
 	Imagen varchar(500)
 );
 
@@ -144,7 +143,9 @@ create table Pago (id_pago int primary key auto_increment,
 Create Table Tarjeta(Id_tarjeta int primary key auto_increment,
 monto double);
 
+
 alter table Usuario add foreign key (id_cliente) references Cliente(id_cliente);
+
 alter table Pago add foreign key (id_cliente) references Cliente(id_cliente);
 alter table Reserva add foreign key (Id_cliente) references Cliente(Id_cliente);
 alter table Reserva add foreign key (Id_habitacion) references Habitacion(Id_habitacion);
@@ -368,7 +369,6 @@ values ('Super Party Room','Deluxe',330.00,'+ 505 22786591',2,'La mejor para dis
 update Habitacion set Eliminado = 0;
 
 insert into Usuario (Nombre_usuario, Contrasena, Tipo_cuenta, Estado, Imagen) values ('David','Salguera',1,1,'jarry.png');
-insert into Usuario (Nombre_usuario, Contrasena, Tipo_cuenta, Estado, Imagen) values ('Sergio','Lopez',3,1,'jonathan.png');
 insert into Usuario (Nombre_usuario, Contrasena, Tipo_cuenta, Estado, Imagen) values ('Manuel','Lopez',2,1,'bob.png');
 
 insert into Cliente 
@@ -612,3 +612,6 @@ CREATE TRIGGER Conteo_Reservas after insert ON cliente
 
 	END;//
 DELIMITER ;
+
+
+
