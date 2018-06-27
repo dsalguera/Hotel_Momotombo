@@ -765,7 +765,7 @@ public class ClientesController implements Initializable {
             
         }else{
             
-            if (screen_img.getImage().equals(null)) {
+            if (screen_img.getImage() == null) {
                 Dialogo("Al parecer necesita agregar una imagen.", "¡No imagen!",
                     "Error", Alert.AlertType.ERROR);
             }else{
