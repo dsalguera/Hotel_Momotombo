@@ -119,12 +119,17 @@ public class ReservaController implements Initializable {
     public static Image imagen_cliente;
     public static String Fecha_Inicial;
     public static String Fecha_Final;
+    int limit=3;
+    int Conteo=0;
     Conexion c = new Conexion();
     Connection connection ;    
     Stage stage_buscar=new Stage();
     
     @FXML
     private ImageView screen_img1;
+    
+    @FXML
+    private Label id_count;
 
     @FXML
     private JFXTextField txtnombre_cliente;
@@ -142,7 +147,8 @@ public class ReservaController implements Initializable {
 
     @FXML
     private ToggleGroup Radio;
-
+    
+    
     
         @FXML
     void Buscar_cliente(ActionEvent event)  {
@@ -234,7 +240,7 @@ public class ReservaController implements Initializable {
     void Cliente_Seleccionada(){
     screen_img1.setImage(imagen_cliente);
     txtnombre_cliente.setText(nombre_cliente);
-
+    setcount();
     }
  
         @FXML
@@ -296,12 +302,44 @@ public class ReservaController implements Initializable {
 
     @FXML
     void Guardar_Registro(ActionEvent event) {
-        if (Id_Cliente!=-1 && Id_habitacion!=-1) {
-            
-            if (JOptionPane.showConfirmDialog(null, "Esta seguro que quiere contratar la reserva desde "+fecha_inicio.getValue()+" hasta "+fecha_final.getValue()+".", "Confirmar Operacion", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
-                System.out.println("yes");           
+        if (Conteo>=limit) {
+            JOptionPane.showMessageDialog(null, "El usuario no puede contratar otra reserva.");
+        }
+        
+        if (Id_Cliente!=-1 && Id_habitacion!=-1 && Conteo<limit ) {
+            if ( JOptionPane.showConfirmDialog(null, "Esta seguro que quiere contratar la reserva desde "+fecha_inicio.getValue()+" hasta "+fecha_final.getValue()+".", "Confirmar Operacion", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION ) {
+                try {
+                Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
+                Statement stm = (Statement) connection.createStatement(); 
+                String query;
+                String mensaje="";
+                 if (Radio_efectivo.isSelected()) {
+                  query="call setReserva("+Id_Cliente+","+Id_habitacion+",'"+Fecha_Inicial+"','"+Fecha_Final+"','Efectivo',null);";
+                 }else{
+                 query="call setPago("+txtcosto.getText()+","+txtnumero_tarjeta.getText()+");";
+                 ResultSet rs = stm.executeQuery(query);
+                 rs.next();
+                 mensaje=rs.getString("mensaje");
+                     if (!mensaje.equals("perfecto")) {
+                         JOptionPane.showMessageDialog(null, mensaje);
+                         return;
+                     }
+                  query="call setReserva("+Id_Cliente+","+Id_habitacion+",'"+Fecha_Inicial+"','"+Fecha_Final+"','Credito',"+txtnumero_tarjeta.getText()+");";
+                 }
+                
+                ResultSet rs = stm.executeQuery(query);
+                rs.next();
+                mensaje=rs.getString("mensaje");
+                JOptionPane.showMessageDialog(null, mensaje);
+                Nuevo_Registro(event);
+            } catch (SQLException ex) {
+              
+            } 
             }
             
+        }else{
+        
+        JOptionPane.showMessageDialog(null, "Seleccione Usuario y/o Habitacion.");
         }
     }
 
@@ -317,8 +355,16 @@ public class ReservaController implements Initializable {
       txtnombre_cliente.setText("");
       Fecha_Defauld();
       txtdias.setText("");
+      id_count.setText("0");
       Id_habitacion=-1;
       Id_Cliente=-1;
+       if (MenuController.tipo_usuario==3) {
+            Radio_efectivo.setDisable(true);
+            Radio_Credito.setSelected(true);
+            txtnumero_tarjeta.setDisable(false);
+            btnBuscar_cliente.setVisible(false);
+            
+        }
     }
 
    
@@ -337,12 +383,37 @@ public class ReservaController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+    Id_habitacion=-1;
+    Id_Cliente=-1;
+    Conteo=0;
+        txtnumero_tarjeta.setOnKeyTyped(event -> {
+        String string =  txtnumero_tarjeta.getText();
+          
+        if (string.length() > 8) {
+           event.consume();
+        }
+         boolean isDigit=true;
+                  try {
+                      int aux=Integer.parseInt(event.getCharacter());
+                  } catch (Exception e) {
+                      isDigit=false;
+                  }
+            if (!isDigit) {
+                event.consume();
+            }
+ {
+                
+            }
+        
+    });
         if (MenuController.tipo_usuario==3) {
             Radio_efectivo.setDisable(true);
             Radio_Credito.setSelected(true);
+            txtnumero_tarjeta.setDisable(false);
             btnBuscar_cliente.setVisible(false);
         }
         Fecha_Defauld();
+        setcount();
     }  
     
     void Fecha_Defauld(){
@@ -362,6 +433,20 @@ public class ReservaController implements Initializable {
         }
     }
     
+    void setcount(){
+         try {
+             Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
+             Statement stm = (Statement) connection.createStatement();
+             String query = " select count(*) as conteo from Reserva where Id_cliente="+Id_Cliente+" and Estado='Espera';";
+             ResultSet rs = stm.executeQuery(query);
+             rs.next();
+             Conteo=rs.getInt("conteo");
+             id_count.setText(""+Conteo);
+         } catch (SQLException ex) {
+             Logger.getLogger(ReservaController.class.getName()).log(Level.SEVERE, null, ex);
+         }
     
+    
+    }
     
 }

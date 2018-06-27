@@ -26,7 +26,7 @@
                         <Insets bottom="20.0" top="10.0" />
                      </VBox.margin>
                   </ImageView>
-                  <JFXTextField fx:id="txtnombre_cliente" alignment="CENTER" focusColor="#00bfe9" maxHeight="43.0" maxWidth="305.0" onKeyTyped="#Sugerencia" prefHeight="43.0" prefWidth="305.0" promptText="Nombre Cliente" styleClass="campos" stylesheets="@../estilos/Estilos.css" VBox.vgrow="ALWAYS">
+                  <JFXTextField fx:id="txtnombre_cliente" alignment="CENTER" editable="false" focusColor="#00bfe9" maxHeight="43.0" maxWidth="305.0" onKeyTyped="#Sugerencia" prefHeight="43.0" prefWidth="305.0" promptText="Nombre Cliente" styleClass="campos" stylesheets="@../estilos/Estilos.css" VBox.vgrow="ALWAYS">
                      <font>
                         <Font name="The Dodger Inky Regular" size="18.0" />
                      </font>
@@ -97,6 +97,20 @@
                         <Insets top="30.0" />
                      </VBox.margin>
                   </HBox>
+                  <HBox alignment="CENTER" prefHeight="92.0" prefWidth="341.0" spacing="10.0">
+                     <children>
+                        <Label text="Contratos: " textFill="#f8f4f4" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="21.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="id_count" text="0" textFill="#f8f4f4" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="21.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
                </children></VBox>
             <VBox alignment="CENTER" prefHeight="611.0" prefWidth="335.0" styleClass="side-panel" stylesheets="@../estilos/Estilos.css" HBox.hgrow="ALWAYS">
                <children>
@@ -115,7 +129,7 @@
                         <Insets bottom="20.0" left="20.0" right="20.0" />
                      </VBox.margin>
                   </ImageView>
-                  <JFXTextField fx:id="txtnombre" focusColor="#00bfe9" maxHeight="43.0" maxWidth="200.0" onKeyTyped="#Sugerencia" prefHeight="25.0" prefWidth="246.0" promptText="Nombre de Habitacion" styleClass="campos" stylesheets="@../estilos/Estilos.css" VBox.vgrow="ALWAYS">
+                  <JFXTextField fx:id="txtnombre" editable="false" focusColor="#00bfe9" maxHeight="43.0" maxWidth="200.0" onKeyTyped="#Sugerencia" prefHeight="25.0" prefWidth="246.0" promptText="Nombre de Habitacion" styleClass="campos" stylesheets="@../estilos/Estilos.css" VBox.vgrow="ALWAYS">
                      <VBox.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" />
                      </VBox.margin>
@@ -189,7 +203,7 @@
             <Insets left="5.0" />
          </opaqueInsets>
       </HBox>
-      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="772.0" styleClass="side-panel" stylesheets="@../estilos/Estilos.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="772.0" spacing="30.0" styleClass="side-panel" stylesheets="@../estilos/Estilos.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label text="Operacion : Contratar Reserva" textFill="#fcf8f8" HBox.hgrow="ALWAYS">
                <font>
