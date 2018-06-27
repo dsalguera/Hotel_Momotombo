@@ -146,6 +146,9 @@ monto double);
 
 alter table Usuario add foreign key (id_cliente) references Cliente(id_cliente);
 
+
+alter table Usuario add foreign key (id_cliente) references Cliente(id_cliente);
+
 alter table Pago add foreign key (id_cliente) references Cliente(id_cliente);
 alter table Reserva add foreign key (Id_cliente) references Cliente(Id_cliente);
 alter table Reserva add foreign key (Id_habitacion) references Habitacion(Id_habitacion);
