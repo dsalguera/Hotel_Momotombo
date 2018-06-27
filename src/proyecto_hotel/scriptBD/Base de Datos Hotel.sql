@@ -331,8 +331,9 @@ CREATE TRIGGER Registrar_Eliminar_Servicio after delete ON servicio_al_cuarto
 		END;//
 DELIMITER ;
 
-
+/*
 -----------------------------------Insert------------------------------------------
+*/
 insert into Tarjeta(monto) values(20000);
 insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado,Imagen) values ('Fresco de cacao', 30, 'Bebida', 25, 1,'fresco de cacao.jpg');
 insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado,Imagen) values ('Vodka', 75, 'Bebida', 16, 2,'vodka.jpg');
@@ -391,7 +392,7 @@ insert into servicio_al_cuarto (Id_estancia,Fecha_hora,Costo_total)
 values (1,now(),200);
 
 
----------------------------Procedimientos----------------------------------------------
+/*---------------------------Procedimientos----------------------------------------------*/
 
 //Procedimiento para que agreges una reserva
 
@@ -548,7 +549,7 @@ call getCertificado_Reserva(3,"Visitante",0);
 
 
 
-3.
+/*3.*/
 
 DROP PROCEDURE IF EXISTS getVerificar; 
 DELIMITER $$
@@ -566,7 +567,7 @@ DELIMITER ;
 call  getVerificar('2018-07-2','2018-07-11');
 
 
-4.
+/*4.*/
 DROP PROCEDURE IF EXISTS getHabitaciones_disponibles; 
 DELIMITER $$
 CREATE PROCEDURE   getHabitaciones_disponibles(DFecha_inicio date,DFecha_Final  date)
@@ -583,7 +584,7 @@ DELIMITER ;
 
 
 
-5.
+/*5.*/
 DROP PROCEDURE IF EXISTS getCosto_total; 
 DELIMITER $$
 CREATE PROCEDURE  getCosto_total(DFecha_inicio date,DFecha_Final  date,DId_habitacion int)
@@ -606,8 +607,8 @@ CREATE TRIGGER Conteo_Reservas after insert ON cliente
 	FOR EACH ROW
 	BEGIN
 
-        set @conteoReservas = (select count(Numero_reserva) from Cliente where Id_cliente = old.Id_cliente);
-        update Cliente set Numero_reserva = @conteoReservas where Id_cliente = old.Id_cliente;
+        set @conteoReservas = (select count(Numero_reserva) from Cliente where Id_cliente = new.Id_cliente);
+        update Cliente set Numero_reserva = @conteoReservas where Id_cliente = new.Id_cliente;
 
 	END;//
 DELIMITER ;
