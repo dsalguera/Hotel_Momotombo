@@ -122,7 +122,7 @@ if (id!=-1) {
           Ver_historial(id);
                 System.out.println("comentario");
             } catch (SQLException ex) {
-                System.out.println("Error en agregar comentario");  
+           JOptionPane.showMessageDialog(null,"Comentario Invalido.");
             }
             
         }

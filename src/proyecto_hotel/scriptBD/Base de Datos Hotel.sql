@@ -140,7 +140,8 @@ create table Pago (id_pago int primary key auto_increment,
  Origen varchar(30),
  Cantidad int
  );
-
+Create Table Tarjeta(Id_tarjeta int primary key auto_increment,
+monto double);
 
 alter table Pago add foreign key (id_cliente) references Cliente(id_cliente);
 alter table Reserva add foreign key (Id_cliente) references Cliente(Id_cliente);
@@ -330,6 +331,7 @@ DELIMITER ;
 
 
 -----------------------------------Insert------------------------------------------
+insert into Tarjeta(monto) values(20000);
 insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado,Imagen) values ('Fresco de cacao', 30, 'Bebida', 25, 1,'fresco de cacao.jpg');
 insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado,Imagen) values ('Vodka', 75, 'Bebida', 16, 2,'vodka.jpg');
 insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado,Imagen) values ('Tres leches', 20, 'Postre', 22, 1, 'tres leches.jpg');

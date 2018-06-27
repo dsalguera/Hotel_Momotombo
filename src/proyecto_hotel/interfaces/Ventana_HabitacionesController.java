@@ -82,14 +82,17 @@ public class Ventana_HabitacionesController implements Initializable {
     
     static String nombre_habitacion_copia;
     
-    void Conexion(String query) throws SQLException{ 
+    void Conexion(String query) { 
         
-        connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
-        Statement stm = (Statement) connection.createStatement();
-        
-        ResultSet rs = stm.executeQuery(query);
-        
-        while (rs.next()) {
+        try {
+            connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
+            Statement stm = (Statement) connection.createStatement();
+            
+            System.out.println(query);
+            ResultSet rs = stm.executeQuery(query);
+            
+            
+            while (rs.next()) {
                 int id = rs.getInt("Id_habitacion");
                 String nombre = rs.getString("nombre");
                 String tipo = rs.getString("tipo");
@@ -101,8 +104,11 @@ public class Ventana_HabitacionesController implements Initializable {
                 
                 Habitaciones habitacion = new Habitaciones(
                         
-                new Image(new File(dir+imagen).toURI().toString()),id,nombre, tipo, tarifa,telefono,estado,descripcion);
+                        new Image(new File(dir+imagen).toURI().toString()),id,nombre, tipo, tarifa,telefono,estado,descripcion);
                 data.add(habitacion);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Invalida busqueda");
         }
         
     }
@@ -154,11 +160,7 @@ public class Ventana_HabitacionesController implements Initializable {
         lista_habitaciones.getItems().clear();
         data.clear();
         
-        try {
-            Conexion(query);
-        } catch (SQLException ex) {
-            Logger.getLogger(HabitacionesController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        Conexion(query);
         
         lista_habitaciones.getItems().addAll(data);
         

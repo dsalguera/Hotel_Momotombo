@@ -16,6 +16,27 @@ and open the template in the editor.
 .top-panel {
     -fx-background-color: #24292C;
 }
+.button-inicio {
+    -fx-padding: 5 22 5 22;   
+    -fx-border-color: #e2e2e2;
+    -fx-border-width: 2;
+    -fx-background-radius: 0;
+    -fx-background-color: #303D54;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-size: 11pt;
+    -fx-text-fill: #d8d8d8;
+    -fx-background-insets: 0 0 0 0, 0, 1, 2;
+}
+
+.button-inicio:hover {
+    -fx-background-color: #2A5699;
+}
+
+.button-inicio:pressed, .button-inicio:default:hover:pressed {
+  -fx-background-color: white;
+  -fx-text-fill: #1d1d1d;
+}
+
 
 .button-selection {
     -fx-text-fill: #FFF;

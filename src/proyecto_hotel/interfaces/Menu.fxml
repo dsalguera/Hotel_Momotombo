@@ -190,7 +190,7 @@
                   <Insets left="20.0" />
                </padding>
                <font>
-                  <Font size="16.0" />
+                  <Font size="14.0" />
                </font>
             </JFXButton>
          </children>

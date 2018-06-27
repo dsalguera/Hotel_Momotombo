@@ -40,7 +40,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -102,23 +104,80 @@ public class ReservaController implements Initializable {
     @FXML
     private JFXButton btnNuevo;
 
-    @FXML
-    private JFXButton btnEditar;
 
     @FXML
     private JFXButton btnGuardar;
 
-    @FXML
-    private JFXButton btnEliminar;
+    
     
     public static int Id_habitacion=-1;
     public static String nombre;
     public static Image imagen;
+      public static int Id_Cliente=-1;
+    public static String nombre_cliente;
+    public static Image imagen_cliente;
     public static String Fecha_Inicial;
     public static String Fecha_Final;
     Conexion c = new Conexion();
     Connection connection ;    
     Stage stage_buscar=new Stage();
+    
+    @FXML
+    private ImageView screen_img1;
+
+    @FXML
+    private JFXTextField txtnombre_cliente;
+
+    @FXML
+    private JFXButton btnBuscar_cliente;
+
+    @FXML
+    private RadioButton Radio_efectivo;
+      @FXML
+    private RadioButton Radio_Credito;
+      
+    @FXML
+    private JFXTextField txtnumero_tarjeta;
+
+    @FXML
+    private ToggleGroup Radio;
+
+    
+        @FXML
+    void Buscar_cliente(ActionEvent event)  {
+           
+        stage_buscar.close();
+        if (!stage_buscar.isShowing()) {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/proyecto_hotel/interfaces/Ventana_Cliente.fxml"));            
+        stage_buscar = new Stage();   
+        Scene scene = null;       
+            try { 
+                
+                scene = new Scene(fxmlLoader.load(),Color.TRANSPARENT);
+            } catch (IOException ex) {
+                Logger.getLogger(ReservaController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        stage_buscar.setTitle("Buscar Cliente");
+        stage_buscar.setScene(scene);
+        Id_Cliente=-1;
+        stage_buscar.show();
+        stage_buscar.setOnHidden(new EventHandler<WindowEvent> (){
+            @Override
+            public void handle(WindowEvent event) {
+                if (Id_Cliente!=-1) {
+                    try {
+                        Cliente_Seleccionada();
+                    } catch (Exception ex) {
+                        System.out.println(""+ex);
+                        Logger.getLogger(ReservaController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+        }   });
+        
+        
+        
+        } }
     @FXML
     void Buscar_habitacion(ActionEvent event) throws SQLException, IOException {
         
@@ -166,6 +225,25 @@ public class ReservaController implements Initializable {
         txtdias.setText(""+rs.getInt("dias"));
     }
     
+    void Cliente_Seleccionada(){
+    screen_img1.setImage(imagen_cliente);
+    txtnombre_cliente.setText(nombre_cliente);
+
+    }
+ 
+        @FXML
+    void Click_Radio_Credito(ActionEvent event) {
+        txtnumero_tarjeta.setText(Guardar_tarjeta);
+        txtnumero_tarjeta.setDisable(false);
+    }
+   String Guardar_tarjeta="";
+    @FXML
+    void Click_Radio_Efectivo(ActionEvent event) {
+      txtnumero_tarjeta.setDisable(true);
+      Guardar_tarjeta=txtnumero_tarjeta.getText();
+      txtnumero_tarjeta.setText("");
+    }
+    
     boolean Fecha_valida() throws SQLException{
    
         if (fecha_inicio.getValue()==null || fecha_final.getValue()==null) {
@@ -207,30 +285,31 @@ public class ReservaController implements Initializable {
     
     
     
-    @FXML
-    void Editar_Registro(ActionEvent event) {
 
-    }
 
-    @FXML
-    void Eliminar_Registro(ActionEvent event) {
-
-    }
 
     @FXML
     void Guardar_Registro(ActionEvent event) {
-
+     
     }
 
     @FXML
     void Nuevo_Registro(ActionEvent event) {
-
+      txtnumero_tarjeta.setDisable(true);
+      Guardar_tarjeta=txtnumero_tarjeta.getText();
+      txtnumero_tarjeta.setText("");
+      screen_img.setImage(null);
+      screen_img1.setImage(null);
+      txtcosto.setText("");
+      txtnombre.setText("");
+      txtnombre_cliente.setText("");
+      Fecha_Defauld();
+      txtdias.setText("");
+      Id_habitacion=-1;
+      Id_Cliente=-1;
     }
 
-    @FXML
-    void buscar(KeyEvent event) {
-
-    }
+   
     
     // Variables universales
     String habitacion, tipo, telefono, descripcion;
@@ -246,7 +325,11 @@ public class ReservaController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-     
+        if (MenuController.tipo_usuario==3) {
+            Radio_efectivo.setDisable(true);
+            Radio_Credito.setSelected(true);
+            btnBuscar_cliente.setVisible(false);
+        }
         Fecha_Defauld();
     }  
     

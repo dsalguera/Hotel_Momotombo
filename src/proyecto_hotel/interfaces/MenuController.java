@@ -60,7 +60,7 @@ import proyecto_hotel.interfaces.HabitacionesController;
 public class MenuController implements Initializable {
 
     @FXML
-    private AnchorPane lienzo;
+    public AnchorPane lienzo;
 
     @FXML
     private JFXButton btnInicio;
@@ -136,8 +136,8 @@ public class MenuController implements Initializable {
         lienzo.getScene().getWindow().setX(event.getScreenX() + xOffset);
         lienzo.getScene().getWindow().setY(event.getScreenY() + yOffset);
     }
-    
-   
+
+
     void Cerrar(ActionEvent event) {
         
         
@@ -145,7 +145,6 @@ public class MenuController implements Initializable {
             
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/proyecto_hotel/FXMLDocument.fxml"));
-
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = new Stage();
         stage.setTitle("Principal");
@@ -239,6 +238,7 @@ public class MenuController implements Initializable {
 
     @FXML
     void Cerrar_sesion(ActionEvent event) {
+        Cerrar(event);
         System.out.println("user "+user);
         System.out.println("type "+type);
     }
@@ -464,9 +464,31 @@ public class MenuController implements Initializable {
         String d = "src\\proyecto_hotel\\imagenes\\";
         img_logo.setImage(new Image(new File(d+"logo.png").toURI().toString()));
         Fecha_Hora();
-        
+        Cargar_Inicio();
     }    
 
-    
+    void Cargar_Inicio(){
+                if (lienzo.getChildren().size()==2) {
+            try {
+                Pane inicio = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Inicio.fxml"));
+                AjustePagina(inicio); 
+                lienzo.getChildren().add(inicio);
+            } catch (IOException ex) {
+                Logger.getLogger(MenuController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }else{
+            try {
+                int  n= lienzo.getChildren().size()-1;
+                for (int i = 2; i <=n; i++) {
+                    lienzo.getChildren().remove(2);
+                }
+                Pane inicio = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Inicio.fxml"));
+                AjustePagina(inicio);
+                lienzo.getChildren().add(inicio);
+            } catch (IOException ex) {
+                Logger.getLogger(MenuController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }}
     
 }
