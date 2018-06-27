@@ -125,6 +125,7 @@ public class FXMLDocumentController implements Initializable {
     Connection connection ;
     Usuarios u;
     
+ public   static Stage stage;
     void Siguiente(String nombre, int tipo, ActionEvent event) throws SQLException{
         
         try {
@@ -132,7 +133,7 @@ public class FXMLDocumentController implements Initializable {
                     FXMLLoader fxmlLoader = new FXMLLoader();
                     fxmlLoader.setLocation(getClass().getResource("/proyecto_hotel/interfaces/Menu.fxml"));
                     
-                    Stage stage = new Stage();
+                   stage = new Stage();
                     //stage.initStyle(StageStyle.TRANSPARENT);
                     
                     Scene scene = new Scene(fxmlLoader.load(),Color.TRANSPARENT);

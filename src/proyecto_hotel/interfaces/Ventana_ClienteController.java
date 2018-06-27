@@ -66,13 +66,16 @@ public class Ventana_ClienteController implements Initializable {
     
     @FXML
     void Aceptar(ActionEvent event) throws SQLException, IOException {
-         ReservaController.Id_Cliente=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getId();
+        if (lista_habitaciones.selectionModelProperty().getValue().getSelectedIndex()!=-1) {
+             ReservaController.Id_Cliente=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getId();
          ReservaController.nombre_cliente=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getPrimerNombre()+" "+
                  lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getSegundoNombre()+" "+
                  lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getPrimerApellido()+" "+
                  lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getSegundoApellido();
          ReservaController.imagen_cliente=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getImagen();
-         ((Node)(event.getSource())).getScene().getWindow().hide(); 
+         ((Node)(event.getSource())).getScene().getWindow().hide();
+        }
+ 
     }
 
     @FXML

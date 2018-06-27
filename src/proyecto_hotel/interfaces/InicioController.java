@@ -17,10 +17,11 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import proyecto_hotel.FXMLDocumentController;
 
 
 public class InicioController implements Initializable {
-Stage stage;
+static Stage stage;
       @FXML
     void Contratar_Reserva(ActionEvent event) {
        
@@ -31,8 +32,8 @@ Stage stage;
         Scene scene = new Scene(fxmlLoader.load());
         stage = new Stage();
         stage.setTitle("Contratar Reserva");
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.initStyle(StageStyle.UTILITY);
+        stage.initOwner(FXMLDocumentController.stage);
+        stage.initModality(Modality.WINDOW_MODAL);
         stage.setScene(scene);
         stage.show();
         

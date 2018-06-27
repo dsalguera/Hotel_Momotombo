@@ -59,6 +59,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
@@ -161,6 +162,8 @@ public class ReservaController implements Initializable {
         stage_buscar.setTitle("Buscar Cliente");
         stage_buscar.setScene(scene);
         Id_Cliente=-1;
+        stage_buscar.initOwner(InicioController.stage);
+        stage_buscar.initModality(Modality.WINDOW_MODAL);
         stage_buscar.show();
         stage_buscar.setOnHidden(new EventHandler<WindowEvent> (){
             @Override
@@ -190,6 +193,8 @@ public class ReservaController implements Initializable {
         stage_buscar = new Stage();          
         Scene scene = new Scene(fxmlLoader.load(),Color.TRANSPARENT);       
         stage_buscar.setTitle("Buscar Habitación");
+        stage_buscar.initOwner(InicioController.stage);
+        stage_buscar.initModality(Modality.WINDOW_MODAL);
         stage_buscar.setScene(scene);
         Id_habitacion=-1;
         stage_buscar.show();
@@ -198,6 +203,7 @@ public class ReservaController implements Initializable {
             public void handle(WindowEvent event) {
                 if (Id_habitacion!=-1) {
                     try {
+                       
                         Habitacion_Seleccionada();
                     } catch (SQLException ex) {
                         System.out.println(""+ex);
@@ -290,7 +296,13 @@ public class ReservaController implements Initializable {
 
     @FXML
     void Guardar_Registro(ActionEvent event) {
-     
+        if (Id_Cliente!=-1 && Id_habitacion!=-1) {
+            
+            if (JOptionPane.showConfirmDialog(null, "Esta seguro que quiere contratar la reserva desde "+fecha_inicio.getValue()+" hasta "+fecha_final.getValue()+".", "Confirmar Operacion", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
+                System.out.println("yes");           
+            }
+            
+        }
     }
 
     @FXML

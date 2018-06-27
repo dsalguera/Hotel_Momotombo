@@ -64,10 +64,12 @@ public class Ventana_HabitacionesController implements Initializable {
     
     @FXML
     void Aceptar(ActionEvent event) throws SQLException, IOException {
+        if (lista_habitaciones.selectionModelProperty().getValue().getSelectedIndex()!=-1) {
          ReservaController.Id_habitacion=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getId();
          ReservaController.nombre=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getNombre();
          ReservaController.imagen=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getImagen();
          ((Node)(event.getSource())).getScene().getWindow().hide(); 
+        }
     }
 
     @FXML
