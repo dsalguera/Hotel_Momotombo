@@ -32,11 +32,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
-import proyecto_hotel.clases.Clientes;
 import proyecto_hotel.Conexion;
+import proyecto_hotel.clases.Clientes;
+
 
 public class Pagar_EstanciaController implements Initializable {
 
+ 
     @FXML
     private AnchorPane anchorpane;
     
@@ -62,7 +64,28 @@ public class Pagar_EstanciaController implements Initializable {
     
     @FXML
     void Aceptar(ActionEvent event) throws SQLException, IOException {
-  
+        System.out.println(""+Contrato_estanciaController.estancia);
+        if (!Contrato_estanciaController.estancia) {
+                    if (lista_habitaciones.selectionModelProperty().getValue().getSelectedIndex()!=-1) {
+             ReservaController.Id_Cliente=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getId();
+         ReservaController.nombre_cliente=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getPrimerNombre()+" "+
+                 lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getSegundoNombre()+" "+
+                 lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getPrimerApellido()+" "+
+                 lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getSegundoApellido();
+         ReservaController.imagen_cliente=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getImagen();
+         ((Node)(event.getSource())).getScene().getWindow().hide();
+        }
+        }else{
+                if (lista_habitaciones.selectionModelProperty().getValue().getSelectedIndex()!=-1) {
+         Contrato_estanciaController.Id_Cliente=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getId();
+         Contrato_estanciaController.nombre_cliente=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getPrimerNombre()+" "+
+                 lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getSegundoNombre()+" "+
+                 lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getPrimerApellido()+" "+
+                 lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getSegundoApellido();
+        Contrato_estanciaController.imagen_cliente=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getImagen();
+         ((Node)(event.getSource())).getScene().getWindow().hide();
+        }
+        }
  
     }
 
@@ -262,6 +285,7 @@ public class Pagar_EstanciaController implements Initializable {
         
         Crear_Lista("Select * from Cliente where Eliminado=0 ;");
     }    
+
   
     
 }

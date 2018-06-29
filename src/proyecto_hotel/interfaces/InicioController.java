@@ -22,6 +22,12 @@ import proyecto_hotel.FXMLDocumentController;
 
 public class InicioController implements Initializable {
 static Stage stage;
+
+  @FXML
+    void Pagar_estancia(ActionEvent event) {
+
+    }
+
     @FXML
     void Contratar_estancia(ActionEvent event) {
       try {
@@ -63,7 +69,6 @@ static Stage stage;
         @FXML
     void Certificado_Reserva(ActionEvent event) {
    try {
-            
         FXMLLoader fxmlLoader = new FXMLLoader();
         System.out.println("1.");
         fxmlLoader.setLocation(getClass().getResource("/proyecto_hotel/interfaces/Certificado_Rerserva.fxml"));

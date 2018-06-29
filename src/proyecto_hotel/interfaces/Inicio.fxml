@@ -30,7 +30,7 @@
                   </ImageView>
                </graphic>
             </JFXButton>
-            <JFXButton onAction="#Contratar_estancia" prefHeight="60.0" prefWidth="241.0" ripplerFill="#2e78e1" styleClass="button-inicio" text="     Pagar Estancia" textFill="#e4dede">
+            <JFXButton onAction="#Pagar_estancia" prefHeight="60.0" prefWidth="241.0" ripplerFill="#2e78e1" styleClass="button-inicio" text="     Pagar Estancia" textFill="#e4dede">
                <graphic>
                   <ImageView fitHeight="43.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
                      <image>

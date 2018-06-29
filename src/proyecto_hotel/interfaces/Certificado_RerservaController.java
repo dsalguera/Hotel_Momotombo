@@ -175,7 +175,6 @@ public class Certificado_RerservaController implements Initializable {
             while (rs.next()) {
                  int Id_reserva=rs.getInt("Id_reserva");
                  int Id_cliente=rs.getInt("Id_cliente");
-                
                  int Id_habitacion=rs.getInt("Id_habitacion");
                  String Fecha_inicio=rs.getString("Fecha_inicio");
                  String Fecha_final=rs.getString("Fecha_final");
