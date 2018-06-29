@@ -97,10 +97,12 @@ public class Pagar_EstanciaController implements Initializable {
           Statement stm = (Statement) connection.createStatement(); 
           String query;
           String mensaje="";
-          query="call setPago("+lbtotal.getText()+","+txttarjeta.getText()+");";
+          query="call setPago("+lbtotal.getText().replace("$","").trim()+","+txttarjeta.getText()+");";
+                System.out.println(query);
           ResultSet rs = stm.executeQuery(query);
           rs.next();
           mensaje=rs.getString("mensaje");
+                System.out.println(mensaje);
                      if (!mensaje.equals("perfecto")) {
                          JOptionPane.showMessageDialog(null, mensaje);
                          return;
@@ -112,7 +114,9 @@ public class Pagar_EstanciaController implements Initializable {
         
         }
         
-        System.out.println("listo :"+pago);
+        if (pago) {
+              JOptionPane.showMessageDialog(null, "Todo lito "+lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getNombre_cliente());
+        }
         
         
         
@@ -295,6 +299,10 @@ public class Pagar_EstanciaController implements Initializable {
         if (newValue!=null) {
           selecionar_servicio(newValue.getId_estancia());
             
+        }else{
+        lbcosto_agregado.setText("0");
+        lbcostobase.setText("0");
+        lbtotal.setText("0");
         }
         
         
@@ -380,24 +388,30 @@ public class Pagar_EstanciaController implements Initializable {
     private JFXTextField txttarjeta;
      @FXML
     private Label lbtotal;
+     
+    @FXML
+    private Label lbcostobase;
+
+    @FXML
+    private Label lbcosto_agregado;
      String guardar="";
          @FXML
     void Radio_Efectivo(ActionEvent event) {
-             if (RC.isSelected()) {
+          
                  guardar=txttarjeta.getText();
                  txttarjeta.setText("");
                  txttarjeta.setEditable(false);
-             }
+             
                
               
     }
 
     @FXML
     void Radio_credito(ActionEvent event) {
-        if (RE.isSelected()) {
+    
          txttarjeta.setText(guardar);
          txttarjeta.setEditable(true);
-        }
+        
     }
 
  void selecionar_servicio(int id){
@@ -408,13 +422,18 @@ public class Pagar_EstanciaController implements Initializable {
              String query = "call get_Servicio_Cuarto("+id+");";
              ResultSet rs = stm.executeQuery(query);
              double total=0;
+             double base=0;
             while( rs.next()){
                 data1.add(rs.getString("mensaje"));
                 total=total+rs.getDouble("Costo_total");
             }
-            
-            // select Costo_total from Estancia where Id_estancia=1;
-            
+            query = " select Costo_total from Estancia where Id_estancia="+id+";";
+             rs = stm.executeQuery(query);
+             rs.next();
+             base=rs.getDouble("Costo_total");
+             lbcostobase.setText("$ "+base);
+             lbcosto_agregado.setText("$ "+total);
+             total=base+total;
             lista_servi.getItems().clear();
             lista_servi.getItems().addAll(data1);
             lbtotal.setText("$ "+total);

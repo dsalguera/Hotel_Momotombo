@@ -35,6 +35,15 @@
                               <FontAwesomeIconView glyphName="SEARCH" size="15" styleClass="icon-color" text="" />
                            </graphic>
                         </JFXButton>
+                        <Pane prefHeight="39.0" prefWidth="505.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label layoutX="186.0" layoutY="1.0" text="Servicios al Cuarto por Estancias" textFill="#f5f2f2">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </Pane>
                      </children>
                      <padding>
                         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
@@ -68,8 +77,12 @@
                                     <Font size="15.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="421.0" layoutY="10.0" text="Total :" textFill="#fcf9f9" />
-                              <Label fx:id="lbtotal" layoutX="470.0" layoutY="10.0" prefHeight="17.0" prefWidth="111.0" text="0" textFill="#eeeaea" />
+                              <Label layoutX="421.0" layoutY="50.0" text="Total :" textFill="#fcf9f9" />
+                              <Label fx:id="lbtotal" layoutX="470.0" layoutY="49.0" prefHeight="17.0" prefWidth="111.0" text="0" textFill="#eeeaea" />
+                              <Label layoutX="364.0" layoutY="33.0" text="Costo Agregado:" textFill="#fcf9f9" />
+                              <Label layoutX="389.0" layoutY="14.0" text="Costo base :" textFill="#fcf9f9" />
+                              <Label fx:id="lbcostobase" layoutX="470.0" layoutY="14.0" prefHeight="17.0" prefWidth="111.0" text="0" textFill="#eeeaea" />
+                              <Label fx:id="lbcosto_agregado" layoutX="470.0" layoutY="33.0" prefHeight="17.0" prefWidth="111.0" text="0" textFill="#eeeaea" />
                            </children>
                         </Pane>
                         <Pane prefHeight="86.0" prefWidth="241.0">

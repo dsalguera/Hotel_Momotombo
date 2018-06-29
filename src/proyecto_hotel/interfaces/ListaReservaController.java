@@ -1,4 +1,8 @@
-
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package proyecto_hotel.interfaces;
 
 import com.jfoenix.controls.JFXButton;
@@ -31,15 +35,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import proyecto_hotel.Conexion;
-import proyecto_hotel.clases.Habitaciones;
 import proyecto_hotel.clases.ListaEstancia;
+import proyecto_hotel.clases.ListaReserva;
 
 /**
  * FXML Controller class
  *
  * @author David Salguera
  */
-public class ListaEstanciaController implements Initializable {
+public class ListaReservaController implements Initializable {
 
     @FXML
     private HBox boxContenedor;
@@ -54,7 +58,7 @@ public class ListaEstanciaController implements Initializable {
     private JFXButton btnBuscar;
 
     @FXML
-    private ListView<ListaEstancia> lista_estancias;
+    private ListView<ListaReserva> lista_reservas;
 
     @FXML
     private VBox boxCambios;
@@ -72,7 +76,7 @@ public class ListaEstanciaController implements Initializable {
     private JFXTextField txtcostoT;
 
     @FXML
-    private JFXTextField txtdesc;
+    private JFXDatePicker fecha_reserva;
 
     @FXML
     private HBox panel_edicion;
@@ -85,57 +89,18 @@ public class ListaEstanciaController implements Initializable {
 
     @FXML
     void Editar_Registro(ActionEvent event) {
-        
+
     }
 
     @FXML
     void Eliminar_Registro(ActionEvent event) {
-        
+
     }
 
+    
     @FXML
-    void buscar(KeyEvent event) throws SQLException {
-        consulta();
-    }
-    
-    void consulta() throws SQLException {
-    
-        Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
-        Statement stm = (Statement) connection.createStatement();
-        
-        String busq = txtbuscar.getText();
-        String filtro = combo_buscar.getSelectionModel().getSelectedItem();
-        String query = "select * from Estancia e inner join Cliente c on e.Id_cliente = c.Id_cliente inner join Habitacion h\n" +
-                       "on h.Id_habitacion = e.Id_habitacion where "+filtro+" like '%"+(busq)+"%'";
-        
-        ResultSet rs = stm.executeQuery(query);
-        
-        while (rs.next()) {
-                int id_estancia = rs.getInt("Id_estancia");
-                int id_cliente = rs.getInt("Id_cliente");
-                int id_habitacion = rs.getInt("Id_habitacion");
-                
-                String fecha_inic = rs.getString("Fecha_inicio");
-                String fecha_fin = rs.getString("Fecha_final");
-                
-                Double costo = rs.getDouble("costo_total");
-                String descripcion = rs.getString("descripcion");
-                String estado = rs.getString("estado");
-                int id_reserva = rs.getInt("id_reserva");
-                
-                String imagenCliente = rs.getString("c.Imagen");
-                String imagenHabitacion = rs.getString("h.Imagen");
-                
-                ListaEstancia estancia = new ListaEstancia(id_estancia, id_cliente, id_habitacion, 
-                fecha_inic, fecha_fin, costo, descripcion, estado, id_reserva,
-                        new Image(new File(dirCliente+imagenCliente).toURI().toString()), 
-                        new Image(new File(dirHabitaciones+imagenHabitacion).toURI().toString()));
-               
-                data.add(estancia);
-                
-        }
-        Crear_Lista(query);
-     
+    void buscar(KeyEvent event) {
+
     }
 
     @FXML
@@ -145,7 +110,7 @@ public class ListaEstanciaController implements Initializable {
     
     Conexion c = new Conexion();
     Connection connection ;
-    ObservableList<ListaEstancia> data = FXCollections.observableArrayList();
+    ObservableList<ListaReserva> data = FXCollections.observableArrayList();
     String dirCliente = "src\\proyecto_hotel\\imagenes\\clientes\\";
     String dirHabitaciones = "src\\proyecto_hotel\\imagenes\\habitaciones\\";
     
@@ -157,37 +122,34 @@ public class ListaEstanciaController implements Initializable {
         ResultSet rs = stm.executeQuery(query);
         
         while (rs.next()) {
-                int id_estancia = rs.getInt("Id_estancia");
+                int id_reserva = rs.getInt("Id_reserva");
                 int id_cliente = rs.getInt("Id_cliente");
-                int id_habitacion = rs.getInt("Id_habitacion");
                 
                 String fecha_inic = rs.getString("Fecha_inicio");
                 String fecha_fin = rs.getString("Fecha_final");
-                
-                Double costo = rs.getDouble("costo_total");
-                String descripcion = rs.getString("descripcion");
                 String estado = rs.getString("estado");
-                int id_reserva = rs.getInt("id_reserva");
+                Double costo = rs.getDouble("costo_total");
+                
+                int id_habitacion = rs.getInt("Id_habitacion");
+                String fecha_reserva = rs.getString("Fecha_reserva");
                 
                 String imagenCliente = rs.getString("c.Imagen");
                 String imagenHabitacion = rs.getString("h.Imagen");
                 
-                ListaEstancia estancia = new ListaEstancia(id_estancia, id_cliente, id_habitacion, 
-                fecha_inic, fecha_fin, costo, descripcion, estado, id_reserva,
+                ListaReserva reserva = new ListaReserva(id_reserva, id_cliente, fecha_inic, 
+                        fecha_fin, estado, costo, id_habitacion, fecha_reserva,
                         new Image(new File(dirCliente+imagenCliente).toURI().toString()), 
                         new Image(new File(dirHabitaciones+imagenHabitacion).toURI().toString()));
                
-                data.add(estancia);
+                data.add(reserva);
                 
         }
         
     }
     
-    int tipo_usuario;
-    
     void Crear_Lista(String query){
         
-        lista_estancias.getItems().clear();
+        lista_reservas.getItems().clear();
         data.clear();
         
         try {
@@ -196,16 +158,16 @@ public class ListaEstanciaController implements Initializable {
             Logger.getLogger(HabitacionesController.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        lista_estancias.getItems().addAll(data);
+        lista_reservas.getItems().addAll(data);
         
-        lista_estancias.setCellFactory(new Callback<ListView<ListaEstancia>, ListCell<ListaEstancia>>() {
+        lista_reservas.setCellFactory(new Callback<ListView<ListaReserva>, ListCell<ListaReserva>>() {
 
         @Override
-        public ListCell<ListaEstancia> call(ListView<ListaEstancia> arg0) {
-        return new ListCell<ListaEstancia>() {
+        public ListCell<ListaReserva> call(ListView<ListaReserva> arg0) {
+        return new ListCell<ListaReserva>() {
 
             @Override
-            protected void updateItem(ListaEstancia item, boolean bln) {
+            protected void updateItem(ListaReserva item, boolean bln) {
             super.updateItem(item, bln);
             if (item != null) {
                             
@@ -216,12 +178,12 @@ public class ListaEstanciaController implements Initializable {
             
             VBox vBox = new VBox(
                     
-                id_estancia = new Label("Id Estancia: "+item.getId_estancia()+"   Id Cliente: "+item.getId_cliente()), 
-                id_habitacion = new Label("Id Habitacion: "+item.getId_habitacion()+"   Id Reserva: "+item.getId_reserva()),
+                id_estancia = new Label("Id Reserva: "+item.getId_reserva()+"   Id Cliente: "+item.getId_cliente()), 
+                id_habitacion = new Label("Id Habitacion: "+item.getId_habitacion()),
                 Fecha_inicio = new Label("Fecha Inicio: "+item.getFecha_inicio()),
                 Fecha_final = new Label("Fecha Final: "+item.getFecha_final()),
                 Costo_total = new Label("Costo Total: "+item.getCosto_total()),
-                Descripcion = new Label("Descripcion: "+item.getDescripcion()),
+                Descripcion = new Label("Fecha Reserva: "+item.getFecha_reserva()),
                 Estado = new Label("Estado: "+item.getEstado()));
  
                     id_estancia.getStyleClass().add("espacio");
@@ -248,13 +210,12 @@ public class ListaEstanciaController implements Initializable {
 
                 };
             }
-        
-            
 
         });
         
     }
     
+    int tipo_usuario;
     String usuario;
     
     public void Botones(int type){
@@ -269,18 +230,17 @@ public class ListaEstanciaController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        
         tipo_usuario = MenuController.tipo_usuario;
         usuario = MenuController.nombre_usuario_entra;
-        
         Botones(tipo_usuario);
         
         if (tipo_usuario == 2) {
-            Crear_Lista("select * from Estancia e inner join Cliente c on e.Id_cliente = c.Id_cliente inner join Habitacion h " +
-                    "on h.Id_habitacion = e.Id_habitacion");
+            Crear_Lista("select * from Reserva r inner join Cliente c on r.Id_cliente = c.Id_cliente inner join Habitacion h " +
+            "on h.Id_habitacion = r.Id_habitacion;");
         }else if (tipo_usuario == 3) {
-            Crear_Lista("select * from Estancia e inner join Cliente c on e.Id_cliente = c.Id_cliente inner join Habitacion h " +
-                        "on h.Id_habitacion = e.Id_habitacion inner join Usuario u on u.Id_cliente = c.Id_cliente "
+            Crear_Lista("select * from Reserva r inner join Cliente c on r.Id_cliente = c.Id_cliente inner join Habitacion h " +
+                     "on h.Id_habitacion = r.Id_habitacion inner join Usuario u on u.Id_cliente = c.Id_cliente "
                       + "where u.Nombre_usuario = '"+usuario+"';");
         }
         
@@ -289,8 +249,8 @@ public class ListaEstanciaController implements Initializable {
         busquedas.add("Fecha_Final");
         busquedas.add("Costo_Total");
         busquedas.add("Numero_Reserva");
-        busquedas.add("Numero_Estancia");
-        busquedas.add("Cliente.Estado");
+        busquedas.add("Fecha_Reserva");
+        busquedas.add("Reserva.Estado");
         combo_buscar.getItems().addAll(busquedas);
         
     }    
