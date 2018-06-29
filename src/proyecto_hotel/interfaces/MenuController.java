@@ -578,8 +578,9 @@ public class MenuController implements Initializable {
         String d = "src\\proyecto_hotel\\imagenes\\";
         img_logo.setImage(new Image(new File(d+"logo.png").toURI().toString()));
         Fecha_Hora();
+        Audit_habitacion();
         Cargar_Inicio();
-          Audit_habitacion();
+       
     }    
 
     void Cargar_Inicio(){
@@ -612,6 +613,7 @@ public class MenuController implements Initializable {
            connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
             Statement stm = (Statement) connection.createStatement();
             String query = "  call    Audit_Habitacione();";
+            stm.executeQuery(query);
          } catch (SQLException ex) {
              System.out.println("error al extraer id reserva");
          }
