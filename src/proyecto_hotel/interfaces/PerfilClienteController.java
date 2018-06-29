@@ -35,6 +35,8 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.*;
+import javafx.scene.input.InputMethodEvent;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -118,14 +120,9 @@ public class PerfilClienteController implements Initializable {
     private HBox panel_edicion2;
 
     @FXML
-    private JFXButton btnLimpiar;
-
-    @FXML
     private JFXButton btnEditar;
 
-    @FXML
-    private JFXButton btnGuardar;
-
+    
     @FXML
     private JFXButton btnEliminar;
     
@@ -171,11 +168,13 @@ public class PerfilClienteController implements Initializable {
     }
 
     String pNombre, pApellido;
+    String oldUser;
+    String vigente;
     
     @FXML
-    void Editar_Registro(ActionEvent event) throws SQLException {
+    void Editar_Registro(ActionEvent event) {
         
-        if (Valida() == true) {
+        try {
             String primerNombre = txtp_nombre.getText().toString();
             String segundoNombre = txts_nombre.getText().toString();
             String primerApellido = txtp_apellido.getText().toString();
@@ -187,21 +186,21 @@ public class PerfilClienteController implements Initializable {
 
             String fecha_inscripcion = this.fecha_inscripcion.getValue().toString();
             String fecha_nacimiento = this.fechanac.getValue().toString();
-
-
+            
+            
             int[] nacimiento = Arrays.stream(fecha_nacimiento.trim().split("-"))
-                          .mapToInt(Integer::parseInt)
-                          .toArray();
-
+                    .mapToInt(Integer::parseInt)
+                    .toArray();
+            
             int[] inscripcion = Arrays.stream(fecha_inscripcion.trim().split("-"))
-                          .mapToInt(Integer::parseInt)
-                          .toArray();
-
-
+                    .mapToInt(Integer::parseInt)
+                    .toArray();
+            
+            
             fecha_nacimiento = (""+nacimiento[0]+"-"+nacimiento[1]+"-"+nacimiento[2]);
             fecha_inscripcion = (""+inscripcion[0]+"-"+inscripcion[1]+"-"+inscripcion[2]);
-
-
+            
+            
             String telefono = txttelefono.getText().toString();
             String correo = txtcorreo.getText().toString();
 
@@ -226,144 +225,86 @@ public class PerfilClienteController implements Initializable {
                 // ... user chose OK
 
                 if (click == 1) {
-
-                        query = "Update Cliente set Primer_nombre = '"+primerNombre+"',"
-                               +"Segundo_nombre = '"+segundoNombre+"',"
-                               +"Primer_apellido = '"+primerApellido+"',"
-                               +"Segundo_apellido = '"+segundoApellido+"',"
-                               +"Identificacion = '"+identificacion+"',"
-                               +"Tipo_identificacion = '"+tipo+"',"
-                               +"Pais_origen = '"+pais+"',"
-                               +"Fecha_inscripcion = '"+fecha_inscripcion+"',"
-                               +"Fecha_nacimiento = '"+fecha_nacimiento+"',"
-                               +"Telefono = '"+telefono+"',"
-                               +"Correo = '"+correo+"',"
-                               +"Imagen = '"+nombre_img+"' where Id_cliente = "+id+";";
-
+                    
+                    query = "Update Cliente set Primer_nombre = '"+primerNombre+"',"
+                            +"Segundo_nombre = '"+segundoNombre+"',"
+                            +"Primer_apellido = '"+primerApellido+"',"
+                            +"Segundo_apellido = '"+segundoApellido+"',"
+                            +"Identificacion = '"+identificacion+"',"
+                            +"Tipo_identificacion = '"+tipo+"',"
+                            +"Pais_origen = '"+pais+"',"
+                            +"Fecha_inscripcion = '"+fecha_inscripcion+"',"
+                            +"Fecha_nacimiento = '"+fecha_nacimiento+"',"
+                            +"Telefono = '"+telefono+"',"
+                            +"Correo = '"+correo+"',"
+                            +"Imagen = '"+nombre_img+"' where Id_cliente = "+id+";";
+                    
                 }else{
-
-                        query = "Update Cliente set Primer_nombre = '"+primerNombre+"',"
-                               +"Segundo_nombre = '"+segundoNombre+"',"
-                               +"Primer_apellido = '"+primerApellido+"',"
-                               +"Segundo_apellido = '"+segundoApellido+"',"
-                               +"Identificacion = '"+identificacion+"',"
-                               +"Tipo_identificacion = '"+tipo+"',"
-                               +"Pais_origen = '"+pais+"',"
-                               +"Fecha_inscripcion = '"+fecha_inscripcion+"',"
-                               +"Fecha_nacimiento = '"+fecha_nacimiento+"',"
-                               +"Telefono = '"+telefono+"',"
-                               +"Correo = '"+correo+"' "
-                               +"where Id_cliente = "+id+";";
-
+                    
+                    query = "Update Cliente set Primer_nombre = '"+primerNombre+"',"
+                            +"Segundo_nombre = '"+segundoNombre+"',"
+                            +"Primer_apellido = '"+primerApellido+"',"
+                            +"Segundo_apellido = '"+segundoApellido+"',"
+                            +"Identificacion = '"+identificacion+"',"
+                            +"Tipo_identificacion = '"+tipo+"',"
+                            +"Pais_origen = '"+pais+"',"
+                            +"Fecha_inscripcion = '"+fecha_inscripcion+"',"
+                            +"Fecha_nacimiento = '"+fecha_nacimiento+"',"
+                            +"Telefono = '"+telefono+"',"
+                            +"Correo = '"+correo+"' "
+                            +"where Id_cliente = "+id+";";
+                    
                 }
-
-                click = 0;
+                
                 stm.executeUpdate(query);
 
-                Dialogo("Se ha editado el registro.", "Exito al Editar!",
-                "Operación Realizada", Alert.AlertType.CONFIRMATION);
-
-
+                if (Usuario_existe(txtnombreuser.getText()) == true) {
+                    Dialogo("Ocurrio un error al editar el registro. Al parecer el usuario ya existe.", "¡Error al Editar!",
+                    "Error", Alert.AlertType.ERROR);
+                }else{
+                    
+                    if (click == 1) {
+                        
+                        query = "update Usuario set Nombre_usuario = '"+txtnombreuser.getText()+"',"
+                            + "Contrasena = '"+txtpassword.getText()+"',"
+                            + "Imagen = '"+nombre_img+"'"
+                            + " where Id_cliente = "+id+";";
+                        
+                        
+                
+                    }else{
+                        
+                        query = "update Usuario set Nombre_usuario = '"+txtnombreuser.getText()+"',"
+                            + "Contrasena = '"+txtpassword.getText()+"'"
+                            + " where Id_cliente = "+id+";";
+                                               
+                    }
+                    
+                    stm.executeUpdate(query);
+                    stm.close();
+                    
+                    click = 0;
+                
+                    Dialogo("Se ha editado el registro.", "Exito al Editar!",
+                        "Operación Realizada", Alert.AlertType.CONFIRMATION);
+                    
+                }
+                
             } else if(result.get() == buttonTypeCancel){
                 // ... user chose CANCEL or closed the dialog
                 alert.close();
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(PerfilClienteController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
-
+    
     @FXML
     void Eliminar_Registro(ActionEvent event) {
         
     }
 
-    @FXML
-    void Guardar_Registro(ActionEvent event) throws SQLException {
-        
-        if (Valida() == true) {
-
-                String primerNombre = txtp_nombre.getText();
-                String segundoNombre = txts_nombre.getText();
-                String primerApellido = txtp_apellido.getText();
-                String segundoApellido = txts_apellido.getText();
-                
-                String identificacion = txtidentificacion.getText();
-                String tipo = (String) combo_tipo.getSelectionModel().getSelectedItem();
-                String pais = txtpais.getText();
-                
-                String fecha_inscripcion = fechanac.getValue().toString();
-                String fecha_nacimiento = this.fecha_inscripcion.getValue().toString();
-                
-                int[] nacimiento = Arrays.stream(fecha_nacimiento.trim().split("-"))
-                        .mapToInt(Integer::parseInt)
-                        .toArray();
-                
-                int[] inscripcion = Arrays.stream(fecha_inscripcion.trim().split("-"))
-                        .mapToInt(Integer::parseInt)
-                        .toArray();
-                
-                
-                fecha_nacimiento = (""+nacimiento[0]+"-"+nacimiento[1]+"-"+nacimiento[2]);
-                fecha_inscripcion = (""+inscripcion[0]+"-"+inscripcion[1]+"-"+inscripcion[2]);
-                
-                System.out.println(""+fecha_nacimiento);
-                System.out.println(""+fecha_inscripcion);
-                
-                String telefono = txttelefono.getText();
-                String correo = txtcorreo.getText();
-                
-                Image imagen = screen_img.getImage();
-                
-                Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
-                Statement stm = (Statement) connection.createStatement();
-                String query = null;
-                String query2 = null;
-                
-                if (Usuario_existe(txtnombreuser.getText()) == true) {
-                    
-                    Dialogo("No se ha guardado el usuario por que ya existe, pruebe con otro.", "Usuario no valido!",
-                            "Error", Alert.AlertType.ERROR);
-                    
-                }else{
-                    
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("¿Confirmar Acción?");
-                    alert.setHeaderText("¿Está seguro que desea guardar el cliente "+primerNombre+" "+primerApellido+" a la base?");
-                    alert.setContentText("Se guardará la información con los datos introcucidos en los campos.\nPara Guardar, presione aceptar.");
-                    
-                    ButtonType buttonTypeCancel = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
-                    ButtonType buttonTypeOk = new ButtonType("Aceptar", ButtonBar.ButtonData.OK_DONE);
-                    
-                    alert.getButtonTypes().setAll(buttonTypeCancel,buttonTypeOk);
-                    
-                    Optional<ButtonType> result = alert.showAndWait();
-                    if (result.get() == buttonTypeOk){
-                        try {
-                            // ... user chose OK
-                            query = "call setUsuario('"+primerNombre+"','"+segundoNombre+"','"+primerApellido+"','"+segundoApellido+"',"
-                                    + "'"+identificacion+"','"+tipo+"','"+pais+"',0,0,'"+fecha_inscripcion+"','"+fecha_nacimiento+"',"
-                                    + "'"+telefono+"','"+correo+"','"+nombre_img+"',0, '"+txtnombreuser.getText()+"','"+txtpassword.getText()+"',3,1,0);";
-
-                            stm.executeUpdate(query);
-                            stm.close();
-                            
-                            Dialogo("Se ha guardado el registro.", "Exito al Guardar!",
-                                    "Operación Realizada", Alert.AlertType.CONFIRMATION);
-                            
-                        } catch (SQLException ex) {
-                            Dialogo("Ha ocurrido un error al guardar el registro.\n\n"+ex.getMessage()+"\n\n"+ex.getSQLState()+"", "Error al Guardar!",
-                                    "Error", Alert.AlertType.CONFIRMATION);
-                        }
-                        
-                    } else if(result.get() == buttonTypeCancel){
-                        // ... user chose CANCEL or closed the dialog
-                        alert.close();
-                    }
-
-                }
-            
-        }
-    }
-    
     boolean Usuario_existe(String usuario) throws SQLException{
         
             String dir = "src\\proyecto_hotel\\imagenes\\usuarios\\";
@@ -383,8 +324,6 @@ public class PerfilClienteController implements Initializable {
         
         return true;
     }
-    
-    
     
     boolean Valida(){
         
@@ -523,6 +462,9 @@ public class PerfilClienteController implements Initializable {
                 tipo = rs.getString("Tipo_identificacion");
                 combo_tipo.setValue(tipo);
                 
+                pNombre = (rs.getString("Primer_nombre"));
+                pApellido = rs.getString("Primer_apellido");
+                
                 txtpais.setText(rs.getString("Pais_origen"));
                 String fecha_inscripcion = rs.getString("Fecha_inscripcion");
                 String fecha_nacimiento = rs.getString("Fecha_nacimiento");
@@ -544,6 +486,7 @@ public class PerfilClienteController implements Initializable {
                 txttelefono.setText(rs.getString("Telefono"));
                 
                 txtnombreuser.setText(rs.getString("Nombre_usuario"));
+                oldUser = rs.getString("Nombre_usuario");
                 txtpassword.setText(rs.getString("Contrasena"));
                 txtpassword2.setText(rs.getString("Contrasena"));
                 
@@ -573,6 +516,12 @@ public class PerfilClienteController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         Tipo_usuario_copia = MenuController.tipo_usuario;
         nombre_user_copia = MenuController.nombre_usuario_entra;
+        
+        ObservableList tipoID = FXCollections.observableArrayList();
+        tipoID.add("Cedula");
+        tipoID.add("Nacionalidad");
+        
+        combo_tipo.getItems().addAll(tipoID);
         
         try {
             Info(nombre_user_copia,Tipo_usuario_copia);

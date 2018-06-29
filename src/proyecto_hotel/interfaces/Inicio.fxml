@@ -12,7 +12,7 @@
    <children>
       <HBox layoutX="15.0" layoutY="63.0" prefHeight="60.0" prefWidth="741.0" spacing="10.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="65.0">
          <children>
-            <JFXButton onAction="#Contratar_Reserva" prefHeight="60.0" prefWidth="226.0" ripplerFill="#2e78e1" styleClass="button-inicio" text="     Contratar Reserva" textFill="#e4dede" HBox.hgrow="ALWAYS">
+            <JFXButton onAction="#Contratar_Reserva" prefHeight="60.0" prefWidth="256.0" ripplerFill="#2e78e1" styleClass="button-inicio" text="     Contratar Reserva" textFill="#e4dede" HBox.hgrow="ALWAYS">
                <graphic>
                   <ImageView fitHeight="43.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
                      <image>

@@ -27,6 +27,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -36,6 +37,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import javax.swing.JOptionPane;
 import proyecto_hotel.Conexion;
 import proyecto_hotel.FXMLDocumentController;
 import proyecto_hotel.clases.Clientes;
@@ -77,8 +79,42 @@ public class Pagar_EstanciaController implements Initializable {
     
     @FXML
     void Aceptar(ActionEvent event) throws SQLException, IOException {
-        System.out.println(""+Contrato_estanciaController.estancia);
-       
+        if (lista_habitaciones.getItems().size()==0) {
+            JOptionPane.showMessageDialog(null,"No hay estancias activas.");
+            return; 
+        }
+        if (lista_habitaciones.selectionModelProperty().getValue().getSelectedIndex()==-1) {
+            JOptionPane.showMessageDialog(null,"Seleccione una estancia.");
+            return;
+        }
+        
+        boolean pago=false; 
+        if (RE.isSelected()) {
+            pago=true;
+        }else{
+            try {
+          Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
+          Statement stm = (Statement) connection.createStatement(); 
+          String query;
+          String mensaje="";
+          query="call setPago("+lbtotal.getText()+","+txttarjeta.getText()+");";
+          ResultSet rs = stm.executeQuery(query);
+          rs.next();
+          mensaje=rs.getString("mensaje");
+                     if (!mensaje.equals("perfecto")) {
+                         JOptionPane.showMessageDialog(null, mensaje);
+                         return;
+                     }
+             pago=true;        
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null,"Pago no realizado, verifique el codigo de la tarjeta.");
+            }
+        
+        }
+        
+        System.out.println("listo :"+pago);
+        
+        
         
     }
 
@@ -334,10 +370,57 @@ public class Pagar_EstanciaController implements Initializable {
         }
      return null;
      }
- 
- 
+     @FXML
+    private RadioButton RE;
+
+
+    @FXML
+    private RadioButton RC;
+    @FXML
+    private JFXTextField txttarjeta;
+     @FXML
+    private Label lbtotal;
+     String guardar="";
+         @FXML
+    void Radio_Efectivo(ActionEvent event) {
+             if (RC.isSelected()) {
+                 guardar=txttarjeta.getText();
+                 txttarjeta.setText("");
+                 txttarjeta.setEditable(false);
+             }
+               
+              
+    }
+
+    @FXML
+    void Radio_credito(ActionEvent event) {
+        if (RE.isSelected()) {
+         txttarjeta.setText(guardar);
+         txttarjeta.setEditable(true);
+        }
+    }
+
  void selecionar_servicio(int id){
- 
+  try {
+             data1.clear();
+             Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
+             Statement stm = (Statement) connection.createStatement();
+             String query = "call get_Servicio_Cuarto("+id+");";
+             ResultSet rs = stm.executeQuery(query);
+             double total=0;
+            while( rs.next()){
+                data1.add(rs.getString("mensaje"));
+                total=total+rs.getDouble("Costo_total");
+            }
+            
+            // select Costo_total from Estancia where Id_estancia=1;
+            
+            lista_servi.getItems().clear();
+            lista_servi.getItems().addAll(data1);
+            lbtotal.setText("$ "+total);
+         } catch (SQLException ex) {
+             System.out.println("error al extraer id reserva");
+         }
  
  
  }

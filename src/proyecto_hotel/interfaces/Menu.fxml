@@ -121,6 +121,17 @@
                <font>
                   <Font size="16.0" />
                </font></JFXButton>
+            <JFXButton fx:id="btnListaReservas" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="20.0" onAction="#ListaReservas" prefHeight="45.0" prefWidth="227.0" styleClass="button-selection" stylesheets="@../estilos/Estilos.css" text="LISTA RESERVAS">
+               <graphic>
+                  <FontAwesomeIconView glyphName="CALENDAR_CHECK_ALT" size="25" styleClass="icon-color" />
+               </graphic>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </JFXButton>
             <JFXButton fx:id="btnEstancias" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="20.0" onAction="#Estancias" prefHeight="45.0" prefWidth="232.0" styleClass="button-selection" stylesheets="@../estilos/Estilos.css" text="ESTANCIAS" VBox.vgrow="ALWAYS">
                <graphic>
                   <FontAwesomeIconView glyphName="BUILDING_ALT" size="25" styleClass="icon-color" />
@@ -134,6 +145,17 @@
                <font>
                   <Font size="16.0" />
                </font></JFXButton>
+            <JFXButton fx:id="btnListaEstancias" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="20.0" onAction="#ListaEstancias" prefHeight="45.0" prefWidth="232.0" styleClass="button-selection" stylesheets="@../estilos/Estilos.css" text="LISTA ESTANCIAS">
+               <graphic>
+                  <FontAwesomeIconView glyphName="BUILDING_ALT" size="25" styleClass="icon-color" />
+               </graphic>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </JFXButton>
             <JFXButton fx:id="btnDetalle_servicio" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="20.0" onAction="#Detalle_servicio" prefHeight="45.0" prefWidth="227.0" styleClass="button-selection" stylesheets="@../estilos/Estilos.css" text="DETALLE SERVICIO" VBox.vgrow="ALWAYS">
                <graphic>
                   <FontAwesomeIconView glyphName="PHONE" size="25" styleClass="icon-color" />

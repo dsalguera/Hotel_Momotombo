@@ -103,6 +103,12 @@ public class MenuController implements Initializable {
     
     @FXML
     private JFXButton btnPerfil;
+    
+    @FXML
+    private JFXButton btnListaReservas;
+
+    @FXML
+    private JFXButton btnListaEstancias;
 
     @FXML
     private JFXButton btnMaximizar;
@@ -143,6 +149,45 @@ public class MenuController implements Initializable {
         lienzo.getScene().getWindow().setY(event.getScreenY() + yOffset);
     }
 
+    @FXML
+    void ListaEstancias(ActionEvent event) throws IOException {
+        
+        if (lienzo.getChildren().size()==2) {
+        Pane listaEstancia = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/ListaEstancia.fxml"));
+        AjustePagina(listaEstancia);
+        lienzo.getChildren().add(listaEstancia);
+        }else{
+        int  n= lienzo.getChildren().size()-1;
+            for (int i = 2; i <=n; i++) {
+                lienzo.getChildren().remove(2);
+            }
+        Pane listaEstancia = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/ListaEstancia.fxml"));
+        AjustePagina(listaEstancia);
+        lienzo.getChildren().add(listaEstancia);
+       
+        }
+        
+    }
+
+    @FXML
+    void ListaReservas(ActionEvent event) throws IOException {
+        
+        if (lienzo.getChildren().size()==2) {
+        Pane listaReserva = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/ListaReserva.fxml"));
+        AjustePagina(listaReserva);
+        lienzo.getChildren().add(listaReserva);
+        }else{
+        int  n= lienzo.getChildren().size()-1;
+            for (int i = 2; i <=n; i++) {
+                lienzo.getChildren().remove(2);
+            }
+        Pane listaReserva = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/ListaReserva.fxml"));
+        AjustePagina(listaReserva);
+        lienzo.getChildren().add(listaReserva);
+       
+        }
+        
+    }
 
     void Cerrar(ActionEvent event) {
         
@@ -179,13 +224,20 @@ public class MenuController implements Initializable {
         if (this.type == 1) {
             txttipo.setText("Administrador");
             menuBtns.getChildren().remove(btnPerfil);
+            menuBtns.getChildren().remove(btnListaReservas);
+            menuBtns.getChildren().remove(btnListaEstancias);
+            
+            
         }else if (this.type == 2) {
             txttipo.setText("Secretario");
             menuBtns.getChildren().remove(btnPerfil);
+            menuBtns.getChildren().remove(btnDetalle_servicio);
+            
         }else if (this.type == 3) {
             txttipo.setText("Visitante");
             menuBtns.getChildren().remove(btnClientes);
             menuBtns.getChildren().remove(btnDetalle_servicio);
+            menuBtns.getChildren().remove(btnReservas);
             menuBtns.getChildren().remove(btnEstancias);
             menuBtns.getChildren().remove(btnServicio_cuarto);
             menuBtns.getChildren().remove(btnBitacora);
@@ -198,7 +250,7 @@ public class MenuController implements Initializable {
     }
     
     
-   static Conexion c = new Conexion();
+ static Conexion c = new Conexion();
    static Connection connection ;
     
     void Conexion() throws SQLException{ 
@@ -488,7 +540,7 @@ public class MenuController implements Initializable {
     String s;
     Format formatter;
     Date date = new Date();
-    int cont=0,aux;
+     int cont=0,aux;
     void Fecha_Hora(){
         
         formatter = new SimpleDateFormat("EEEE, dd MMMM yyyy");
@@ -500,7 +552,6 @@ public class MenuController implements Initializable {
         int segundos = cal.get(Calendar.SECOND);
         int minutos = cal.get(Calendar.MINUTE);
         int hora = cal.get(Calendar.HOUR);
-            
         //System.out.println(hour + ":" + (minute) + ":" + second);
         if (segundos<10) {
             labHora.setText(" "+(hora)+":"+(minutos)+":0"+(segundos)+" |");    
@@ -528,7 +579,7 @@ public class MenuController implements Initializable {
         img_logo.setImage(new Image(new File(d+"logo.png").toURI().toString()));
         Fecha_Hora();
         Cargar_Inicio();
-        Audit_habitacion();
+          Audit_habitacion();
     }    
 
     void Cargar_Inicio(){
@@ -554,8 +605,8 @@ public class MenuController implements Initializable {
                 Logger.getLogger(MenuController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }}
-
-    public static void Audit_habitacion(){
+ 
+     public static void Audit_habitacion(){
    
          try {
            connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
@@ -567,8 +618,6 @@ public class MenuController implements Initializable {
     
    
     }
-    
-    
     
     
     
