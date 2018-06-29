@@ -14,6 +14,8 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -57,6 +59,8 @@ public class Pagar_EstanciaController implements Initializable {
 
     @FXML
     private ListView<Manuel_Estancia> lista_habitaciones;
+        @FXML
+    private ListView<String> lista_servi;
 
     @FXML
     private JFXButton btnAceptar;
@@ -85,7 +89,7 @@ public class Pagar_EstanciaController implements Initializable {
     
    
     ObservableList<Manuel_Estancia> data = FXCollections.observableArrayList();
-   
+    ObservableList<String> data1 = FXCollections.observableArrayList();
    
    
        @FXML
@@ -202,16 +206,16 @@ public class Pagar_EstanciaController implements Initializable {
                     
                     //,Estado = new Label(""+estado)     
                 );
-               Id_Estancia.getStyleClass().add("espacio");
-               Id_reserva.getStyleClass().add("espacio");
-                Id_cliente.getStyleClass().add("espacio");
-                Nombre_cliente.getStyleClass().add("espacio");
-                Id_habitacion.getStyleClass().add("espacio");
-               Nombre_habitacion.getStyleClass().add("espacio");
-               Fecha_inicio.getStyleClass().add("espacio");
-               Fecha_final.getStyleClass().add("espacio");
-               Descripcion.getStyleClass().add("espacio");
-               Costo_total.getStyleClass().add("espacio");
+               Id_Estancia.getStyleClass().add("espacio1");
+               Id_reserva.getStyleClass().add("espacio1");
+                Id_cliente.getStyleClass().add("espacio1");
+                Nombre_cliente.getStyleClass().add("espacio1");
+                Id_habitacion.getStyleClass().add("espacio1");
+               Nombre_habitacion.getStyleClass().add("espacio1");
+               Fecha_inicio.getStyleClass().add("espacio1");
+               Fecha_final.getStyleClass().add("espacio1");
+               Descripcion.getStyleClass().add("espacio1");
+               Costo_total.getStyleClass().add("espacio1");
               
                     if (item.getEstado().equalsIgnoreCase("Activo")) {
                         Estado.getStyleClass().add("round-green");
@@ -224,15 +228,15 @@ public class Pagar_EstanciaController implements Initializable {
                     VBox vimg=new VBox(imagen1 = new ImageView(item.getImgcliente()),imagen2 = new ImageView(item.getImghabitacion()));
                     imagen1.setFitHeight(100);
                     imagen1.setFitWidth(200);
-                    imagen1.setFitHeight(100);
-                    imagen1.setFitWidth(200);
+                    imagen2.setFitHeight(100);
+                    imagen2.setFitWidth(200);
                     HBox hBox = new HBox(vimg, vBox);
                    Separator s=new Separator();
                     VBox vfinal=new VBox(hBox,s);
                     vfinal.setSpacing(2);
-                    hBox.setSpacing(10);
-                    vBox.setSpacing(5);
-                    vimg.setSpacing(10);
+                    hBox.setSpacing(5);
+                    vBox.setSpacing(2);
+                    vimg.setSpacing(5);
                     setGraphic(vfinal);
                             
                         }
@@ -248,7 +252,18 @@ public class Pagar_EstanciaController implements Initializable {
     
   @Override
     public void initialize(URL url, ResourceBundle rb) {
-         
+         lista_habitaciones.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Manuel_Estancia>() {
+
+    @Override
+    public void changed(ObservableValue<? extends Manuel_Estancia> observable, Manuel_Estancia oldValue,Manuel_Estancia newValue) {
+        if (newValue!=null) {
+          selecionar_servicio(newValue.getId_estancia());
+            
+        }
+        
+        
+    }
+});
         ObservableList busquedas = FXCollections.observableArrayList();
         if (MenuController.tipo_usuario!=3) {
         busquedas.add("Nombre Cliente");
@@ -319,5 +334,12 @@ public class Pagar_EstanciaController implements Initializable {
         }
      return null;
      }
+ 
+ 
+ void selecionar_servicio(int id){
+ 
+ 
+ 
+ }
     
 }

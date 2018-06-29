@@ -116,6 +116,12 @@ and open the template in the editor.
     -fx-padding: 1;
 }
 
+.espacio1 {
+    -fx-padding: 1;
+	-fx-font-family:'The Dodger Inky';
+    -fx-font-size:12px;
+}
+
 .jfx-date-picker .jfx-text-field{
     -fx-prompt-text-fill: #9FA5AE;
     -fx-text-fill: #FFFFFF;

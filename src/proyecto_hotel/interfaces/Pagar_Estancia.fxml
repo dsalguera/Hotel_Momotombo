@@ -42,9 +42,9 @@
                   </HBox>
                   <HBox prefHeight="406.0" prefWidth="787.0">
                      <children>
-                        <ListView fx:id="lista_habitaciones" onMouseClicked="#click" prefHeight="256.0" prefWidth="638.0" />
+                        <ListView fx:id="lista_habitaciones" onMouseClicked="#click" prefHeight="405.0" prefWidth="501.0" />
                         <Separator orientation="VERTICAL" prefHeight="200.0" />
-                        <ListView prefHeight="100.0" prefWidth="656.0" />
+                        <ListView fx:id="lista_servi" prefHeight="405.0" prefWidth="279.0" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="106.0" prefWidth="787.0" styleClass="top-panel" stylesheets="@../estilos/Estilos.css">
