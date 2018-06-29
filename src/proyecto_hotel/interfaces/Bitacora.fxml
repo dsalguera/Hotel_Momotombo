@@ -32,7 +32,7 @@
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="123.0" prefWidth="828.0" styleClass="top-panel" stylesheets="@../estilos/Estilos.css">
                <children>
                   <TextField fx:id="txtbuscar_cliente" layoutX="14.0" layoutY="41.0" onKeyTyped="#Evento_Ttecla_en_txtbuscar_cliente" prefHeight="25.0" prefWidth="415.0" AnchorPane.leftAnchor="14.0" />
-                    <Label fx:id="label" layoutX="14.0" layoutY="14.0" minHeight="16" minWidth="69" text="Buscar Cliente" textFill="#fcf9f9">
+                    <Label fx:id="label_buscar_cliente" layoutX="14.0" layoutY="14.0" minHeight="16" minWidth="69" text="Buscar Cliente" textFill="#fcf9f9">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -42,14 +42,14 @@
                   <ImageView fx:id="Foto_Cliente" fitHeight="88.0" fitWidth="116.0" layoutX="554.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="554.0" AnchorPane.rightAnchor="139.0" AnchorPane.topAnchor="29.0" />
                   <Label fx:id="panel_nombre_cliente" layoutX="702.0" layoutY="25.0" prefHeight="17.0" prefWidth="297.0" textFill="#fffbfb" AnchorPane.leftAnchor="702.0" AnchorPane.rightAnchor="38.0" />
                   <Label fx:id="panel_identificacion" layoutX="702.0" layoutY="52.0" prefHeight="17.0" prefWidth="59.0" textFill="#fffbfb" AnchorPane.leftAnchor="702.0" AnchorPane.rightAnchor="38.0" />
-                  <Button layoutX="877.0" layoutY="85.0" mnemonicParsing="false" onAction="#Ocultar_historial" styleClass="button-skyblue" text="Ocultar Historial" AnchorPane.rightAnchor="58.0" />
+                  <Button fx:id="btn_ocultar_historial" layoutX="877.0" layoutY="85.0" mnemonicParsing="false" onAction="#Ocultar_historial" styleClass="button-skyblue" text="Ocultar Historial" AnchorPane.rightAnchor="58.0" />
                </children>
             </AnchorPane>
             <HBox fx:id="Hbox_principal" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0" VBox.vgrow="ALWAYS">
                <children>
                   <VBox spacing="10.0">
                      <children>
-                        <Pane prefHeight="280.0" prefWidth="396.0" styleClass="top-panel" stylesheets="@../estilos/Estilos.css">
+                        <Pane fx:id="Panel_Comentario" prefHeight="280.0" prefWidth="396.0" styleClass="top-panel" stylesheets="@../estilos/Estilos.css">
                            <children>
                               <Label fx:id="label3" layoutX="61.0" layoutY="14.0" minHeight="16" minWidth="69" text="Agregar Comentario" textFill="WHITE">
                                  <font>

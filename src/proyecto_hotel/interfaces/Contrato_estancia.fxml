@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
@@ -12,14 +13,15 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorpane" prefHeight="611.0" prefWidth="772.0" style="-fx-background-color: #fff;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto_hotel.interfaces.ReservaController">
+<AnchorPane id="AnchorPane" fx:id="anchorpane" prefHeight="611.0" prefWidth="931.0" style="-fx-background-color: #fff;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto_hotel.interfaces.Contrato_estanciaController">
    <children>
       <HBox layoutX="10.0" layoutY="50.0" prefHeight="561.0" prefWidth="767.0" spacing="5.0" stylesheets="@../estilos/Estilos.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
-            <VBox alignment="TOP_CENTER" prefHeight="611.0" prefWidth="348.0" styleClass="side-panel" stylesheets="@../estilos/Estilos.css" HBox.hgrow="ALWAYS">
+            <VBox alignment="TOP_CENTER" prefHeight="561.0" prefWidth="284.0" styleClass="side-panel" stylesheets="@../estilos/Estilos.css" HBox.hgrow="ALWAYS">
                <children>
                   <ImageView fx:id="screen_img1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
                      <VBox.margin>
@@ -48,7 +50,7 @@
                   <Separator fx:id="separador" prefWidth="200.0" />
                   <HBox alignment="CENTER" prefHeight="42.0" prefWidth="339.0">
                      <children>
-                        <Label prefHeight="31.0" prefWidth="135.0" text="Tipo de Pago" textFill="#f2ecec" HBox.hgrow="ALWAYS">
+                        <Label prefHeight="31.0" prefWidth="90.0" text="Estancia" textFill="#f2ecec" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="21.0" />
                            </font>
@@ -56,10 +58,7 @@
                               <Insets left="4.0" />
                            </HBox.margin>
                         </Label>
-                        <RadioButton fx:id="Radio_efectivo" mnemonicParsing="false" onAction="#Click_Radio_Efectivo" selected="true" text="Efectivo" textFill="WHITE" HBox.hgrow="ALWAYS">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
+                        <RadioButton fx:id="Radio_efectivo" mnemonicParsing="false" onAction="#Click_Radio_Efectivo" selected="true" text="Sin reserva" textFill="WHITE" HBox.hgrow="ALWAYS">
                            <HBox.margin>
                               <Insets right="10.0" />
                            </HBox.margin>
@@ -67,19 +66,15 @@
                               <ToggleGroup fx:id="Radio" />
                            </toggleGroup>
                         </RadioButton>
-                        <RadioButton fx:id="Radio_Credito" mnemonicParsing="false" onAction="#Click_Radio_Credito" text="Credito" textFill="#f2eded" toggleGroup="$Radio" HBox.hgrow="ALWAYS">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </RadioButton>
+                        <RadioButton fx:id="Radio_Credito" mnemonicParsing="false" onAction="#Click_Radio_Credito" text="Con reserva" textFill="#f2eded" toggleGroup="$Radio" HBox.hgrow="ALWAYS" />
                      </children>
                      <VBox.margin>
                         <Insets top="40.0" />
                      </VBox.margin>
                   </HBox>
-                  <HBox alignment="CENTER" prefHeight="60.0" prefWidth="339.0">
+                  <HBox alignment="CENTER" prefHeight="57.0" prefWidth="306.0">
                      <children>
-                        <Label prefHeight="31.0" prefWidth="135.0" text="Numero de Tarjeta:" textFill="#f2ecec">
+                        <Label prefHeight="31.0" prefWidth="135.0" text="Codigo de reserva:" textFill="#f2ecec">
                            <font>
                               <Font size="15.0" />
                            </font>
@@ -111,8 +106,9 @@
                         </Label>
                      </children>
                   </HBox>
-               </children></VBox>
-            <VBox alignment="CENTER" prefHeight="611.0" prefWidth="335.0" styleClass="side-panel" stylesheets="@../estilos/Estilos.css" HBox.hgrow="ALWAYS">
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="561.0" prefWidth="316.0" styleClass="side-panel" stylesheets="@../estilos/Estilos.css" HBox.hgrow="ALWAYS">
                <children>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
                      <children>
@@ -191,18 +187,36 @@
                   <Insets />
                </HBox.margin>
             </VBox>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" styleClass="side-panel" stylesheets="@../estilos/Estilos.css">
+            <VBox alignment="CENTER" prefHeight="561.0" prefWidth="277.0" spacing="20.0" styleClass="side-panel" stylesheets="@../estilos/Estilos.css">
                <children>
-                  <JFXButton fx:id="btnNuevo" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" onAction="#Nuevo_Registro" styleClass="button-skyblue" stylesheets="@../estilos/Estilos.css">
-                     <graphic>
-                        <FontAwesomeIconView glyphName="PLUS" size="25" styleClass="icon-color" text="" />
-                     </graphic>
-                  </JFXButton>
-                  <JFXButton fx:id="btnGuardar" contentDisplay="GRAPHIC_ONLY" onAction="#Guardar_Registro" styleClass="button-skyblue" stylesheets="@../estilos/Estilos.css">
-                     <graphic>
-                        <FontAwesomeIconView glyphName="SAVE" size="25" styleClass="icon-color" />
-                     </graphic>
-                  </JFXButton>
+                  <Pane prefHeight="296.0" prefWidth="277.0">
+                     <children>
+                        <Label layoutX="24.0" layoutY="32.0" text="Descripcion" textFill="WHITE">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <JFXTextArea fx:id="txtdescripcion" focusColor="#fbfcff" labelFloat="true" layoutX="26.0" layoutY="77.0" prefHeight="176.0" prefWidth="225.0" styleClass="campos" stylesheets="@../estilos/Estilos.css" text="Todo bien" unFocusColor="#fff7f7" wrapText="true">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </JFXTextArea>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="79.0" prefWidth="277.0">
+                     <children>
+                        <JFXButton fx:id="btnGuardar" contentDisplay="GRAPHIC_ONLY" layoutX="69.0" layoutY="23.0" onAction="#Guardar_Registro" styleClass="button-skyblue" stylesheets="@../estilos/Estilos.css">
+                           <graphic>
+                              <FontAwesomeIconView glyphName="SAVE" size="25" styleClass="icon-color" />
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton fx:id="btnNuevo" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" layoutX="163.0" layoutY="23.0" onAction="#Nuevo_Registro" styleClass="button-skyblue" stylesheets="@../estilos/Estilos.css">
+                           <graphic>
+                              <FontAwesomeIconView glyphName="PLUS" size="25" styleClass="icon-color" text="" />
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                  </Pane>
                </children>
                <HBox.margin>
                   <Insets />
@@ -215,7 +229,7 @@
       </HBox>
       <HBox alignment="CENTER" prefHeight="50.0" prefWidth="772.0" spacing="30.0" styleClass="side-panel" stylesheets="@../estilos/Estilos.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label text="Operacion : Contratar Reserva" textFill="#fcf8f8" HBox.hgrow="ALWAYS">
+            <Label text="Operacion : Contratar Estancia" textFill="#fcf8f8" HBox.hgrow="ALWAYS">
                <font>
                   <Font size="19.0" />
                </font>

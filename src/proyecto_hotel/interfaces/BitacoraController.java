@@ -323,6 +323,11 @@ if (rs.getString("Fecha_convertida")!=null) {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
        
+        if (MenuController.tipo_usuario==3) {
+            
+        }
+        
+        
       Hbox_principal.prefHeightProperty().addListener(new ChangeListener(){
           @Override
           public void changed(ObservableValue observable, Object oldValue, Object newValue) {

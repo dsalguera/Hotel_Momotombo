@@ -198,7 +198,7 @@ public class FXMLDocumentController implements Initializable {
     }
     
      boolean usuario_encontrado=false;    
-     
+     public static  int Id_Cliente=-1;
     void Conexion(ActionEvent event) { 
         if (txtuser.getText().trim().equals("") || txtpass.getText().trim().equals("")) {
               Dialogo("Asegúrese de ingresar corretamente sus credenciales.", "Usuario o Contraseña Inválidos!", "Error", Alert.AlertType.ERROR, 1);
@@ -218,6 +218,7 @@ public class FXMLDocumentController implements Initializable {
                 int estado = rs.getInt("estado");
                 String imagen = rs.getString("imagen");
                 String contra = rs.getString("contrasena"); 
+                Id_Cliente=rs.getInt("Id_cliente");
                 usuario_encontrado=true;
                 if(txtuser.getText().toString().equals(nombre) && txtpass.getText().toString().equals(contra)){
                     
@@ -240,7 +241,7 @@ public class FXMLDocumentController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+      Id_Cliente=-1;  
     }    
     
     

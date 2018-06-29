@@ -1,4 +1,3 @@
-
 package proyecto_hotel.interfaces;
 
 import com.jfoenix.controls.*;
@@ -17,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,6 +30,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -97,6 +100,9 @@ public class MenuController implements Initializable {
     
     @FXML
     private JFXButton btnMinimizar;
+    
+    @FXML
+    private JFXButton btnPerfil;
 
     @FXML
     private JFXButton btnMaximizar;
@@ -140,7 +146,6 @@ public class MenuController implements Initializable {
 
     void Cerrar(ActionEvent event) {
         
-        
         try {
             
         FXMLLoader fxmlLoader = new FXMLLoader();
@@ -156,13 +161,15 @@ public class MenuController implements Initializable {
         ((Node)(event.getSource())).getScene().getWindow().hide();
         
         } catch (IOException e) {
-        } 
+        }
+        
     }
 
     
     String user;
     int type;
     static int tipo_usuario;
+    static String nombre_usuario_entra;
     
     public void setUser(String username, int type) throws SQLException{
         
@@ -171,30 +178,38 @@ public class MenuController implements Initializable {
         txtuser.setText(username);
         if (this.type == 1) {
             txttipo.setText("Administrador");
+            menuBtns.getChildren().remove(btnPerfil);
         }else if (this.type == 2) {
             txttipo.setText("Secretario");
+            menuBtns.getChildren().remove(btnPerfil);
         }else if (this.type == 3) {
             txttipo.setText("Visitante");
-            
+            menuBtns.getChildren().remove(btnClientes);
             menuBtns.getChildren().remove(btnDetalle_servicio);
             menuBtns.getChildren().remove(btnEstancias);
             menuBtns.getChildren().remove(btnServicio_cuarto);
             menuBtns.getChildren().remove(btnBitacora);
             
         }
-        
+        nombre_usuario_entra = username;
         tipo_usuario = type;
         Conexion();
         
     }
     
     
-    Conexion c = new Conexion();
-    Connection connection ;
+   static Conexion c = new Conexion();
+   static Connection connection ;
     
     void Conexion() throws SQLException{ 
         
-        String dir = "src\\proyecto_hotel\\imagenes\\usuarios\\";
+        String dir;
+        
+        if (this.type == 3) {
+            dir= "src\\proyecto_hotel\\imagenes\\clientes\\";
+        }else{
+            dir= "src\\proyecto_hotel\\imagenes\\usuarios\\";
+        }
         
         connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
         Statement stm = (Statement) connection.createStatement();
@@ -217,30 +232,77 @@ public class MenuController implements Initializable {
     }
 
     @FXML
-    void Bitacora(ActionEvent event) throws IOException {
+    void Bitacora(ActionEvent event) {
+        
         if (lienzo.getChildren().size()==2) {
-        Pane bitacora = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Bitacora.fxml"));
-        AjustePagina(bitacora);
-        lienzo.getChildren().add(bitacora);   
-        }else{
-            int  n= lienzo.getChildren().size()-1;
-            for (int i = 2; i <=n; i++) {
-                lienzo.getChildren().remove(2);
+            try {
+                Pane bitacora = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Bitacora.fxml"));
+                AjustePagina(bitacora);   
+                lienzo.getChildren().add(bitacora);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, ""+ex.getMessage());
             }
-        Pane bitacora = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Bitacora.fxml"));
-        AjustePagina(bitacora);
-        lienzo.getChildren().add(bitacora);  
+        }else{
+            try {
+                int  n= lienzo.getChildren().size()-1;
+                for (int i = 2; i <=n; i++) {
+                    lienzo.getChildren().remove(2);
+                }
+                Pane bitacora = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Bitacora.fxml"));
+                AjustePagina(bitacora);
+                lienzo.getChildren().add(bitacora);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, ""+ex.getMessage());
+            }
         
         }
  
-        
     }
 
     @FXML
     void Cerrar_sesion(ActionEvent event) {
-        Cerrar(event);
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("¿Confirmar Acción?");
+        alert.setHeaderText("¿Está seguro que desea cerrar la sesión de "+this.user+"?");
+        alert.setContentText("Para regresar al Login, presione aceptar.");
+
+        ButtonType buttonTypeCancel = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType buttonTypeOk = new ButtonType("Aceptar", ButtonBar.ButtonData.OK_DONE);
+
+        alert.getButtonTypes().setAll(buttonTypeCancel,buttonTypeOk);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == buttonTypeOk){
+            // ... user chose OK
+            Cerrar(event);
+
+        } else if(result.get() == buttonTypeCancel){
+            // ... user chose CANCEL or closed the dialog
+            alert.close();
+        }
+        
         System.out.println("user "+user);
         System.out.println("type "+type);
+    }
+    
+    @FXML
+    void Perfil(ActionEvent event) throws IOException {
+        
+        if (lienzo.getChildren().size()==2) {
+        Pane clientes = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/PerfilCliente.fxml"));
+        AjustePagina(clientes);
+        lienzo.getChildren().add(clientes);
+        }else{
+        int  n= lienzo.getChildren().size()-1;
+            for (int i = 2; i <=n; i++) {
+                lienzo.getChildren().remove(2);
+            }
+        Pane clientes = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/PerfilCliente.fxml"));
+        AjustePagina(clientes);
+        lienzo.getChildren().add(clientes);
+       
+        }
+        
     }
 
     @FXML
@@ -426,7 +488,7 @@ public class MenuController implements Initializable {
     String s;
     Format formatter;
     Date date = new Date();
-    
+    int cont=0,aux;
     void Fecha_Hora(){
         
         formatter = new SimpleDateFormat("EEEE, dd MMMM yyyy");
@@ -438,6 +500,7 @@ public class MenuController implements Initializable {
         int segundos = cal.get(Calendar.SECOND);
         int minutos = cal.get(Calendar.MINUTE);
         int hora = cal.get(Calendar.HOUR);
+            
         //System.out.println(hour + ":" + (minute) + ":" + second);
         if (segundos<10) {
             labHora.setText(" "+(hora)+":"+(minutos)+":0"+(segundos)+" |");    
@@ -465,6 +528,7 @@ public class MenuController implements Initializable {
         img_logo.setImage(new Image(new File(d+"logo.png").toURI().toString()));
         Fecha_Hora();
         Cargar_Inicio();
+        Audit_habitacion();
     }    
 
     void Cargar_Inicio(){
@@ -490,5 +554,23 @@ public class MenuController implements Initializable {
                 Logger.getLogger(MenuController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }}
+
+    public static void Audit_habitacion(){
+   
+         try {
+           connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
+            Statement stm = (Statement) connection.createStatement();
+            String query = "  call    Audit_Habitacione();";
+         } catch (SQLException ex) {
+             System.out.println("error al extraer id reserva");
+         }
+    
+   
+    }
+    
+    
+    
+    
+    
     
 }

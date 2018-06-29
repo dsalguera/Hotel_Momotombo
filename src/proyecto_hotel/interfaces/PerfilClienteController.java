@@ -19,11 +19,8 @@ import java.nio.file.StandardCopyOption;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.Format;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -32,17 +29,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.image.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import proyecto_hotel.Conexion;
 import proyecto_hotel.clases.Clientes;
 
@@ -51,7 +46,7 @@ import proyecto_hotel.clases.Clientes;
  *
  * @author David Salguera
  */
-public class RegistroController implements Initializable {
+public class PerfilClienteController implements Initializable {
 
     @FXML
     private AnchorPane anchorpane;
@@ -84,7 +79,7 @@ public class RegistroController implements Initializable {
     private JFXTextField txtidentificacion;
 
     @FXML
-    private ComboBox<?> combo_tipo;
+    private ComboBox<String> combo_tipo;
 
     @FXML
     private JFXDatePicker fecha_inscripcion;
@@ -114,57 +109,33 @@ public class RegistroController implements Initializable {
     private HBox panel_edicion;
 
     @FXML
-    private JFXButton btnGuardar;
-
-    @FXML
     private HBox panel_edicion1;
-
-    @FXML
-    private JFXButton btnLimpiar;
 
     @FXML
     private HBox panel_edicion11;
 
     @FXML
-    private JFXButton btnRegresar;
+    private HBox panel_edicion2;
 
-    
-    Conexion c = new Conexion();
-    Connection connection ;
-    ObservableList<Clientes> data = FXCollections.observableArrayList();
-    String dir = "src\\proyecto_hotel\\imagenes\\clientes\\";
-    
-    //Importante: De aqui se obtiene la ruta de la imagen
-    String nombre_img;
-    int click = 0;
-    
-    
     @FXML
-    void Regresar(ActionEvent event) {
-        try {
-            
-                    FXMLLoader fxmlLoader = new FXMLLoader();
-                    fxmlLoader.setLocation(getClass().getResource("/proyecto_hotel/FXMLDocument.fxml"));
-                    
-                    Stage stage = new Stage();
-                    stage.initStyle(StageStyle.TRANSPARENT);
-                    
-                    Scene scene = new Scene(fxmlLoader.load(),Color.TRANSPARENT);
-                    
-                    stage.setScene(scene);
-                    stage.show();
-                    
-                    ((Node)(event.getSource())).getScene().getWindow().hide();
+    private JFXButton btnLimpiar;
 
-        } catch (IOException e) {
-            
-            DialogoOk("Al parecer hay un error de regreso al sistema.\n\n"+e.getMessage()+"", "Error al Acceder!", "Error", Alert.AlertType.ERROR, 1);
-                        
-        }
-    }
+    @FXML
+    private JFXButton btnEditar;
+
+    @FXML
+    private JFXButton btnGuardar;
+
+    @FXML
+    private JFXButton btnEliminar;
     
+    // Variables universales
+    int id = 0;
+    Image imagen;
+
     @FXML
     void Cambiar_Imagen(ActionEvent event) throws IOException {
+        
         Stage stage = (Stage) anchorpane.getScene().getWindow();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File(dir));
@@ -197,6 +168,112 @@ public class RegistroController implements Initializable {
                 screen_img.setImage(Nueva);
                 click = 1;
             }
+    }
+
+    String pNombre, pApellido;
+    
+    @FXML
+    void Editar_Registro(ActionEvent event) throws SQLException {
+        
+        if (Valida() == true) {
+            String primerNombre = txtp_nombre.getText().toString();
+            String segundoNombre = txts_nombre.getText().toString();
+            String primerApellido = txtp_apellido.getText().toString();
+            String segundoApellido = txts_apellido.getText().toString();
+
+            String identificacion = txtidentificacion.getText().toString();
+            String tipo = combo_tipo.getSelectionModel().getSelectedItem().toString();
+            String pais = txtpais.getText().toString();
+
+            String fecha_inscripcion = this.fecha_inscripcion.getValue().toString();
+            String fecha_nacimiento = this.fechanac.getValue().toString();
+
+
+            int[] nacimiento = Arrays.stream(fecha_nacimiento.trim().split("-"))
+                          .mapToInt(Integer::parseInt)
+                          .toArray();
+
+            int[] inscripcion = Arrays.stream(fecha_inscripcion.trim().split("-"))
+                          .mapToInt(Integer::parseInt)
+                          .toArray();
+
+
+            fecha_nacimiento = (""+nacimiento[0]+"-"+nacimiento[1]+"-"+nacimiento[2]);
+            fecha_inscripcion = (""+inscripcion[0]+"-"+inscripcion[1]+"-"+inscripcion[2]);
+
+
+            String telefono = txttelefono.getText().toString();
+            String correo = txtcorreo.getText().toString();
+
+            Image imagen = screen_img.getImage();
+
+            Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
+            Statement stm = (Statement) connection.createStatement();
+            String query = null;
+
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("¿Confirmar Acción?");
+            alert.setHeaderText("¿Está seguro que desea editar el cliente "+pNombre+" "+pApellido+" de la base?");
+            alert.setContentText("Se reescribirá la información con los datos introcucidos en los campos.\nPara Editar, presione aceptar.");
+
+            ButtonType buttonTypeCancel = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+            ButtonType buttonTypeOk = new ButtonType("Aceptar", ButtonBar.ButtonData.OK_DONE);
+
+            alert.getButtonTypes().setAll(buttonTypeCancel,buttonTypeOk);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == buttonTypeOk){
+                // ... user chose OK
+
+                if (click == 1) {
+
+                        query = "Update Cliente set Primer_nombre = '"+primerNombre+"',"
+                               +"Segundo_nombre = '"+segundoNombre+"',"
+                               +"Primer_apellido = '"+primerApellido+"',"
+                               +"Segundo_apellido = '"+segundoApellido+"',"
+                               +"Identificacion = '"+identificacion+"',"
+                               +"Tipo_identificacion = '"+tipo+"',"
+                               +"Pais_origen = '"+pais+"',"
+                               +"Fecha_inscripcion = '"+fecha_inscripcion+"',"
+                               +"Fecha_nacimiento = '"+fecha_nacimiento+"',"
+                               +"Telefono = '"+telefono+"',"
+                               +"Correo = '"+correo+"',"
+                               +"Imagen = '"+nombre_img+"' where Id_cliente = "+id+";";
+
+                }else{
+
+                        query = "Update Cliente set Primer_nombre = '"+primerNombre+"',"
+                               +"Segundo_nombre = '"+segundoNombre+"',"
+                               +"Primer_apellido = '"+primerApellido+"',"
+                               +"Segundo_apellido = '"+segundoApellido+"',"
+                               +"Identificacion = '"+identificacion+"',"
+                               +"Tipo_identificacion = '"+tipo+"',"
+                               +"Pais_origen = '"+pais+"',"
+                               +"Fecha_inscripcion = '"+fecha_inscripcion+"',"
+                               +"Fecha_nacimiento = '"+fecha_nacimiento+"',"
+                               +"Telefono = '"+telefono+"',"
+                               +"Correo = '"+correo+"' "
+                               +"where Id_cliente = "+id+";";
+
+                }
+
+                click = 0;
+                stm.executeUpdate(query);
+
+                Dialogo("Se ha editado el registro.", "Exito al Editar!",
+                "Operación Realizada", Alert.AlertType.CONFIRMATION);
+
+
+            } else if(result.get() == buttonTypeCancel){
+                // ... user chose CANCEL or closed the dialog
+                alert.close();
+            }
+        }
+    }
+
+    @FXML
+    void Eliminar_Registro(ActionEvent event) {
+        
     }
 
     @FXML
@@ -285,7 +362,6 @@ public class RegistroController implements Initializable {
                 }
             
         }
-        
     }
     
     boolean Usuario_existe(String usuario) throws SQLException{
@@ -348,6 +424,8 @@ public class RegistroController implements Initializable {
         return false;
     }
     
+    String deflt = "";
+    
     void Dialogo(String mensaje, String cabecera, String titulo, Alert.AlertType e){
         
         Alert alert = new Alert(e);
@@ -399,11 +477,6 @@ public class RegistroController implements Initializable {
         
     }
     
-    @FXML
-    void Nuevo_Registro(ActionEvent event) {
-        Nuevo();
-    }
-    
     void Nuevo(){
         
         txtnombreuser.setText("");
@@ -421,45 +494,92 @@ public class RegistroController implements Initializable {
         fecha_inscripcion.setValue(null);
         txttelefono.setText("");
         txtcorreo.setText("");
-        Fecha_hoy();
         
     }
     
-    String s;
-    Format formatter;
-    Date date = new Date();
+    int Tipo_usuario_copia;
+    String nombre_user_copia;
     
-    void Fecha_hoy(){
+    String tipo = "";
+    
+    public void Info(String name, int type) throws SQLException{
         
-        formatter = new SimpleDateFormat("dd-MM-yyyy");
-        s = formatter.format(date); 
-        String fecha_inscripcion = s;
+        connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
+        Statement stm = (Statement) connection.createStatement();
         
-        int[] inscripcion = Arrays.stream(fecha_inscripcion.trim().split("-"))
+        ResultSet rs = stm.executeQuery("select * from Usuario u "
+                + "inner join Cliente c on u.Id_cliente = c.Id_cliente "
+                + "where u.Nombre_usuario = '"+nombre_user_copia+"';");
+        
+         while (rs.next()) {
+                
+                String imagen = rs.getString("imagen");
+                id = rs.getInt("Id_cliente");
+                txtp_nombre.setText(rs.getString("Primer_nombre"));
+                txts_nombre.setText(rs.getString("Segundo_nombre"));
+                txtp_apellido.setText(rs.getString("Primer_apellido"));
+                txts_apellido.setText(rs.getString("Segundo_apellido"));
+                txtidentificacion.setText(rs.getString("Identificacion"));
+                tipo = rs.getString("Tipo_identificacion");
+                combo_tipo.setValue(tipo);
+                
+                txtpais.setText(rs.getString("Pais_origen"));
+                String fecha_inscripcion = rs.getString("Fecha_inscripcion");
+                String fecha_nacimiento = rs.getString("Fecha_nacimiento");
+                
+                int[] nacimiento = Arrays.stream(fecha_nacimiento.trim().split("-"))
+                      .mapToInt(Integer::parseInt)
+                      .toArray();
+        
+                int[] inscripcion = Arrays.stream(fecha_inscripcion.trim().split("-"))
                       .mapToInt(Integer::parseInt)
                       .toArray();
                 
         
-        this.fecha_inscripcion.setValue(LocalDate.of(inscripcion[2],inscripcion[1],inscripcion[0]));
-        
+                fechanac.setValue(LocalDate.of(nacimiento[0],nacimiento[1],nacimiento[2]));
+                this.fecha_inscripcion.setValue(LocalDate.of(inscripcion[0],inscripcion[1],inscripcion[2]));
+                
+                txtcorreo.setText(rs.getString("Correo"));
+                screen_img.setImage(new Image(new File(dir+imagen).toURI().toString()));
+                txttelefono.setText(rs.getString("Telefono"));
+                
+                txtnombreuser.setText(rs.getString("Nombre_usuario"));
+                txtpassword.setText(rs.getString("Contrasena"));
+                txtpassword2.setText(rs.getString("Contrasena"));
+                
+                
+        }
+         
+    }
+
+    @FXML
+    void Nuevo_Registro(ActionEvent event) {
+        Nuevo();
     }
     
-    String deflt = "";
+    Conexion c = new Conexion();
+    Connection connection ;
+    ObservableList<Clientes> data = FXCollections.observableArrayList();
+    String dir = "src\\proyecto_hotel\\imagenes\\clientes\\";
+    
+    
+    //Importante: De aqui se obtiene la ruta de la imagen
+    String nombre_img;
+    int click = 0;
+    
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        Tipo_usuario_copia = MenuController.tipo_usuario;
+        nombre_user_copia = MenuController.nombre_usuario_entra;
         
-        fecha_inscripcion.setEditable(false);
-        Nuevo();
+        try {
+            Info(nombre_user_copia,Tipo_usuario_copia);
+        } catch (SQLException ex) {
+            Logger.getLogger(PerfilClienteController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        ObservableList tipoID = FXCollections.observableArrayList();
-        
-        tipoID.add("Cedula");
-        tipoID.add("Nacionalidad");
-        
-        deflt = screen_img.getImage().impl_getUrl();
-        
-        combo_tipo.getItems().addAll(tipoID);
     }    
     
 }

@@ -1,7 +1,8 @@
 
 package proyecto_hotel.interfaces;
 
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextField;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 import java.io.File;
@@ -16,29 +17,25 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.fxml.*;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Callback;
-import proyecto_hotel.clases.Habitaciones;
-import proyecto_hotel.Conexion;
 import proyecto_hotel.clases.Clientes;
+import proyecto_hotel.Conexion;
 
-public class Ventana_ClienteController implements Initializable {
+public class Pagar_EstanciaController implements Initializable {
 
     @FXML
     private AnchorPane anchorpane;
@@ -65,28 +62,7 @@ public class Ventana_ClienteController implements Initializable {
     
     @FXML
     void Aceptar(ActionEvent event) throws SQLException, IOException {
-        System.out.println(""+Contrato_estanciaController.estancia);
-        if (!Contrato_estanciaController.estancia) {
-                    if (lista_habitaciones.selectionModelProperty().getValue().getSelectedIndex()!=-1) {
-             ReservaController.Id_Cliente=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getId();
-         ReservaController.nombre_cliente=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getPrimerNombre()+" "+
-                 lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getSegundoNombre()+" "+
-                 lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getPrimerApellido()+" "+
-                 lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getSegundoApellido();
-         ReservaController.imagen_cliente=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getImagen();
-         ((Node)(event.getSource())).getScene().getWindow().hide();
-        }
-        }else{
-                if (lista_habitaciones.selectionModelProperty().getValue().getSelectedIndex()!=-1) {
-         Contrato_estanciaController.Id_Cliente=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getId();
-         Contrato_estanciaController.nombre_cliente=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getPrimerNombre()+" "+
-                 lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getSegundoNombre()+" "+
-                 lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getPrimerApellido()+" "+
-                 lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getSegundoApellido();
-        Contrato_estanciaController.imagen_cliente=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getImagen();
-         ((Node)(event.getSource())).getScene().getWindow().hide();
-        }
-        }
+  
  
     }
 
@@ -286,5 +262,6 @@ public class Ventana_ClienteController implements Initializable {
         
         Crear_Lista("Select * from Cliente where Eliminado=0 ;");
     }    
+  
     
 }

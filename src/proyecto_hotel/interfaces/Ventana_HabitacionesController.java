@@ -64,11 +64,21 @@ public class Ventana_HabitacionesController implements Initializable {
     
     @FXML
     void Aceptar(ActionEvent event) throws SQLException, IOException {
+        if (!Contrato_estanciaController.estancia) {
         if (lista_habitaciones.selectionModelProperty().getValue().getSelectedIndex()!=-1) {
          ReservaController.Id_habitacion=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getId();
          ReservaController.nombre=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getNombre();
          ReservaController.imagen=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getImagen();
          ((Node)(event.getSource())).getScene().getWindow().hide(); 
+        }
+        }else{
+            System.out.println("Estancia Aceptar");
+        if (lista_habitaciones.selectionModelProperty().getValue().getSelectedIndex()!=-1) {
+         Contrato_estanciaController.Id_habitacion=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getId();
+         Contrato_estanciaController.nombre=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getNombre();
+         Contrato_estanciaController.imagen=lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getImagen();
+         ((Node)(event.getSource())).getScene().getWindow().hide(); 
+        }
         }
     }
 
@@ -129,11 +139,15 @@ public class Ventana_HabitacionesController implements Initializable {
         String busq = txtbuscar.getText()+complemento;
         String filtro = combo_buscar.getSelectionModel().getSelectedItem();
             System.out.println(""+filtro);
-        String query = "call getHabitaciones_disponibles_buscar('"+ReservaController.Fecha_Inicial+"','"+ReservaController.Fecha_Final+"','"+filtro+"','"+busq+"');";
-            System.out.println(""+query);
+        String query = "";
+            if (!Contrato_estanciaController.estancia) {
+              query=  "call getHabitaciones_disponibles_buscar('"+ReservaController.Fecha_Inicial+"','"+ReservaController.Fecha_Final+"','"+filtro+"','"+busq+"');";
+            }else{
+            query=  "call getHabitaciones_disponibles_buscar_e('"+Contrato_estanciaController.Fecha_Inicial+"','"+Contrato_estanciaController.Fecha_Final+"','"+filtro+"','"+busq+"');";
+            }
         Crear_Lista(query);
         }else{
-         Crear_Lista("call getHabitaciones_disponibles('"+ReservaController.Fecha_Inicial+"','"+ReservaController.Fecha_Final+"');");
+         Consulta_simple();
         }
      
     }
@@ -187,8 +201,9 @@ public class Ventana_HabitacionesController implements Initializable {
             
             Label Nombre,Tipo,Tarifa,Telefono,Estado,Descripcion;
             ImageView imagen;
-            
-            VBox vBox = new VBox(
+                  VBox vBox;
+                if (!Contrato_estanciaController.estancia) {
+                    vBox= new VBox(
                     
                 Nombre = new Label("Nombre: "+item.getNombre()), 
                 Tipo = new Label("Tipo: "+item.getTipo()), 
@@ -197,6 +212,23 @@ public class Ventana_HabitacionesController implements Initializable {
                 Descripcion = new Label("Descripción: "+item.getDescripcion())
                     //,Estado = new Label(""+estado)     
                 );
+                }else{
+                 vBox = new VBox(
+                    
+                Nombre = new Label("Nombre: "+item.getNombre()), 
+                Tipo = new Label("Tipo: "+item.getTipo()), 
+                Tarifa = new Label("Tarifa: $ "+item.getTarifa().toString()+" al mes."),
+                Telefono = new Label("Teléfono: "+item.getTelefono()),
+                Descripcion = new Label("Descripción: "+item.getDescripcion()),
+                Estado = new Label(""+estado)     
+                );
+                 if (estado == "   Disponible   ") {
+                        Estado.getStyleClass().add("round-green");
+                    }else{
+                        Estado.getStyleClass().add("round-red");
+                    }
+                
+                }
              
                     Nombre.getStyleClass().add("espacio");
                     Tipo.getStyleClass().add("espacio");
@@ -204,11 +236,7 @@ public class Ventana_HabitacionesController implements Initializable {
                     Telefono.getStyleClass().add("espacio");
                     Descripcion.getStyleClass().add("espacio");
                     
-//                    if (estado == "   Disponible   ") {
-//                        Estado.getStyleClass().add("round-green");
-//                    }else{
-//                        Estado.getStyleClass().add("round-red");
-//                    }
+
                                                
                     HBox hBox = new HBox(
                             
@@ -248,8 +276,6 @@ public class Ventana_HabitacionesController implements Initializable {
          }
         
         });
-        
-        
           txtbuscar.setOnKeyTyped(event -> {     
         String string =  txtbuscar.getText();
               if (combo_buscar.getSelectionModel().getSelectedIndex()==2) {
@@ -273,7 +299,7 @@ public class Ventana_HabitacionesController implements Initializable {
         } 
             try {
                 if (event.getCharacter().toString().trim().equals("")) {
-                Crear_Lista(" call getHabitaciones_disponibles('"+ReservaController.Fecha_Inicial+"','"+ReservaController.Fecha_Final+"');");
+               Consulta_simple();
                 }else{
                 consulta(event.getCharacter().toString());
                 }
@@ -285,7 +311,18 @@ public class Ventana_HabitacionesController implements Initializable {
           });
         combo_buscar.getItems().addAll(busquedas);
         
-        Crear_Lista(" call getHabitaciones_disponibles('"+ReservaController.Fecha_Inicial+"','"+ReservaController.Fecha_Final+"');");
+      Consulta_simple();
     }    
+
+    public void Consulta_simple() {
+        System.out.println(""+Contrato_estanciaController.estancia);
+        if (!Contrato_estanciaController.estancia) {
+                      Crear_Lista("call getHabitaciones_disponibles('"+ReservaController.Fecha_Inicial+"','"+ReservaController.Fecha_Final+"');");
+            }else{
+             Crear_Lista("call getHabitaciones_disponibles_e('"+Contrato_estanciaController.Fecha_Inicial+"','"+Contrato_estanciaController.Fecha_Final+"');");
+            }
+    }
+    
+ 
     
 }

@@ -1,20 +1,15 @@
 
 package proyecto_hotel.interfaces;
 
-import com.jfoenix.controls.*;
-import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.JFXTextField;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.CopyOption;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,68 +20,41 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableColumn;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TreeItemPropertyValueFactory;
-import javafx.scene.image.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
-import javafx.util.Callback;
 import javax.swing.JOptionPane;
-import static jdk.nashorn.internal.objects.NativeFunction.call;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
-import proyecto_hotel.clases.CustomThing;
-import proyecto_hotel.clases.Habitaciones;
-import proyecto_hotel.*;
-import proyecto_hotel.clases.*;
+import proyecto_hotel.Conexion;
+import proyecto_hotel.FXMLDocumentController;
 
-public class ReservaController implements Initializable {
+
+public class Contrato_estanciaController implements Initializable {
     
      @FXML
     private AnchorPane anchorpane;
 
 
-    @FXML
-    private ListView<Reserva> lista_reservas;
-    
  
     @FXML
     private ImageView screen_img;
@@ -162,6 +130,7 @@ public class ReservaController implements Initializable {
            
         stage_buscar.close();
         if (!stage_buscar.isShowing()) {
+        estancia=true;
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/proyecto_hotel/interfaces/Ventana_Cliente.fxml"));            
         stage_buscar = new Stage();   
@@ -184,6 +153,7 @@ public class ReservaController implements Initializable {
                 if (Id_Cliente!=-1) {
                     try {
                         Cliente_Seleccionada();
+                        estancia=false;
                     } catch (Exception ex) {
                         System.out.println(""+ex);
                         Logger.getLogger(ReservaController.class.getName()).log(Level.SEVERE, null, ex);
@@ -194,11 +164,14 @@ public class ReservaController implements Initializable {
         
         
         } }
+    
+    public static boolean estancia=false;
     @FXML
     void Buscar_habitacion(ActionEvent event) throws SQLException, IOException {
         
         stage_buscar.close();
         if (Fecha_valida() && !stage_buscar.isShowing()) {
+        estancia=true;    
         Fecha_Inicial=fecha_inicio.getValue().toString();
         Fecha_Final=fecha_final.getValue().toString();
         FXMLLoader fxmlLoader = new FXMLLoader();
@@ -218,6 +191,7 @@ public class ReservaController implements Initializable {
                     try {
                        
                         Habitacion_Seleccionada();
+                        estancia=false;
                     } catch (SQLException ex) {
                         System.out.println(""+ex);
                         Logger.getLogger(ReservaController.class.getName()).log(Level.SEVERE, null, ex);
@@ -287,10 +261,7 @@ public class ReservaController implements Initializable {
             JOptionPane.showMessageDialog(null,"Fechas Invalidas");
             return false;
         }
-   if (diff2<5) {
-            JOptionPane.showMessageDialog(null,"Las politicas del hotel expresan que el contrator de la reserva \npuede hacerse desde "+fecha_permitida);
-            return false;
-        }
+  
         
     
     return true;
@@ -300,70 +271,40 @@ public class ReservaController implements Initializable {
     void Sugerencia(KeyEvent event) {
        
     }
-    
-    
-    
-    
-
-
-
+        @FXML
+    private JFXTextArea txtdescripcion;
     @FXML
     void Guardar_Registro(ActionEvent event) {
         if (Conteo>=limit) {
-            JOptionPane.showMessageDialog(null, "El usuario no puede contratar otra reserva.");
+            JOptionPane.showMessageDialog(null, "El usuario no puede contratar otra estancia.");
             return;
         }
         if (Radio_Credito.isSelected() && txtnumero_tarjeta.getText().trim().equals("")) {
-            JOptionPane.showMessageDialog(null, "Ingrese numero de tarjeta.");
+            JOptionPane.showMessageDialog(null, "Ingrese codigo de reserva.");
             return;
         }
         if (Id_Cliente!=-1 && Id_habitacion!=-1 && Conteo<limit ) {
-            if ( JOptionPane.showConfirmDialog(null, "Esta seguro que quiere contratar la reserva desde "+fecha_inicio.getValue()+" hasta "+fecha_final.getValue()+".", "Confirmar Operacion", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION ) {
+            if ( JOptionPane.showConfirmDialog(null, "Esta seguro que quiere contratar el hospedaje desde "+fecha_inicio.getValue()+" hasta "+fecha_final.getValue()+".", "Confirmar Operacion", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION ) {
                 try {
                 Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
                 Statement stm = (Statement) connection.createStatement(); 
                 String query;
                 String mensaje="";
-                 if (Radio_efectivo.isSelected()) {
-                  query="call setReserva("+Id_Cliente+","+Id_habitacion+",'"+Fecha_Inicial+"','"+Fecha_Final+"','Efectivo',null);";
-                 }else{
-                 query="call setPago("+txtcosto.getText()+","+txtnumero_tarjeta.getText()+");";
-                 ResultSet rs = stm.executeQuery(query);
-                 rs.next();
-                 mensaje=rs.getString("mensaje");
-                     if (!mensaje.equals("perfecto")) {
-                         JOptionPane.showMessageDialog(null, mensaje);
-                         return;
-                     }
-                  query="call setReserva("+Id_Cliente+","+Id_habitacion+",'"+Fecha_Inicial+"','"+Fecha_Final+"','Credito',"+txtnumero_tarjeta.getText()+");";
-                 }
-                
+                    if (Radio_efectivo.isSelected()) {
+                         query="call setEstancianull("+Id_Cliente+","+Id_habitacion+",'"+Fecha_Inicial+"','"+Fecha_Final+"',"+txtcosto.getText()+",'"+txtdescripcion.getText()+"');";
+                    
+                    }else{
+                    query="call setEstancia("+Id_Cliente+","+Id_habitacion+",'"+Fecha_Inicial+"','"+Fecha_Final+"',"+txtcosto.getText()+",'"+txtdescripcion.getText()+"', "+txtnumero_tarjeta.getText()+");";
+                    
+                    }
+ 
+                System.out.println(query);
                 ResultSet rs = stm.executeQuery(query);
                 rs.next();
                 mensaje=rs.getString("mensaje");
                 JOptionPane.showMessageDialog(null, mensaje);
-     if (true) {
-                            
-    try {
-    Conexion c=new Conexion();
-    connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
-    JasperReport reporte = (JasperReport) JRLoader.loadObject("src//Reportes//Certificado_Reserva.jasper"); 
-    Map parametro=new HashMap();
-        System.out.println("R:"+getReservaID());
-        System.out.println("U:"+typeUser());
-    parametro.put("DId_Reserva",getReservaID());
-    parametro.put("DTipo_User",typeUser());
-    parametro.put("permiso",1);
-    JasperPrint j = JasperFillManager.fillReport(reporte,parametro, connection); 
-    JasperViewer jv=new JasperViewer(j,false);
-    jv.setTitle("Certificado de Reserva (Original)");
-    jv.setVisible(true);
-        } catch (Exception e) {
-            System.out.println("2"+e);
-        }
-           
-                    }
-                
+                connection.close();
+                MenuController.Audit_habitacion();
                 Nuevo_Registro(event);
             } catch (SQLException ex) {
                     System.out.println("2"+ex);
@@ -419,6 +360,7 @@ public class ReservaController implements Initializable {
     Id_habitacion=-1;
     Id_Cliente=-1;
     Conteo=0;
+    
         txtnumero_tarjeta.setOnKeyTyped(event -> {
         String string =  txtnumero_tarjeta.getText();
           
@@ -440,12 +382,11 @@ public class ReservaController implements Initializable {
         
     });
         if (MenuController.tipo_usuario==3) {
-            Radio_efectivo.setDisable(true);
-            Radio_Credito.setSelected(true);
-            txtnumero_tarjeta.setDisable(false);
+           
             btnBuscar_cliente.setVisible(false);
             setCliente();
         }
+        fecha_inicio.setDisable(true);
         Fecha_Defauld();
         setcount();
     }  
@@ -474,7 +415,7 @@ public class ReservaController implements Initializable {
      try {
         Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
         Statement stm = (Statement) connection.createStatement();
-        String query = "select cast(ADDDATE(now(), INTERVAL 5 DAY) as date) as Fecha_defauld;";
+        String query = "select cast(now() as date) as Fecha_defauld;";
         String Fecha="";
         ResultSet rs = stm.executeQuery(query);
         while (rs.next()) {
@@ -491,10 +432,11 @@ public class ReservaController implements Initializable {
          try {
              Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
              Statement stm = (Statement) connection.createStatement();
-             String query = " select count(*) as conteo from Reserva where Id_cliente="+Id_Cliente+" and Estado='Espera';";
+             String query = " select count(*) as conteo from Estancia where Id_cliente="+Id_Cliente+" and Estado='Activo';";
              ResultSet rs = stm.executeQuery(query);
              rs.next();
              Conteo=rs.getInt("conteo");
+             System.out.println(""+Conteo);
              id_count.setText(""+Conteo);
          } catch (SQLException ex) {
              Logger.getLogger(ReservaController.class.getName()).log(Level.SEVERE, null, ex);
@@ -505,6 +447,7 @@ public class ReservaController implements Initializable {
      int getReservaID(){
          int id=0;
          try {
+            
              Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
              Statement stm = (Statement) connection.createStatement();
              String query = " select Id_reserva from Reserva where Id_cliente="+Id_Cliente+" and Estado='Espera' and Id_habitacion="+Id_habitacion+" and Fecha_inicio='"+Fecha_Inicial+"' and Fecha_final='"+Fecha_Final+"';";
@@ -528,4 +471,5 @@ public class ReservaController implements Initializable {
         }
      return null;
      }
+    
 }
