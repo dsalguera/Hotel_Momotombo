@@ -25,7 +25,21 @@ static Stage stage;
 
   @FXML
     void Pagar_estancia(ActionEvent event) {
-
+         try {
+            
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/proyecto_hotel/interfaces/Pagar_Estancia.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage = new Stage();
+        stage.setTitle("Contratar Estancia");
+        stage.initOwner(FXMLDocumentController.stage);
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.setScene(scene);
+        stage.show();
+        
+        
+        } catch (IOException e) {
+        } 
     }
 
     @FXML

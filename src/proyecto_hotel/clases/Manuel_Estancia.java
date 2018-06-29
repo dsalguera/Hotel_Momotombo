@@ -11,7 +11,7 @@ public class Manuel_Estancia {
    public String nombre_cliente,nombre_habitacion;
    public Image imgcliente,imghabitacion;
 
-    public Manuel_Estancia(int Id_estancia, int Id_reserva, int Id_cliente, int Id_habitacion, String Fecha_inicio, String Fecha_final, String Fecha_reserva, String Estado, String Descripcion, double Costo_total, String nombre_cliente, String nombre_habitacion, Image imgcliente, Image imghabitacion) {
+    public Manuel_Estancia(int Id_estancia, int Id_reserva, int Id_cliente, int Id_habitacion, String Fecha_inicio, String Fecha_final, String Estado, String Descripcion, double Costo_total, String nombre_cliente, String nombre_habitacion, Image imgcliente, Image imghabitacion) {
         this.Id_estancia = Id_estancia;
         this.Id_reserva = Id_reserva;
         this.Id_cliente = Id_cliente;
