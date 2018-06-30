@@ -543,7 +543,7 @@ public class Contrato_estanciaController implements Initializable {
                  JOptionPane.showMessageDialog(null,"No hay reserva en espera con este codigo.");
                      return;
                  }
-                 System.out.println("0");
+             System.out.println("0");
                  query = "call get_Estancia_Reservada("+txtnumero_tarjeta.getText()+");";
                  rs = stm.executeQuery(query);
                  rs.next();
