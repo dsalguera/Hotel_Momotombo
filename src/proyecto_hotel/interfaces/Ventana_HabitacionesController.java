@@ -263,7 +263,7 @@ public class Ventana_HabitacionesController implements Initializable {
   
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+         MenuController.Audit_habitacion();
         ObservableList busquedas = FXCollections.observableArrayList();
         busquedas.add("Nombre");
         busquedas.add("Tipo");

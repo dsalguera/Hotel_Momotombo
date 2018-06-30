@@ -328,7 +328,7 @@ public class Certificado_RerservaController implements Initializable {
   
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-         
+         MenuController.Audit_habitacion(); 
         ObservableList busquedas = FXCollections.observableArrayList();
         if (MenuController.tipo_usuario!=3) {
         busquedas.add("Nombre Cliente");

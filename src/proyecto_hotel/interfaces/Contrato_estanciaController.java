@@ -32,6 +32,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -123,7 +124,7 @@ public class Contrato_estanciaController implements Initializable {
     @FXML
     private ToggleGroup Radio;
     
-    
+    int aux_id_cliente=-1;
     
         @FXML
     void Buscar_cliente(ActionEvent event)  {
@@ -143,6 +144,7 @@ public class Contrato_estanciaController implements Initializable {
             }
         stage_buscar.setTitle("Buscar Cliente");
         stage_buscar.setScene(scene);
+         aux_id_cliente=Id_Cliente;
         Id_Cliente=-1;
         stage_buscar.initOwner(InicioController.stage);
         stage_buscar.initModality(Modality.WINDOW_MODAL);
@@ -158,7 +160,7 @@ public class Contrato_estanciaController implements Initializable {
                         System.out.println(""+ex);
                         Logger.getLogger(ReservaController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }
+                }else{Id_Cliente=aux_id_cliente;}
         }   });
         
         
@@ -166,6 +168,7 @@ public class Contrato_estanciaController implements Initializable {
         } }
     
     public static boolean estancia=false;
+    int aux_id_habitacion=-1;
     @FXML
     void Buscar_habitacion(ActionEvent event) throws SQLException, IOException {
         
@@ -182,6 +185,7 @@ public class Contrato_estanciaController implements Initializable {
         stage_buscar.initOwner(InicioController.stage);
         stage_buscar.initModality(Modality.WINDOW_MODAL);
         stage_buscar.setScene(scene);
+        aux_id_habitacion=Id_habitacion;
         Id_habitacion=-1;
         stage_buscar.show();
         stage_buscar.setOnHidden(new EventHandler<WindowEvent> (){
@@ -196,7 +200,7 @@ public class Contrato_estanciaController implements Initializable {
                         System.out.println(""+ex);
                         Logger.getLogger(ReservaController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }
+                }else{Id_habitacion=aux_id_habitacion;}
         }   });
         
         
@@ -228,6 +232,8 @@ public class Contrato_estanciaController implements Initializable {
     void Click_Radio_Credito(ActionEvent event) {
         txtnumero_tarjeta.setText(Guardar_tarjeta);
         txtnumero_tarjeta.setDisable(false);
+        btnBuscar_habitacion.setDisable(true);
+        btnBuscar_cliente.setDisable(true);
     }
    String Guardar_tarjeta="";
     @FXML
@@ -235,6 +241,9 @@ public class Contrato_estanciaController implements Initializable {
       txtnumero_tarjeta.setDisable(true);
       Guardar_tarjeta=txtnumero_tarjeta.getText();
       txtnumero_tarjeta.setText("");
+      btnBuscar_habitacion.setDisable(false);
+      btnBuscar_cliente.setDisable(false);
+      
     }
     
     boolean Fecha_valida() throws SQLException{
@@ -283,6 +292,7 @@ public class Contrato_estanciaController implements Initializable {
             JOptionPane.showMessageDialog(null, "Ingrese codigo de reserva.");
             return;
         }
+        
         if (Id_Cliente!=-1 && Id_habitacion!=-1 && Conteo<limit ) {
             if ( JOptionPane.showConfirmDialog(null, "Esta seguro que quiere contratar el hospedaje desde "+fecha_inicio.getValue()+" hasta "+fecha_final.getValue()+".", "Confirmar Operacion", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION ) {
                 try {
@@ -294,6 +304,11 @@ public class Contrato_estanciaController implements Initializable {
                          query="call setEstancianull("+Id_Cliente+","+Id_habitacion+",'"+Fecha_Inicial+"','"+Fecha_Final+"',"+txtcosto.getText()+",'"+txtdescripcion.getText()+"');";
                     
                     }else{
+                        if (!Validar_Id_reserva()) {
+                            return;
+                        }
+    
+                        
                     query="call setEstancia("+Id_Cliente+","+Id_habitacion+",'"+Fecha_Inicial+"','"+Fecha_Final+"',"+txtcosto.getText()+",'"+txtdescripcion.getText()+"', "+txtnumero_tarjeta.getText()+");";
                     
                     }
@@ -317,28 +332,56 @@ public class Contrato_estanciaController implements Initializable {
         }
     }
 
+    boolean Validar_Id_reserva(){
+        int id=0;
+         try {
+             Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
+             Statement stm = (Statement) connection.createStatement();
+             String query = "select count(*) as conteo from Reserva where Id_cliente="+Id_Cliente+" and Estado='Espera' and Id_habitacion="+Id_habitacion+" and Id_reserva="+txtnumero_tarjeta.getText()+" and Reserva.Fecha_inicio>=Estancia.Fecha_inicio and Estancia.Fecha_final>=Reserva.Fecha_final;";
+             System.out.println(query);
+             ResultSet rs = stm.executeQuery(query);
+             rs.next();
+             id=rs.getInt("conteo");
+             if (id==0) {
+            JOptionPane.showMessageDialog(null,"La reserva debe estar registrada para este cliente, habitacion y rango de fecha especificado.");
+             return false;   
+             }
+         } catch (SQLException ex) {
+             JOptionPane.showMessageDialog(null,"Reserva Invalida");
+             return false;
+         }
+ 
+    return true;
+    
+    }
+    
+    
+    
+    
+    
     @FXML
     void Nuevo_Registro(ActionEvent event) {
       txtnumero_tarjeta.setDisable(true);
+      Radio_efectivo.setSelected(true);
       Guardar_tarjeta=txtnumero_tarjeta.getText();
       txtnumero_tarjeta.setText("");
       screen_img.setImage(null);
-      screen_img1.setImage(null);
+       if (MenuController.tipo_usuario!=3) {
+       screen_img1.setImage(null);
+       Id_Cliente=-1;
+       txtnombre_cliente.setText("");
+       
+        }
       txtcosto.setText("");
       txtnombre.setText("");
-      txtnombre_cliente.setText("");
       Fecha_Defauld();
       txtdias.setText("");
       id_count.setText("0");
       Id_habitacion=-1;
-      Id_Cliente=-1;
-       if (MenuController.tipo_usuario==3) {
-            Radio_efectivo.setDisable(true);
-            Radio_Credito.setSelected(true);
-            txtnumero_tarjeta.setDisable(false);
-            btnBuscar_cliente.setVisible(false);
-            
-        }
+      
+      setcount();
+      
+      
     }
 
    
@@ -360,7 +403,14 @@ public class Contrato_estanciaController implements Initializable {
     Id_habitacion=-1;
     Id_Cliente=-1;
     Conteo=0;
-    
+    txtnumero_tarjeta.setOnKeyPressed(event->{
+        System.out.println(""+event.getCode());
+         if (event.getCode().equals(KeyCode.ENTER)) {
+             Extraer_Estancia_Rerservada();
+         }
+        
+        });
+    MenuController.Audit_habitacion();
         txtnumero_tarjeta.setOnKeyTyped(event -> {
         String string =  txtnumero_tarjeta.getText();
           
@@ -471,5 +521,62 @@ public class Contrato_estanciaController implements Initializable {
         }
      return null;
      }
+     
+     void Extraer_Estancia_Rerservada(){
+        try {
+            
+             Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
+             Statement stm = (Statement) connection.createStatement();
+             String query = "select count(*) as count from Reserva where Id_reserva="+txtnumero_tarjeta.getText()+" and Reserva.Estado='Espera';";
+             ResultSet rs = stm.executeQuery(query);
+                 rs.next();
+                 if (rs.getInt("count")==0) {
+                 JOptionPane.showMessageDialog(null,"No hay reserva en espera con este codigo.");
+                     return;
+                 }
+                 System.out.println("0");
+                 query = "call get_Estancia_Reservada("+txtnumero_tarjeta.getText()+");";
+                 rs = stm.executeQuery(query);
+                 rs.next();
+                 int Id_cliente=rs.getInt("Id_cliente");
+                 int Id_habitacion=rs.getInt("Id_habitacion");
+                 String Fecha_inicio=rs.getString("Fecha_inicio");
+                 String Fecha_final=rs.getString("Fecha_final");
+                 String Nombre_cliente=rs.getString("nombre_cliente");
+                 String Nombre_habitacion=rs.getString("nombre_habitacion");
+                 Image i1=new Image(new File(dirc+rs.getString("imgcliente")).toURI().toString());
+                 Image i2=new Image(new File(dirh+rs.getString("imghabitacion")).toURI().toString());
+                 connection.close();
+                 System.out.println("1");
+                 if (Id_Cliente!=-1 && Id_Cliente!=Id_cliente) {
+                   JOptionPane.showMessageDialog(null,"Reserva no peretenece al cliente.");
+                     return;
+                 }
+                 if (Fecha_inicio.equals(fecha_inicio.getValue())) {
+                  JOptionPane.showMessageDialog(null,"La reserva no fue contratada para hoy.");
+                     return;
+                  }
+                 System.out.println("2");
+                 this.Id_habitacion=Id_habitacion;
+                 this.nombre=Nombre_habitacion;
+                 this.imagen=i2;
+                 this.Id_Cliente=Id_cliente;
+                 this.nombre_cliente=nombre_cliente;
+                 this.imagen_cliente=i1;
+                 this.Fecha_Inicial=Fecha_inicio;
+                 this.Fecha_Final=Fecha_final;
+                 System.out.println("3");
+                 Cliente_Seleccionada();
+                 Habitacion_Seleccionada();
+         } catch (SQLException ex) {
+             JOptionPane.showMessageDialog(null,"Reserva Invalida.");
+             System.out.println("error al extraer id reserva");
+         }
+     
+     
+     
+     }
+    String dirh = "src\\proyecto_hotel\\imagenes\\habitaciones\\";
+    String dirc = "src\\proyecto_hotel\\imagenes\\clientes\\";
     
 }

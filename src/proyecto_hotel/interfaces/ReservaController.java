@@ -155,7 +155,7 @@ public class ReservaController implements Initializable {
     @FXML
     private ToggleGroup Radio;
     
-    
+    int aux_id_cliente=-1;
     
         @FXML
     void Buscar_cliente(ActionEvent event)  {
@@ -174,6 +174,7 @@ public class ReservaController implements Initializable {
             }
         stage_buscar.setTitle("Buscar Cliente");
         stage_buscar.setScene(scene);
+        aux_id_cliente=Id_Cliente;
         Id_Cliente=-1;
         stage_buscar.initOwner(InicioController.stage);
         stage_buscar.initModality(Modality.WINDOW_MODAL);
@@ -188,12 +189,13 @@ public class ReservaController implements Initializable {
                         System.out.println(""+ex);
                         Logger.getLogger(ReservaController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }
+                }else{Id_Cliente=aux_id_cliente;}
         }   });
         
         
         
         } }
+    int aux_id_habitacion=-1;
     @FXML
     void Buscar_habitacion(ActionEvent event) throws SQLException, IOException {
         
@@ -209,7 +211,8 @@ public class ReservaController implements Initializable {
         stage_buscar.initOwner(InicioController.stage);
         stage_buscar.initModality(Modality.WINDOW_MODAL);
         stage_buscar.setScene(scene);
-        Id_habitacion=-1;
+         aux_id_habitacion=Id_habitacion;
+          Id_habitacion=-1;
         stage_buscar.show();
         stage_buscar.setOnHidden(new EventHandler<WindowEvent> (){
             @Override
@@ -222,7 +225,7 @@ public class ReservaController implements Initializable {
                         System.out.println(""+ex);
                         Logger.getLogger(ReservaController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }
+                }else{Id_habitacion=aux_id_habitacion;}
         }   });
         
         
@@ -382,7 +385,6 @@ public class ReservaController implements Initializable {
       Guardar_tarjeta=txtnumero_tarjeta.getText();
       txtnumero_tarjeta.setText("");
       screen_img.setImage(null);
-      screen_img1.setImage(null);
       txtcosto.setText("");
       txtnombre.setText("");
       txtnombre_cliente.setText("");
@@ -390,14 +392,19 @@ public class ReservaController implements Initializable {
       txtdias.setText("");
       id_count.setText("0");
       Id_habitacion=-1;
-      Id_Cliente=-1;
        if (MenuController.tipo_usuario==3) {
+           
             Radio_efectivo.setDisable(true);
             Radio_Credito.setSelected(true);
             txtnumero_tarjeta.setDisable(false);
             btnBuscar_cliente.setVisible(false);
             
-        }
+        }else{
+       Radio_efectivo.setSelected(true);
+        screen_img1.setImage(null);
+         Id_Cliente=-1;
+       }
+       setcount();
     }
 
    
@@ -416,6 +423,7 @@ public class ReservaController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+    MenuController.Audit_habitacion();
     Id_habitacion=-1;
     Id_Cliente=-1;
     Conteo=0;
