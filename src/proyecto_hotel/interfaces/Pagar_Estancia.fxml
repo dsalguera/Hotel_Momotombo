@@ -22,7 +22,7 @@
          <children>
             <VBox prefHeight="559.0" prefWidth="787.0" HBox.hgrow="ALWAYS">
                <children>
-                  <HBox prefHeight="56.0" prefWidth="532.0" styleClass="top-panel" stylesheets="@../estilos/Estilos.css">
+                  <HBox prefHeight="56.0" prefWidth="532.0" styleClass="top-panel" stylesheets="@../estilos/Estilos.css" VBox.vgrow="ALWAYS">
                      <children>
                         <ComboBox fx:id="combo_buscar" prefHeight="38.0" prefWidth="142.0" promptText="Buscar por:" styleClass="combo-box" stylesheets="@../estilos/Estilos.css">
                            <HBox.margin>
@@ -49,14 +49,14 @@
                         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                      </padding>
                   </HBox>
-                  <HBox prefHeight="405.0" prefWidth="854.0">
+                  <HBox prefHeight="405.0" prefWidth="854.0" VBox.vgrow="ALWAYS">
                      <children>
                         <ListView fx:id="lista_habitaciones" onMouseClicked="#click" prefHeight="405.0" prefWidth="501.0" HBox.hgrow="ALWAYS" />
                         <Separator orientation="VERTICAL" prefHeight="200.0" />
                         <ListView fx:id="lista_servi" prefHeight="403.0" prefWidth="435.0" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER" prefHeight="117.0" prefWidth="942.0" styleClass="top-panel" stylesheets="@../estilos/Estilos.css">
+                  <HBox alignment="CENTER" prefHeight="117.0" prefWidth="942.0" styleClass="top-panel" stylesheets="@../estilos/Estilos.css" VBox.vgrow="ALWAYS">
                      <children>
                         <Pane prefHeight="85.0" prefWidth="596.0">
                            <children>

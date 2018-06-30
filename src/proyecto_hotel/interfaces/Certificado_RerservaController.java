@@ -87,7 +87,7 @@ public class Certificado_RerservaController implements Initializable {
         }
         int rspta;
         if (!lista_habitaciones.getSelectionModel().getSelectedItem().getEstado().equals("Espera")) {
-             JOptionPane.showMessageDialog(null,"Esta reserva perdida solo presenta una copia.");
+             JOptionPane.showMessageDialog(null,"Esta reserva solo presenta una copia.");
             rspta=JOptionPane.NO_OPTION;
         }else{
         rspta=JOptionPane.showConfirmDialog(null,"Generar certificado Oficial (yes)/ Copia (no).");
@@ -139,8 +139,13 @@ public class Certificado_RerservaController implements Initializable {
     parametro.put("permiso",0);
     JasperPrint j = JasperFillManager.fillReport(reporte,parametro, connection); 
     JasperViewer jv=new JasperViewer(j,false);
+                             if (jv.isValid()) {
+                                 
     jv.setTitle("Copia del Certificado");
     jv.setVisible(true);
+                             }else{
+                             JOptionPane.showMessageDialog(null,"La copia de un reporte solo es valida para las reservas insertadas \n en el sitema no las insertadas en mysql.");
+                             }
         } catch (Exception e) {
           JOptionPane.showMessageDialog(null, "El sistema solo genera copia de la ultima replica oficial\nasegurese de gestionar al menos un certificado de reserva original.");
         }

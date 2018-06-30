@@ -234,6 +234,10 @@ public class Contrato_estanciaController implements Initializable {
         txtnumero_tarjeta.setDisable(false);
         btnBuscar_habitacion.setDisable(true);
         btnBuscar_cliente.setDisable(true);
+        screen_img.setDisable(true);
+        screen_img1.setDisable(true);
+        fecha_final.setDisable(true);
+        
     }
    String Guardar_tarjeta="";
     @FXML
@@ -243,7 +247,11 @@ public class Contrato_estanciaController implements Initializable {
       txtnumero_tarjeta.setText("");
       btnBuscar_habitacion.setDisable(false);
       btnBuscar_cliente.setDisable(false);
-      
+      screen_img.setDisable(false);
+      screen_img1.setDisable(false);
+       fecha_final.setDisable(false);
+       Fecha_Defauld();
+       Nuevo_Registro(event);
     }
     
     boolean Fecha_valida() throws SQLException{
@@ -337,7 +345,7 @@ public class Contrato_estanciaController implements Initializable {
          try {
              Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
              Statement stm = (Statement) connection.createStatement();
-             String query = "select count(*) as conteo from Reserva where Id_cliente="+Id_Cliente+" and Estado='Espera' and Id_habitacion="+Id_habitacion+" and Id_reserva="+txtnumero_tarjeta.getText()+" and Reserva.Fecha_inicio>=Estancia.Fecha_inicio and Estancia.Fecha_final>=Reserva.Fecha_final;";
+             String query = "select count(*) as conteo from Reserva where Id_cliente="+Id_Cliente+" and Estado='Espera' and Id_habitacion="+Id_habitacion+" and Id_reserva="+txtnumero_tarjeta.getText()+" ;";
              System.out.println(query);
              ResultSet rs = stm.executeQuery(query);
              rs.next();
@@ -363,6 +371,7 @@ public class Contrato_estanciaController implements Initializable {
     void Nuevo_Registro(ActionEvent event) {
       txtnumero_tarjeta.setDisable(true);
       Radio_efectivo.setSelected(true);
+      btnBuscar_habitacion.setDisable(false);
       Guardar_tarjeta=txtnumero_tarjeta.getText();
       txtnumero_tarjeta.setText("");
       screen_img.setImage(null);
@@ -552,11 +561,14 @@ public class Contrato_estanciaController implements Initializable {
                    JOptionPane.showMessageDialog(null,"Reserva no peretenece al cliente.");
                      return;
                  }
-                 if (Fecha_inicio.equals(fecha_inicio.getValue())) {
+                 
+               
+                 System.out.println(Fecha_inicio+" : "+fecha_inicio.getValue());
+                 if (!Fecha_inicio.equals(fecha_inicio.getValue().toString())) {
+             
                   JOptionPane.showMessageDialog(null,"La reserva no fue contratada para hoy.");
                      return;
                   }
-                 System.out.println("2");
                  this.Id_habitacion=Id_habitacion;
                  this.nombre=Nombre_habitacion;
                  this.imagen=i2;
@@ -568,6 +580,8 @@ public class Contrato_estanciaController implements Initializable {
                  System.out.println("3");
                  Cliente_Seleccionada();
                  Habitacion_Seleccionada();
+      screen_img.setDisable(false);
+      screen_img1.setDisable(false);
          } catch (SQLException ex) {
              JOptionPane.showMessageDialog(null,"Reserva Invalida.");
              System.out.println("error al extraer id reserva");

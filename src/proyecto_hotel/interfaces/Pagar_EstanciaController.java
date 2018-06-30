@@ -292,6 +292,7 @@ public class Pagar_EstanciaController implements Initializable {
     
   @Override
     public void initialize(URL url, ResourceBundle rb) {
+         MenuController.Audit_habitacion();
          lista_habitaciones.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Manuel_Estancia>() {
 
     @Override

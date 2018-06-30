@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="792" whenNoDataType="BlankPage" columnWidth="612" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="792" whenNoDataType="BlankPage" columnWidth="612" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" whenResourceMissingType="Error">
 	<property name="ireport.zoom" value="1.0000000000000004"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="566"/>
+	<property name="ireport.y" value="631"/>
 	<parameter name="DId_Reserva" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[2]]></defaultValueExpression>
 	</parameter>
@@ -198,7 +198,11 @@
 		</band>
 	</pageHeader>
 	<columnFooter>
-		<band height="301" splitType="Stretch">
+		<band height="351" splitType="Stretch">
+			<image scaleImage="FillFrame">
+				<reportElement x="0" y="205" width="612" height="146"/>
+				<imageExpression class="java.lang.String"><![CDATA[new File("src\\Reportes\\white.png").toPath().toAbsolutePath().toString()]]></imageExpression>
+			</image>
 			<textField>
 				<reportElement x="54" y="41" width="514" height="152" forecolor="#FFFFFF"/>
 				<textElement textAlignment="Justified">
@@ -207,63 +211,40 @@
 				<textFieldExpression class="java.lang.String"><![CDATA["La presentacion de este documento es opcional si la reserva sera hecha por el cliente que la ha contratado, de lo contrario se debe presentar este certificado con la firma del cliente y del portador para hacer efectiva la estancia o hospedaje reservado transfiriendo el derecho al portador. Lo anterior se cumple siempre y cuando el documento sea oficial y no copia."]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="29" y="205" width="118" height="20" forecolor="#FFFFFF"/>
+				<reportElement x="106" y="220" width="118" height="20" forecolor="#000000"/>
 				<textElement textAlignment="Right">
 					<font fontName="Arial" size="12"/>
 				</textElement>
 				<text><![CDATA[Nombre del Portador:]]></text>
 			</staticText>
-			<image scaleImage="FillFrame">
-				<reportElement isPrintRepeatedValues="false" x="153" y="205" width="310" height="20"/>
-				<imageExpression class="java.lang.String"><![CDATA[new File("src\\Reportes\\Linea.png").toPath().toAbsolutePath().toString()]]></imageExpression>
-			</image>
 			<staticText>
-				<reportElement x="18" y="229" width="129" height="20" forecolor="#FFFFFF"/>
-				<textElement textAlignment="Right">
+				<reportElement x="29" y="253" width="129" height="34" forecolor="#000000"/>
+				<textElement textAlignment="Center">
 					<font fontName="Arial" size="12"/>
 				</textElement>
-				<text><![CDATA[Tipo de Identificación:]]></text>
+				<text><![CDATA[Identificación de portador:]]></text>
 			</staticText>
-			<image scaleImage="FillFrame">
-				<reportElement isPrintRepeatedValues="false" x="153" y="229" width="134" height="20"/>
-				<imageExpression class="java.lang.String"><![CDATA[new File("src\\Reportes\\Linea.png").toPath().toAbsolutePath().toString()]]></imageExpression>
-			</image>
 			<staticText>
-				<reportElement x="304" y="229" width="129" height="20" forecolor="#FFFFFF"/>
-				<textElement textAlignment="Right">
+				<reportElement x="326" y="253" width="122" height="34" forecolor="#000000"/>
+				<textElement textAlignment="Center">
 					<font fontName="Arial" size="12"/>
 				</textElement>
-				<text><![CDATA[Tipo de Identificación:]]></text>
+				<text><![CDATA[Identificación de Cliente:]]></text>
 			</staticText>
-			<image scaleImage="FillFrame">
-				<reportElement isPrintRepeatedValues="false" x="440" y="229" width="134" height="20"/>
-				<imageExpression class="java.lang.String"><![CDATA[new File("src\\Reportes\\Linea.png").toPath().toAbsolutePath().toString()]]></imageExpression>
-			</image>
 			<staticText>
-				<reportElement x="15" y="253" width="129" height="20" forecolor="#FFFFFF"/>
+				<reportElement x="81" y="314" width="129" height="20" forecolor="#000000"/>
 				<textElement textAlignment="Right">
 					<font fontName="Arial" size="12"/>
 				</textElement>
 				<text><![CDATA[Firma del portador:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="304" y="253" width="129" height="20" forecolor="#FFFFFF"/>
+				<reportElement x="326" y="314" width="107" height="20" forecolor="#000000"/>
 				<textElement textAlignment="Right">
 					<font fontName="Arial" size="12"/>
 				</textElement>
 				<text><![CDATA[Firma del Cliente:]]></text>
 			</staticText>
-			<image scaleImage="FillFrame">
-				<reportElement isPrintRepeatedValues="false" x="440" y="253" width="134" height="40"/>
-				<imageExpression class="java.lang.String"><![CDATA[new File("src\\Reportes\\Linea.png").toPath().toAbsolutePath().toString()]]></imageExpression>
-			</image>
-			<image scaleImage="FillFrame">
-				<reportElement isPrintRepeatedValues="false" x="153" y="253" width="134" height="40"/>
-				<imageExpression class="java.lang.String"><![CDATA[new File("src\\Reportes\\Linea.png").toPath().toAbsolutePath().toString()]]></imageExpression>
-			</image>
 		</band>
 	</columnFooter>
-	<pageFooter>
-		<band height="49" splitType="Stretch"/>
-	</pageFooter>
 </jasperReport>
