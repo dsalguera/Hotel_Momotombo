@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="792" whenNoDataType="BlankPage" columnWidth="576" leftMargin="18" rightMargin="18" topMargin="15" bottomMargin="15">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="179"/>
+	<parameter name="Id_estancia" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Mi Pc\\Documents\\NetBeansProjects\\ReporteHotel\\src\\Reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="deduccion" class="java.lang.Double">
+		<defaultValueExpression><![CDATA[0.0]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[call get_Factura($P{Id_estancia});]]>
+	</queryString>
+	<field name="Id_estancia" class="java.lang.Integer"/>
+	<field name="Id_cliente" class="java.lang.Integer"/>
+	<field name="Id_habitacion" class="java.lang.Integer"/>
+	<field name="Fecha_inicio" class="java.sql.Timestamp"/>
+	<field name="Fecha_final" class="java.sql.Timestamp"/>
+	<field name="Costo_total" class="java.lang.Double"/>
+	<field name="Descripcion" class="java.lang.String"/>
+	<field name="Estado" class="java.lang.String"/>
+	<field name="Id_reserva" class="java.lang.Integer"/>
+	<field name="Id_servicio_cuarto" class="java.lang.Integer"/>
+	<field name="Fecha_hora" class="java.sql.Timestamp"/>
+	<field name="Nombre" class="java.lang.String"/>
+	<field name="Tipo" class="java.lang.String"/>
+	<field name="Tarifa" class="java.lang.Double"/>
+	<field name="Telefono" class="java.lang.String"/>
+	<field name="Eliminado" class="java.lang.Integer"/>
+	<field name="Imagen" class="java.lang.String"/>
+	<field name="Primer_nombre" class="java.lang.String"/>
+	<field name="Segundo_nombre" class="java.lang.String"/>
+	<field name="Primer_apellido" class="java.lang.String"/>
+	<field name="Segundo_apellido" class="java.lang.String"/>
+	<field name="Identificacion" class="java.lang.String"/>
+	<field name="Tipo_identificacion" class="java.lang.String"/>
+	<field name="Pais_origen" class="java.lang.String"/>
+	<field name="Numero_reserva" class="java.lang.Integer"/>
+	<field name="Numero_estancia" class="java.lang.Integer"/>
+	<field name="GPA" class="java.lang.Double"/>
+	<field name="Fecha_inscripcion" class="java.sql.Date"/>
+	<field name="Fecha_nacimiento" class="java.sql.Date"/>
+	<field name="Correo" class="java.lang.String"/>
+	<field name="fecha_hoy" class="java.lang.String"/>
+	<field name="hora_hoy" class="java.lang.String"/>
+	<field name="fecha_incio" class="java.lang.String"/>
+	<field name="fecha_finall" class="java.lang.String"/>
+	<field name="Costo_total1" class="java.lang.Double"/>
+	<field name="Suma_Costo_total" class="java.lang.Double"/>
+	<variable name="costoadd" class="java.lang.Double" resetType="None" calculation="Sum">
+		<variableExpression><![CDATA[$F{Costo_total1}]]></variableExpression>
+	</variable>
+	<variable name="Costo_total1_3" class="java.lang.Double" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{Costo_total1}]]></variableExpression>
+	</variable>
+	<variable name="Costo_total1_1" class="java.lang.Double" resetType="Page" calculation="Sum">
+		<variableExpression><![CDATA[$F{Costo_total1}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="206" splitType="Stretch">
+			<staticText>
+				<reportElement x="169" y="73" width="66" height="18" forecolor="#000000"/>
+				<textElement textAlignment="Left">
+					<font fontName="Arial" size="12" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Fixed"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="169" y="45" width="374" height="20" forecolor="#000000"/>
+				<textElement verticalAlignment="Middle" rotation="None">
+					<font fontName="Arial" size="14"/>
+					<paragraph lineSpacing="Proportional"/>
+				</textElement>
+				<text><![CDATA[ Dirección: Pali P del H 3crs, al Sur 1/2c. Arriba.  ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="169" y="99" width="66" height="20" forecolor="#000000"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[Hora:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="169" y="0" width="358" height="39" forecolor="#000000"/>
+				<textElement>
+					<font fontName="Arial" size="24"/>
+				</textElement>
+				<text><![CDATA[Hotel Momotombo]]></text>
+			</staticText>
+			<image>
+				<reportElement x="0" y="0" width="169" height="132"/>
+				<imageExpression class="java.lang.String"><![CDATA[new File("src\\Reportes\\logo_black.png").toPath().toAbsolutePath().toString()]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="248" y="73" width="213" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="14"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{fecha_hoy}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="248" y="99" width="136" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="14"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{hora_hoy}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="132" width="576" height="74"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Arial" size="14"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["El hotel momotombo se complace en haber recibido al cliente "+$F{Primer_nombre}+" "+$F{Segundo_nombre}+" "+$F{Primer_apellido}+" "+$F{Segundo_apellido}+" con "+$F{Tipo_identificacion}+": "+$F{Identificacion}+" en la habitacion "+$F{Nombre}+" Tipo: "+$F{Tipo}+" con tarifa diaria de $"+$F{Tarifa}+" desde "+$F{fecha_incio}+" hasta "+$F{fecha_finall}+"."]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="28" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="576" height="23" forecolor="#FFFFFF" backcolor="#333333"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="4" width="100" height="20" forecolor="#FFFFFF" backcolor="#000000"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[Servicio al Cuarto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="221" y="3" width="100" height="20" forecolor="#FFFFFF" backcolor="#000000"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[Fecha y Hora]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="416" y="3" width="111" height="20" forecolor="#FFFFFF" backcolor="#000000"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[Sub Total de Servicio al Cuarto]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="33" splitType="Prevent">
+			<line>
+				<reportElement x="0" y="25" width="576" height="1"/>
+			</line>
+			<textField>
+				<reportElement x="-1" y="4" width="169" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Codigo: "+$F{Id_servicio_cuarto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="221" y="4" width="100" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{Fecha_hora}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="416" y="4" width="100" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{Costo_total1}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="-1" y="30" width="572" height="0"/>
+				<subreportParameter name="Id_servicio_cuarto">
+					<subreportParameterExpression><![CDATA[$F{Id_servicio_cuarto}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "Sub_Factura.jasper"]]></subreportExpression>
+			</subreport>
+			<line>
+				<reportElement x="0" y="2" width="576" height="1"/>
+			</line>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="26">
+			<textField>
+				<reportElement x="0" y="3" width="80" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="230" y="3" width="341" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["El Costo acumulado en servicios es de: $ "+$V{Costo_total1_1}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="100" y="3" width="40" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="148">
+			<rectangle>
+				<reportElement x="100" y="5" width="416" height="142"/>
+			</rectangle>
+			<textField>
+				<reportElement x="348" y="32" width="160" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["$ "+$F{Suma_Costo_total}*0.15]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="216" y="54" width="100" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[Total Servicios]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="348" y="101" width="160" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["$ "+($F{Costo_total}*$P{deduccion})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="216" y="10" width="100" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[Total Facturado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="216" y="77" width="100" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[Costo Base]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="349" y="78" width="159" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["$ "+$F{Costo_total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="348" y="124" width="160" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["$ "+(($F{Costo_total}*(1.0-$P{deduccion})+$F{Suma_Costo_total}*1.15))]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="216" y="99" width="100" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[Deduccion:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="348" y="55" width="160" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["$ "+$F{Suma_Costo_total}*1.15]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="216" y="123" width="100" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[Total pagado :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="216" y="32" width="100" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[IVA]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="349" y="10" width="159" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["$ "+$F{Suma_Costo_total}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="0" y="121" width="100" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Pagina "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="100" y="52" width="100" height="45"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[Resumen de Factura]]></text>
+			</staticText>
+		</band>
+	</lastPageFooter>
+</jasperReport>
