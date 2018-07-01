@@ -79,6 +79,10 @@ public class Pagar_EstanciaController implements Initializable {
     
     @FXML
     void Aceptar(ActionEvent event) throws SQLException, IOException {
+         if (RC.isSelected() && txttarjeta.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(null, "Ingrese codigo de tarjeta.");
+            return;
+        }
         if (lista_habitaciones.getItems().size()==0) {
             JOptionPane.showMessageDialog(null,"No hay estancias activas.");
             return; 
@@ -114,29 +118,23 @@ public class Pagar_EstanciaController implements Initializable {
         
         }
         
-        if (pago) {
-              JOptionPane.showMessageDialog(null, "Todo lito "+lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getNombre_cliente());
+        if (pago && Cancelacion()) {
+            
+              
+              JOptionPane.showMessageDialog(null, "El Cliente "+lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getNombre_cliente()+" ha cancelado la estancia.");
+               Actualizar();
+               Validar_visitante();
+               
+               lista_servi.getItems().clear();
         }
         
         
         
     }
-
-    @FXML
-    void Cancelar(ActionEvent event) {
-    ((Node)(event.getSource())).getScene().getWindow().hide(); 
-    }
+  
     
-   
-    ObservableList<Manuel_Estancia> data = FXCollections.observableArrayList();
-    ObservableList<String> data1 = FXCollections.observableArrayList();
-   
-   
-       @FXML
-    void Accion_buscar(ActionEvent event) throws SQLException {
-           
-            if (combo_buscar.getSelectionModel().getSelectedIndex()!=-1) {
-                if (MenuController.tipo_usuario!=3) {
+    void Actualizar(){
+    if (MenuController.tipo_usuario!=3) {
                        String buscar=txtbuscar.getText();
                 if (!buscar.trim().equals("")) {
                     
@@ -154,10 +152,39 @@ public class Pagar_EstanciaController implements Initializable {
                   Crear_Lista("call get_Estancia_consulta_id("+id_cliente+") ;");
                 }
                 }
+    }
+    @FXML
+    void Cancelar(ActionEvent event) {
+    ((Node)(event.getSource())).getScene().getWindow().hide(); 
+    }
+    
+   
+    ObservableList<Manuel_Estancia> data = FXCollections.observableArrayList();
+    ObservableList<String> data1 = FXCollections.observableArrayList();
+   
+   
+       @FXML
+    void Accion_buscar(ActionEvent event) throws SQLException {
+           
+            if (combo_buscar.getSelectionModel().getSelectedIndex()!=-1) {
+               Actualizar();
             }
     }
 
+void Validar_visitante(){
+    if (MenuController.tipo_usuario!=3) {
+        RE.setSelected(true);
+        txttarjeta.setText("");
+        txttarjeta.setEditable(false);
+        
+    }else{
+     RE.setDisable(true);
+     RC.setSelected(true);
+     txttarjeta.setText("");
+     txttarjeta.setEditable(true);
+    }
 
+}
     
     @FXML
     void consulta(String complemento) throws SQLException {
@@ -293,8 +320,9 @@ public class Pagar_EstanciaController implements Initializable {
   @Override
     public void initialize(URL url, ResourceBundle rb) {
          MenuController.Audit_habitacion();
+           Validar_visitante();
          lista_habitaciones.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Manuel_Estancia>() {
-
+  
     @Override
     public void changed(ObservableValue<? extends Manuel_Estancia> observable, Manuel_Estancia oldValue,Manuel_Estancia newValue) {
         if (newValue!=null) {
@@ -402,7 +430,7 @@ public class Pagar_EstanciaController implements Initializable {
                  guardar=txttarjeta.getText();
                  txttarjeta.setText("");
                  txttarjeta.setEditable(false);
-             
+                              
                
               
     }
@@ -412,6 +440,7 @@ public class Pagar_EstanciaController implements Initializable {
     
          txttarjeta.setText(guardar);
          txttarjeta.setEditable(true);
+         txttarjeta.setDisable(false);
         
     }
 
@@ -444,5 +473,27 @@ public class Pagar_EstanciaController implements Initializable {
  
  
  }
+ boolean Cancelacion(){
+        try {
+            Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
+            Statement stm = (Statement) connection.createStatement();
+            String query = "call set_Cancelacion_Estancianull("+lista_habitaciones.getSelectionModel().getSelectedItem().getId_cliente()+","+lista_habitaciones.getSelectionModel().getSelectedItem().getId_estancia()+","+lbtotal.getText().replace("$","").trim()+");";
+            if (RC.isSelected()) {
+                query = "call set_Cancelacion_Estancia("+lista_habitaciones.getSelectionModel().getSelectedItem().getId_cliente()+","+lista_habitaciones.getSelectionModel().getSelectedItem().getId_estancia()+","+lbtotal.getText().replace("$","").trim()+",'Credito',"+txttarjeta.getText()+");";
+            }
+            ResultSet rs = stm.executeQuery(query);
+            rs.next();
+            if (!rs.getString("mensaje").equals("Exito")) {
+               JOptionPane.showMessageDialog(null, "No se completo la cancelacion, revise los campos.");
+             return false;  
+            }
+            
+            return true;
+        } catch (SQLException ex) {
+           
+            JOptionPane.showMessageDialog(null, "No se completo la cancelacion, revise los campos");
+             return false;
+        }
+}
     
 }

@@ -24,7 +24,7 @@
                <children>
                   <HBox prefHeight="56.0" prefWidth="532.0" styleClass="top-panel" stylesheets="@../estilos/Estilos.css" VBox.vgrow="ALWAYS">
                      <children>
-                        <ComboBox fx:id="combo_buscar" prefHeight="38.0" prefWidth="142.0" promptText="Buscar por:" styleClass="combo-box" stylesheets="@../estilos/Estilos.css">
+                        <ComboBox fx:id="combo_buscar" prefHeight="38.0" prefWidth="182.0" promptText="Buscar por:" styleClass="combo-box" stylesheets="@../estilos/Estilos.css">
                            <HBox.margin>
                               <Insets right="15.0" />
                            </HBox.margin>
