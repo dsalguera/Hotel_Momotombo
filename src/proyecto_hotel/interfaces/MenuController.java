@@ -213,7 +213,7 @@ public class MenuController implements Initializable {
     
     String user;
     int type;
-   public static int tipo_usuario;
+    public static int tipo_usuario;
     static String nombre_usuario_entra;
     
     public void setUser(String username, int type) throws SQLException{
@@ -221,17 +221,22 @@ public class MenuController implements Initializable {
         this.user = username;
         this.type = type;
         txtuser.setText(username);
+        
         if (this.type == 1) {
+            
             txttipo.setText("Administrador");
             menuBtns.getChildren().remove(btnPerfil);
-            menuBtns.getChildren().remove(btnListaReservas);
-            menuBtns.getChildren().remove(btnListaEstancias);
-            
+            menuBtns.getChildren().remove(btnDetalle_servicio);
+            menuBtns.getChildren().remove(btnReservas);
+            menuBtns.getChildren().remove(btnEstancias);
             
         }else if (this.type == 2) {
+            
             txttipo.setText("Secretario");
             menuBtns.getChildren().remove(btnPerfil);
             menuBtns.getChildren().remove(btnDetalle_servicio);
+            menuBtns.getChildren().remove(btnReservas);
+            menuBtns.getChildren().remove(btnEstancias);
             
         }else if (this.type == 3) {
             txttipo.setText("Visitante");
@@ -250,8 +255,8 @@ public class MenuController implements Initializable {
     }
     
     
- static Conexion c = new Conexion();
-   static Connection connection ;
+   static  Conexion c = new Conexion();
+    static Connection connection ;
     
     void Conexion() throws SQLException{ 
         
@@ -467,23 +472,21 @@ public class MenuController implements Initializable {
 
     @FXML
     void Servicio_cuarto(ActionEvent event) throws IOException {
-//          if (lienzo.getChildren().size()==2) {
-//        Pane servicio_cuarto = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Servicio_cuarto.fxml"));
-//        AjustePagina(servicio_cuarto);
-//        lienzo.getChildren().add(servicio_cuarto); 
-//            
-//        }else{
-//        int  n= lienzo.getChildren().size()-1;
-//            for (int i = 2; i <=n; i++) {
-//                lienzo.getChildren().remove(2);
-//            }
-//        Pane servicio_cuarto = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Servicio_cuarto.fxml"));
-//        AjustePagina(servicio_cuarto);
-//        lienzo.getChildren().add(servicio_cuarto);
-//        }
-//        
-      
-        JOptionPane.showMessageDialog(null,"En construccion");
+          if (lienzo.getChildren().size()==2) {
+        Pane servicio_cuarto = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Servicio_Cuarto.fxml"));
+        AjustePagina(servicio_cuarto);
+        lienzo.getChildren().add(servicio_cuarto); 
+            
+        }else{
+        int  n= lienzo.getChildren().size()-1;
+            for (int i = 2; i <=n; i++) {
+                lienzo.getChildren().remove(2);
+            }
+        Pane servicio_cuarto = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Servicio_Cuarto.fxml"));
+        AjustePagina(servicio_cuarto);
+        lienzo.getChildren().add(servicio_cuarto);
+        }
+        
     }
      
     
@@ -519,7 +522,7 @@ public class MenuController implements Initializable {
     
     @FXML
     void Productos(ActionEvent event) throws IOException {
-          if (lienzo.getChildren().size()==2) {
+         if (lienzo.getChildren().size()==2) {
         Pane Productos = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Productos.fxml"));
         AjustePagina(Productos);
         lienzo.getChildren().add(Productos);     
@@ -533,14 +536,12 @@ public class MenuController implements Initializable {
         lienzo.getChildren().add(Productos); 
         }
         
-    
-        
     }
     
     String s;
     Format formatter;
     Date date = new Date();
-     int cont=0,aux;
+      int cont=0,aux;
     void Fecha_Hora(){
         
         formatter = new SimpleDateFormat("EEEE, dd MMMM yyyy");
@@ -578,13 +579,11 @@ public class MenuController implements Initializable {
         String d = "src\\proyecto_hotel\\imagenes\\";
         img_logo.setImage(new Image(new File(d+"logo.png").toURI().toString()));
         Fecha_Hora();
-        Audit_habitacion();
-        System.out.println(""+tipo_usuario);
+         Audit_habitacion();
         Cargar_Inicio();
-       
     }    
 
-   void Cargar_Inicio(){
+    void Cargar_Inicio(){
                 if (lienzo.getChildren().size()==2) {
             try {
                 Pane inicio = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Inicio.fxml"));
@@ -607,8 +606,7 @@ public class MenuController implements Initializable {
                 Logger.getLogger(MenuController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }}
- 
-     public static void Audit_habitacion(){
+ public static void Audit_habitacion(){
    
          try {
            connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
@@ -620,9 +618,5 @@ public class MenuController implements Initializable {
          }
     
    
-    }
-    
-    
-    
-    
+    }   
 }

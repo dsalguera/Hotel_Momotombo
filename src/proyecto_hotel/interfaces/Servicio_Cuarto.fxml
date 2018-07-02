@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="549.0" prefWidth="802.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto_hotel.interfaces.Servicio_CuartoController">
+   <children>
+      <HBox fx:id="boxContenedor" layoutX="40.0" layoutY="75.0" prefHeight="601.0" prefWidth="772.0" stylesheets="@../estilos/Estilos.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="56.0" prefWidth="532.0" styleClass="top-panel" stylesheets="@../estilos/Estilos.css">
+                     <children>
+                        <ComboBox fx:id="combo_buscar" prefWidth="150.0" promptText="Buscar por:" styleClass="combo-box" stylesheets="@../estilos/Estilos.css">
+                           <HBox.margin>
+                              <Insets right="15.0" />
+                           </HBox.margin>
+                        </ComboBox>
+                        <JFXTextField fx:id="txtbuscar" onKeyTyped="#buscar" promptText="Buscar" styleClass="campos" />
+                        <JFXButton fx:id="btnBuscar" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" styleClass="button-skyblue" stylesheets="@../estilos/Estilos.css" text="Buscar">
+                           <graphic>
+                              <FontAwesomeIconView glyphName="SEARCH" size="15" styleClass="icon-color" text="" />
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <VBox prefHeight="516.0" prefWidth="263.0">
+                           <children>
+                              <ListView fx:id="lista_servicios" editable="true" onMouseClicked="#clickDentro" prefHeight="516.0" prefWidth="161.0" VBox.vgrow="ALWAYS" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="516.0" prefWidth="375.0">
+                           <children>
+                              <ListView fx:id="lista_productos" editable="true" prefHeight="516.0" prefWidth="141.0" VBox.vgrow="ALWAYS" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="516.0" prefWidth="349.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <ListView fx:id="lista_agrega" editable="true" onMouseClicked="#click" prefHeight="516.0" prefWidth="194.0" VBox.vgrow="ALWAYS" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox fx:id="boxCambios" alignment="CENTER" prefHeight="418.0" prefWidth="238.0" styleClass="side-panel" stylesheets="@../estilos/Estilos.css">
+               <children>
+                  <JFXTextField fx:id="txtidestancia" focusColor="#00bfe9" labelFloat="true" maxHeight="43.0" maxWidth="200.0" prefHeight="25.0" prefWidth="246.0" promptText="Id Estancia" styleClass="campos" stylesheets="@../estilos/Estilos.css">
+                     <font>
+                        <Font name="The Dodger Inky Regular" size="18.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="30.0" />
+                     </VBox.margin>
+                  </JFXTextField>
+                  <JFXButton fx:id="btnBuscarEstancia" graphicTextGap="10.0" onAction="#Buscar_estancia" prefHeight="35.0" prefWidth="198.0" styleClass="button-skyblue" stylesheets="@../estilos/Estilos.css" text="Buscar Estancia">
+                     <font>
+                        <Font name="The Dodger Inky Regular" size="20.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView glyphName="SEARCH" size="18" styleClass="icon-color" />
+                     </graphic>
+                  </JFXButton>
+                  <ImageView fx:id="screen_img" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <VBox.margin>
+                        <Insets bottom="20.0" top="20.0" />
+                     </VBox.margin></ImageView>
+                  <JFXButton fx:id="btnBuscarProducto" graphicTextGap="10.0" onAction="#Buscar_producto" prefHeight="35.0" prefWidth="198.0" styleClass="button-skyblue" stylesheets="@../estilos/Estilos.css" text="Buscar Producto">
+                     <font>
+                        <Font name="The Dodger Inky Regular" size="20.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView glyphName="SEARCH" size="18" styleClass="icon-color" />
+                     </graphic>
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
+                  </JFXButton>
+                  <JFXTextField fx:id="txtprecio" focusColor="#00bfe9" labelFloat="true" maxHeight="43.0" maxWidth="200.0" prefHeight="25.0" prefWidth="246.0" promptText="Precio" styleClass="campos" stylesheets="@../estilos/Estilos.css">
+                     <font>
+                        <Font name="The Dodger Inky Regular" size="18.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="20.0" left="20.0" right="20.0" />
+                     </VBox.margin>
+                  </JFXTextField>
+                  <JFXTextField fx:id="txtcantidad" focusColor="#00bfe9" labelFloat="true" maxHeight="43.0" maxWidth="200.0" prefHeight="25.0" prefWidth="246.0" promptText="Cantidad" styleClass="campos" stylesheets="@../estilos/Estilos.css">
+                     <font>
+                        <Font name="The Dodger Inky Regular" size="18.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="20.0" left="20.0" right="20.0" />
+                     </VBox.margin>
+                  </JFXTextField>
+                  <JFXTextField fx:id="txtsubtotal" focusColor="#00bfe9" labelFloat="true" maxHeight="43.0" maxWidth="200.0" prefHeight="25.0" prefWidth="246.0" promptText="Subtotal" styleClass="campos" stylesheets="@../estilos/Estilos.css">
+                     <font>
+                        <Font name="The Dodger Inky Regular" size="18.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="20.0" left="20.0" right="20.0" />
+                     </VBox.margin>
+                  </JFXTextField>
+                  <HBox fx:id="panel_edicion" alignment="CENTER" prefHeight="49.0" prefWidth="238.0">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <JFXButton fx:id="btnNuevo" onAction="#Nuevo_Registro" prefHeight="34.0" prefWidth="198.0" styleClass="button-skyblue" stylesheets="@../estilos/Estilos.css" text="Agregar Uno">
+                                 <graphic>
+                                    <FontAwesomeIconView glyphName="PLUS" size="25" styleClass="icon-color" />
+                                 </graphic>
+                              </JFXButton>
+                              <JFXButton fx:id="btnGuardar" onAction="#Guardar_Registro" prefHeight="34.0" prefWidth="198.0" styleClass="button-skyblue" stylesheets="@../estilos/Estilos.css" text="Guardar Todo">
+                                 <graphic>
+                                    <FontAwesomeIconView glyphName="SAVE" size="25" styleClass="icon-color" />
+                                 </graphic>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" top="10.0" />
+                                 </VBox.margin>
+                              </JFXButton>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

@@ -124,7 +124,7 @@ public class FXMLDocumentController implements Initializable {
     Conexion c = new Conexion();
     Connection connection ;
     Usuarios u;
-    
+  
  public   static Stage stage;
     void Siguiente(String nombre, int tipo, ActionEvent event) throws SQLException{
         
@@ -221,7 +221,7 @@ public class FXMLDocumentController implements Initializable {
                 Id_Cliente=rs.getInt("Id_cliente");
                 usuario_encontrado=true;
                 if(txtuser.getText().toString().equals(nombre) && txtpass.getText().toString().equals(contra)){
-                    
+                   MenuController.tipo_usuario=tipo;
                     Siguiente(nombre,tipo,event);
                     
                 }else{

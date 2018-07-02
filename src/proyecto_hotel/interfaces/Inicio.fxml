@@ -11,14 +11,14 @@
 
 <AnchorPane id="AnchorPane" prefHeight="662.0" prefWidth="771.0" styleClass="side-panel" stylesheets="@../estilos/Estilos.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto_hotel.interfaces.InicioController">
    <children>
-      <VBox prefHeight="310.0" prefWidth="763.0">
+      <VBox nodeOrientation="LEFT_TO_RIGHT" prefHeight="310.0" prefWidth="763.0">
          <children>
             <Label text="Operaciones" textFill="#f8f3f3">
                <font>
                   <Font name="Segoe UI" size="27.0" />
                </font>
             </Label>
-            <HBox fx:id="h1" alignment="CENTER" prefHeight="90.0" prefWidth="749.0" spacing="10.0">
+            <HBox fx:id="h1" alignment="CENTER_LEFT" prefHeight="90.0" prefWidth="749.0" spacing="10.0" VBox.vgrow="ALWAYS">
                <children>
                   <JFXButton onAction="#Contratar_Reserva" prefHeight="60.0" prefWidth="256.0" ripplerFill="#2e78e1" styleClass="button-inicio" text="     Contratar Reserva" textFill="#e4dede" HBox.hgrow="ALWAYS">
                      <graphic>
@@ -54,10 +54,10 @@
                   <Font name="Segoe UI" size="27.0" />
                </font>
             </Label>
-            <HBox alignment="CENTER" prefHeight="142.0" prefWidth="749.0" />
+            <HBox fx:id="h2" alignment="CENTER" prefHeight="142.0" prefWidth="749.0" VBox.vgrow="ALWAYS" />
          </children>
       </VBox>
-      <HBox layoutY="171.0" prefHeight="60.0" prefWidth="741.0" spacing="10.0" AnchorPane.leftAnchor="1.0">
+      <HBox fx:id="h3" layoutY="171.0" prefHeight="60.0" prefWidth="741.0" spacing="10.0" AnchorPane.leftAnchor="1.0">
          <children>
             <JFXButton fx:id="btn_Certificado_Reserva" onAction="#Certificado_Reserva" prefHeight="60.0" prefWidth="255.0" ripplerFill="#2e78e1" styleClass="button-inicio" text="    Certificado de Reserva" textFill="#e4dede" HBox.hgrow="ALWAYS">
                <graphic>

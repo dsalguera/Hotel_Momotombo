@@ -6,6 +6,7 @@ import com.mysql.jdbc.Connection;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -23,6 +24,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
@@ -146,23 +148,29 @@ static Stage stage;
     void Grafico(ActionEvent event) {
     Grafico();
     }
+    Connection connection ;
     void Grafico(){
               try {
     Conexion c=new Conexion();
-    Connection connection ;
     connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
     JasperReport reporte = (JasperReport) JRLoader.loadObject("src//Reportes//new.jasper"); 
     JasperPrint j = JasperFillManager.fillReport(reporte,null, connection); 
-    JasperViewer jv=new JasperViewer(j);
+    JasperViewer jv=new JasperViewer(j,false);
     jv.setTitle("Factura del Hospedaje");
     jv.setVisible(true);
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println(""+e);
-        }
+        } catch (JRException ex) {
+          System.out.println(""+ex);
+    }
 
     
     }
-    
+        @FXML
+    private HBox h3;
+
+        @FXML
+    private HBox h2;
     @FXML
     private JFXButton CE;
 
@@ -171,10 +179,8 @@ static Stage stage;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         if (MenuController.tipo_usuario==3) {
-            IA.setVisible(false);
-            CE.setVisible(false);
-        }else{IA.setVisible(true);
-        CE.setVisible(true);}
-    }    
-    
+            h1.getChildren().remove(CE);
+            h3.getChildren().remove(IA);
+        }   
+    }
 }

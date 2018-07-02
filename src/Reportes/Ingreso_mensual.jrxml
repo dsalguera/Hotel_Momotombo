@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" printOrder="Horizontal" pageWidth="612" pageHeight="792" whenNoDataType="BlankPage" columnWidth="592" leftMargin="10" rightMargin="10" topMargin="15" bottomMargin="15">
+	<property name="ireport.zoom" value="0.9090909090909095"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[call get_Informe();]]>
+	</queryString>
+	<field name="Mes" class="java.lang.String"/>
+	<field name="Monto" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Reserva" class="java.lang.Double"/>
+	<field name="Estancia" class="java.lang.Double"/>
+	<field name="Efectivo" class="java.lang.Double"/>
+	<field name="Credito" class="java.lang.Double"/>
+	<field name="fecha_hoy" class="java.lang.String"/>
+	<field name="hora_hoy" class="java.lang.String"/>
+	<field name="Año" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="137" splitType="Stretch">
+			<staticText>
+				<reportElement x="165" y="79" width="66" height="18" forecolor="#000000"/>
+				<textElement textAlignment="Left">
+					<font fontName="Arial" size="12" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Fixed"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="244" y="79" width="213" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha_hoy}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="35" y="23" width="120" height="98"/>
+				<imageExpression><![CDATA[new File("src\\Reportes\\logo_black.png").toPath().toAbsolutePath().toString()]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="161" y="23" width="341" height="27" forecolor="#000000"/>
+				<textElement>
+					<font fontName="Arial" size="18"/>
+				</textElement>
+				<text><![CDATA[Hotel Momotombo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="162" y="54" width="340" height="20" forecolor="#000000"/>
+				<textElement verticalAlignment="Middle" rotation="None">
+					<font fontName="Arial" size="14"/>
+					<paragraph lineSpacing="Proportional"/>
+				</textElement>
+				<text><![CDATA[ Dirección: Pali P del H 3crs, al Sur 1/2c. Arriba.  ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="165" y="102" width="66" height="20" forecolor="#000000"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[Hora:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="244" y="103" width="136" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{hora_hoy}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="50"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="50">
+			<rectangle>
+				<reportElement x="12" y="1" width="257" height="49" forecolor="#FFFFFF" backcolor="#000000"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="32" y="11" width="82" height="29" forecolor="#FFFFFF"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="18"/>
+				</textElement>
+				<text><![CDATA[Mes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="118" y="12" width="151" height="29" forecolor="#FFFFFF"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="18"/>
+				</textElement>
+				<text><![CDATA[Monto]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="271" y="23" width="129" height="27" forecolor="#FFFFFF" backcolor="#000000"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="276" y="26" width="43" height="20" forecolor="#FFFFFF"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Reserva]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="349" y="25" width="42" height="20" forecolor="#FFFFFF"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Estancia]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="271" y="1" width="129" height="20" forecolor="#FFFFFF" backcolor="#000000"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="274" y="4" width="100" height="20" forecolor="#FFFFFF"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[Concepto]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="407" y="2" width="138" height="20" forecolor="#FFFFFF" backcolor="#333333"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="407" y="27" width="138" height="20" forecolor="#FFFFFF" backcolor="#000000"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="430" y="4" width="79" height="20" forecolor="#FFFFFF"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[Tipo Pago]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="414" y="30" width="46" height="20" forecolor="#FFFFFF"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[Efectivo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="473" y="28" width="55" height="20" forecolor="#FFFFFF"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[Credito]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="24">
+			<textField>
+				<reportElement x="12" y="0" width="102" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Mes}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="118" y="0" width="151" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Monto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="271" y="0" width="61" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Reserva}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="339" y="1" width="61" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Estancia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="407" y="1" width="58" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Efectivo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="473" y="0" width="70" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Credito}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="19"/>
+	</columnFooter>
+	<summary>
+		<band height="7"/>
+	</summary>
+</jasperReport>
