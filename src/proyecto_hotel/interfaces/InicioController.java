@@ -1,8 +1,13 @@
 
 package proyecto_hotel.interfaces;
 
+import com.jfoenix.controls.JFXButton;
+import com.mysql.jdbc.Connection;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.DriverManager;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,10 +18,17 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
+import proyecto_hotel.Conexion;
 import proyecto_hotel.FXMLDocumentController;
 
 
@@ -80,6 +92,25 @@ static Stage stage;
         } catch (IOException e) {
         } 
     }
+    
+        @FXML
+    void Facturar_estancia(ActionEvent event) {
+ try {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/proyecto_hotel/interfaces/Facturas_estancia.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage = new Stage();
+        stage.setTitle("Factura de Estancia");
+        stage.initOwner(FXMLDocumentController.stage);
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.setScene(scene);
+        stage.show();
+        
+        } catch (IOException e) {
+            System.out.println("eror al abrir");
+        } 
+    }
+    
         @FXML
     void Certificado_Reserva(ActionEvent event) {
    try {
@@ -107,11 +138,43 @@ static Stage stage;
         AnchorPane.setRightAnchor(n, 0.00);
         AnchorPane.setBottomAnchor(n, 0.00);
     }
+      
+      
+          @FXML
+    private HBox h1;
+    @FXML
+    void Grafico(ActionEvent event) {
+    Grafico();
+    }
+    void Grafico(){
+              try {
+    Conexion c=new Conexion();
+    Connection connection ;
+    connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
+    JasperReport reporte = (JasperReport) JRLoader.loadObject("src//Reportes//new.jasper"); 
+    JasperPrint j = JasperFillManager.fillReport(reporte,null, connection); 
+    JasperViewer jv=new JasperViewer(j);
+    jv.setTitle("Factura del Hospedaje");
+    jv.setVisible(true);
+        } catch (Exception e) {
+            System.out.println(""+e);
+        }
+
     
+    }
     
+    @FXML
+    private JFXButton CE;
+
+    @FXML
+    private JFXButton IA;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        if (MenuController.tipo_usuario==3) {
+            IA.setVisible(false);
+            CE.setVisible(false);
+        }else{IA.setVisible(true);
+        CE.setVisible(true);}
     }    
     
 }

@@ -213,7 +213,7 @@ public class MenuController implements Initializable {
     
     String user;
     int type;
-    static int tipo_usuario;
+   public static int tipo_usuario;
     static String nombre_usuario_entra;
     
     public void setUser(String username, int type) throws SQLException{
@@ -579,11 +579,12 @@ public class MenuController implements Initializable {
         img_logo.setImage(new Image(new File(d+"logo.png").toURI().toString()));
         Fecha_Hora();
         Audit_habitacion();
+        System.out.println(""+tipo_usuario);
         Cargar_Inicio();
        
     }    
 
-    void Cargar_Inicio(){
+   void Cargar_Inicio(){
                 if (lienzo.getChildren().size()==2) {
             try {
                 Pane inicio = FXMLLoader.load(getClass().getResource("/proyecto_hotel/interfaces/Inicio.fxml"));

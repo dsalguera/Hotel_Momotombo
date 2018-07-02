@@ -14,8 +14,6 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -23,7 +21,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -45,15 +42,13 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
-import proyecto_hotel.Conexion;
 import proyecto_hotel.FXMLDocumentController;
-import proyecto_hotel.clases.Clientes;
+import proyecto_hotel.Conexion;
 import proyecto_hotel.clases.Manuel_Estancia;
+import proyecto_hotel.clases.Manuel_Reserva;
 
-
-public class Pagar_EstanciaController implements Initializable {
-
- 
+public class Facturas_estanciaController implements Initializable {
+  
     @FXML
     private AnchorPane anchorpane;
     
@@ -68,67 +63,31 @@ public class Pagar_EstanciaController implements Initializable {
 
     @FXML
     private ListView<Manuel_Estancia> lista_habitaciones;
-        @FXML
-    private ListView<String> lista_servi;
 
     @FXML
     private JFXButton btnAceptar;
 
     @FXML
     private JFXButton btnCancelar;
-       int id_cliente=-1;
+   
     public static String HabitacionInfoCopia;
-     Conexion c = new Conexion();
-    Connection connection ;
-    String dirh = "src\\proyecto_hotel\\imagenes\\habitaciones\\";
-    String dirc = "src\\proyecto_hotel\\imagenes\\clientes\\";
-    static String nombre_habitacion_copia;
+    int id_cliente=-1;
     
     @FXML
     void Aceptar(ActionEvent event) throws SQLException, IOException {
-         if (RC.isSelected() && txttarjeta.getText().trim().equals("")) {
-            JOptionPane.showMessageDialog(null, "Ingrese codigo de tarjeta.");
-            return;
-        }
+        boolean errorsql=false;
+        
         if (lista_habitaciones.getItems().size()==0) {
-            JOptionPane.showMessageDialog(null,"No hay estancias activas.");
-            return; 
+            JOptionPane.showMessageDialog(null, "No hay reservas en la lista.");
+            return ;
         }
-        if (lista_habitaciones.selectionModelProperty().getValue().getSelectedIndex()==-1) {
-            JOptionPane.showMessageDialog(null,"Seleccione una estancia.");
-            return;
+        if (lista_habitaciones.getSelectionModel().getSelectedIndex()==-1) {
+          JOptionPane.showMessageDialog(null, "No ha selecionado la reserva.");
+            return ;
         }
-        
-        boolean pago=false; 
-        if (RE.isSelected()) {
-            pago=true;
-        }else{
+       
+        if (lista_habitaciones.getSelectionModel().getSelectedIndex()!=-1) {
             try {
-          Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
-          Statement stm = (Statement) connection.createStatement(); 
-          String query;
-          String mensaje="";
-          query="call setPago("+lbtotal.getText().replace("$","").trim()+","+txttarjeta.getText()+");";
-                System.out.println(query);
-          ResultSet rs = stm.executeQuery(query);
-          rs.next();
-          mensaje=rs.getString("mensaje");
-                System.out.println(mensaje);
-                     if (!mensaje.equals("perfecto")) {
-                         JOptionPane.showMessageDialog(null, mensaje);
-                         return;
-                     }
-             pago=true;        
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null,"Pago no realizado, verifique el codigo de la tarjeta.");
-            }
-        
-        }
-        
-        if (pago && Cancelacion()) {
-              JOptionPane.showMessageDialog(null, "El Cliente "+lista_habitaciones.selectionModelProperty().getValue().getSelectedItem().getNombre_cliente()+" ha cancelado la estancia.");
-                     
-    try {
     Conexion c=new Conexion();
     Connection connection ;
     connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
@@ -149,74 +108,53 @@ public class Pagar_EstanciaController implements Initializable {
         } catch (Exception e) {
             System.out.println(""+e);
         }
-               Actualizar();
-               Validar_visitante();
-               
-               lista_servi.getItems().clear();
+
+ 
+        }else{
+        JOptionPane.showMessageDialog(null,"Seleccione una reserva");
         }
-        
-        
-        
     }
-  
+
+    @FXML
+    void Cancelar(ActionEvent event) {
+    ((Node)(event.getSource())).getScene().getWindow().hide(); 
+    }
     
-    void Actualizar(){
-    if (MenuController.tipo_usuario!=3) {
+    Conexion c = new Conexion();
+    Connection connection ;
+    ObservableList<Manuel_Estancia> data = FXCollections.observableArrayList();
+    String dirh = "src\\proyecto_hotel\\imagenes\\habitaciones\\";
+    String dirc = "src\\proyecto_hotel\\imagenes\\clientes\\";
+    static String nombre_habitacion_copia;
+  
+       @FXML
+    void Accion_buscar(ActionEvent event) throws SQLException {
+            if (MenuController.tipo_usuario!=3) {
                        String buscar=txtbuscar.getText();
                 if (!buscar.trim().equals("")) {
                     
-                    Crear_Lista("call get_Estancia_consulta_buscar('"+buscar+"',"+combo_buscar.getSelectionModel().getSelectedIndex()+");");
+                    Crear_Lista("call get_Estancia_consulta_buscar_fact('"+buscar+"',"+combo_buscar.getSelectionModel().getSelectedIndex()+");");
                 }else{
-                  Crear_Lista("call get_Estancia_consulta() ;");
+                  Crear_Lista("call get_Estancia_consulta_fact() ;");
                 }
                 }else{
                 
                        String buscar=txtbuscar.getText();
                 if (!buscar.trim().equals("")) {
                     
-                    Crear_Lista("call get_Estancia_consulta_buscar_id('"+buscar+"',"+combo_buscar.getSelectionModel().getSelectedIndex()+","+id_cliente+");");
+                    Crear_Lista("call get_Estancia_consulta_buscar_id_fact('"+buscar+"',"+combo_buscar.getSelectionModel().getSelectedIndex()+","+id_cliente+");");
                 }else{
-                  Crear_Lista("call get_Estancia_consulta_id("+id_cliente+") ;");
+                  Crear_Lista("call get_Estancia_consulta_id_fact("+id_cliente+") ;");
                 }
                 }
     }
-    @FXML
-    void Cancelar(ActionEvent event) {
-    ((Node)(event.getSource())).getScene().getWindow().hide(); 
-    }
-    
-   
-    ObservableList<Manuel_Estancia> data = FXCollections.observableArrayList();
-    ObservableList<String> data1 = FXCollections.observableArrayList();
-   
-   
-       @FXML
-    void Accion_buscar(ActionEvent event) throws SQLException {
-           
-            if (combo_buscar.getSelectionModel().getSelectedIndex()!=-1) {
-               Actualizar();
-            }
-    }
 
-void Validar_visitante(){
-    if (MenuController.tipo_usuario!=3) {
-        RE.setSelected(true);
-        txttarjeta.setText("");
-        txttarjeta.setEditable(false);
-        
-    }else{
-     RE.setDisable(true);
-     RC.setSelected(true);
-     txttarjeta.setText("");
-     txttarjeta.setEditable(true);
-    }
 
-}
     
     @FXML
     void consulta(String complemento) throws SQLException {
     
-   
+ 
      
     }
 
@@ -224,14 +162,16 @@ void Validar_visitante(){
     String habitacion, tipo, telefono, descripcion;
     int estado,id;
     Image imagen;
+    Image imagen1;
     double tarifa; 
     
     @FXML
     void click(MouseEvent event) throws SQLException {
-
+    
+        
     }
     
-      void Conexion(String query) { 
+   void Conexion(String query) { 
         
         try {
             connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
@@ -256,7 +196,9 @@ void Validar_visitante(){
                  Image i1=new Image(new File(dirc+rs.getString("imgcliente")).toURI().toString());
                  Image i2=new Image(new File(dirh+rs.getString("imghabitacion")).toURI().toString());
                 Manuel_Estancia habitacion = new Manuel_Estancia(Id_estancia,Id_reserva, Id_cliente,Id_habitacion, Fecha_inicio, Fecha_final, Estado,Descripcion, Costo_total,Nombre_cliente,Nombre_habitacion,i1,i2);
-                data.add(habitacion);
+                if (Estado.toUpperCase().trim().equals("Cancelado".toUpperCase())) {
+                    data.add(habitacion);
+                }
             }
         } catch (SQLException ex) {
             System.out.println("Invalida busqueda");
@@ -298,18 +240,18 @@ void Validar_visitante(){
                Estado = new Label("Estado : "+item.getEstado()),
                Id_reserva=new Label("Reserva : "+item.getId_reserva())
                     
-                    //,Estado = new Label(""+estado)     
+                    //,Estado = new Label(""+estado)    
                 );
-               Id_Estancia.getStyleClass().add("espacio1");
-               Id_reserva.getStyleClass().add("espacio1");
-                Id_cliente.getStyleClass().add("espacio1");
-                Nombre_cliente.getStyleClass().add("espacio1");
-                Id_habitacion.getStyleClass().add("espacio1");
-               Nombre_habitacion.getStyleClass().add("espacio1");
-               Fecha_inicio.getStyleClass().add("espacio1");
-               Fecha_final.getStyleClass().add("espacio1");
-               Descripcion.getStyleClass().add("espacio1");
-               Costo_total.getStyleClass().add("espacio1");
+               Id_Estancia.getStyleClass().add("espacio");
+               Id_reserva.getStyleClass().add("espacio");
+                Id_cliente.getStyleClass().add("espacio");
+                Nombre_cliente.getStyleClass().add("espacio");
+                Id_habitacion.getStyleClass().add("espacio");
+               Nombre_habitacion.getStyleClass().add("espacio");
+               Fecha_inicio.getStyleClass().add("espacio");
+               Fecha_final.getStyleClass().add("espacio");
+               Descripcion.getStyleClass().add("espacio");
+               Costo_total.getStyleClass().add("espacio");
               
                     if (item.getEstado().equalsIgnoreCase("Activo")) {
                         Estado.getStyleClass().add("round-green");
@@ -344,26 +286,10 @@ void Validar_visitante(){
         });
     }
     
-  @Override
-    public void initialize(URL url, ResourceBundle rb) {
-         MenuController.Audit_habitacion();
-           Validar_visitante();
-         lista_habitaciones.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Manuel_Estancia>() {
   
     @Override
-    public void changed(ObservableValue<? extends Manuel_Estancia> observable, Manuel_Estancia oldValue,Manuel_Estancia newValue) {
-        if (newValue!=null) {
-          selecionar_servicio(newValue.getId_estancia());
-            
-        }else{
-        lbcosto_agregado.setText("0");
-        lbcostobase.setText("0");
-        lbtotal.setText("0");
-        }
-        
-        
-    }
-});
+    public void initialize(URL url, ResourceBundle rb) {
+         MenuController.Audit_habitacion(); 
         ObservableList busquedas = FXCollections.observableArrayList();
         if (MenuController.tipo_usuario!=3) {
         busquedas.add("Nombre Cliente");
@@ -371,7 +297,6 @@ void Validar_visitante(){
         id_cliente=FXMLDocumentController.Id_Cliente;
         }
         busquedas.add("Nombre Habitacion");
-        busquedas.add("Estado");
         txtbuscar.setOnKeyPressed(event->{
         System.out.println(""+event.getCode());
          if (event.getCode().equals(KeyCode.BACK_SPACE) && combo_buscar.getSelectionModel().getSelectedIndex()==2) {
@@ -393,18 +318,18 @@ void Validar_visitante(){
                        String buscar=txtbuscar.getText()+event.getCharacter();
                 if (!buscar.trim().equals("")) {
                     
-                    Crear_Lista("call get_Estancia_consulta_buscar('"+buscar+"',"+combo_buscar.getSelectionModel().getSelectedIndex()+");");
+                    Crear_Lista("call get_Estancia_consulta_buscar_fact('"+buscar+"',"+combo_buscar.getSelectionModel().getSelectedIndex()+");");
                 }else{
-                  Crear_Lista("call get_Estancia_consulta() ;");
+                  Crear_Lista("call get_Estancia_consulta_fact() ;");
                 }
                 }else{
                 
                        String buscar=txtbuscar.getText()+event.getCharacter();
                 if (!buscar.trim().equals("")) {
                     
-                    Crear_Lista("call get_Estancia_consulta_buscar_id('"+buscar+"',"+combo_buscar.getSelectionModel().getSelectedIndex()+","+id_cliente+");");
+                    Crear_Lista("call get_Estancia_consulta_buscar_id_fact('"+buscar+"',"+combo_buscar.getSelectionModel().getSelectedIndex()+","+id_cliente+");");
                 }else{
-                  Crear_Lista("call get_Estancia_consulta_id("+id_cliente+") ;");
+                  Crear_Lista("call get_Estancia_consulta_id_fact("+id_cliente+") ;");
                 }
                 }
             }
@@ -417,11 +342,10 @@ void Validar_visitante(){
           
         combo_buscar.getItems().addAll(busquedas);
         if (MenuController.tipo_usuario==3) {
-             Crear_Lista("call get_Estancia_consulta_id("+id_cliente+") ;");
+             Crear_Lista("call get_Estancia_consulta_id_fact("+id_cliente+") ;");
         }else{
-        Crear_Lista(" call get_Estancia_consulta() ;");
+        Crear_Lista(" call get_Estancia_consulta_fact() ;");
         }
-        System.out.println("listo");
         
     }    
  String typeUser(){
@@ -434,97 +358,6 @@ void Validar_visitante(){
         }
      return null;
      }
-     @FXML
-    private RadioButton RE;
 
-
-    @FXML
-    private RadioButton RC;
-    @FXML
-    private JFXTextField txttarjeta;
-     @FXML
-    private Label lbtotal;
-     
-    @FXML
-    private Label lbcostobase;
-
-    @FXML
-    private Label lbcosto_agregado;
-     String guardar="";
-         @FXML
-    void Radio_Efectivo(ActionEvent event) {
-          
-                 guardar=txttarjeta.getText();
-                 txttarjeta.setText("");
-                 txttarjeta.setEditable(false);
-                              
-               
-              
-    }
-
-    @FXML
-    void Radio_credito(ActionEvent event) {
-    
-         txttarjeta.setText(guardar);
-         txttarjeta.setEditable(true);
-         txttarjeta.setDisable(false);
-        
-    }
-
- void selecionar_servicio(int id){
-  try {
-             data1.clear();
-             Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
-             Statement stm = (Statement) connection.createStatement();
-             String query = "call get_Servicio_Cuarto("+id+");";
-             ResultSet rs = stm.executeQuery(query);
-             double total=0;
-             double base=0;
-            while( rs.next()){
-                data1.add(rs.getString("mensaje"));
-                total=total+rs.getDouble("Costo_total");
-            }
-            query = " select Costo_total from Estancia where Id_estancia="+id+";";
-             rs = stm.executeQuery(query);
-             rs.next();
-             base=rs.getDouble("Costo_total");
-             if (lista_habitaciones.getSelectionModel().getSelectedItem().getId_reserva()!=0) {
-             base=base*0.9;
-             }
-             
-             lbcostobase.setText("$ "+base);
-             lbcosto_agregado.setText("$ "+total*1.15);
-             total=base+total*1.15;
-            lista_servi.getItems().clear();
-            lista_servi.getItems().addAll(data1);
-            lbtotal.setText("$ "+total);
-         } catch (SQLException ex) {
-             System.out.println("error al extraer id reserva");
-         }
- 
- 
- }
- boolean Cancelacion(){
-        try {
-            Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
-            Statement stm = (Statement) connection.createStatement();
-            String query = "call set_Cancelacion_Estancianull("+lista_habitaciones.getSelectionModel().getSelectedItem().getId_cliente()+","+lista_habitaciones.getSelectionModel().getSelectedItem().getId_estancia()+","+lbtotal.getText().replace("$","").trim()+");";
-            if (RC.isSelected()) {
-                query = "call set_Cancelacion_Estancia("+lista_habitaciones.getSelectionModel().getSelectedItem().getId_cliente()+","+lista_habitaciones.getSelectionModel().getSelectedItem().getId_estancia()+","+lbtotal.getText().replace("$","").trim()+",'Credito',"+txttarjeta.getText()+");";
-            }
-            ResultSet rs = stm.executeQuery(query);
-            rs.next();
-            if (!rs.getString("mensaje").equals("Exito")) {
-               JOptionPane.showMessageDialog(null, "No se completo la cancelacion, revise los campos.");
-             return false;  
-            }
-            
-            return true;
-        } catch (SQLException ex) {
-           
-            JOptionPane.showMessageDialog(null, "No se completo la cancelacion, revise los campos");
-             return false;
-        }
-}
     
 }

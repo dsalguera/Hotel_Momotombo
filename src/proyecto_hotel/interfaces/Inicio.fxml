@@ -6,61 +6,58 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" prefHeight="662.0" prefWidth="771.0" styleClass="side-panel" stylesheets="@../estilos/Estilos.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto_hotel.interfaces.InicioController">
    <children>
-      <HBox layoutX="15.0" layoutY="63.0" prefHeight="60.0" prefWidth="741.0" spacing="10.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="65.0">
+      <VBox prefHeight="310.0" prefWidth="763.0">
          <children>
-            <JFXButton onAction="#Contratar_Reserva" prefHeight="60.0" prefWidth="256.0" ripplerFill="#2e78e1" styleClass="button-inicio" text="     Contratar Reserva" textFill="#e4dede" HBox.hgrow="ALWAYS">
-               <graphic>
-                  <ImageView fitHeight="43.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../imagenes/login/pages-3-256.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </JFXButton>
-            <JFXButton onAction="#Contratar_estancia" prefHeight="60.0" prefWidth="241.0" ripplerFill="#2e78e1" styleClass="button-inicio" text="     Contratar Estancia" textFill="#e4dede">
-               <graphic>
-                  <ImageView fitHeight="43.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../imagenes/login/pages-3-256.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </JFXButton>
-            <JFXButton onAction="#Pagar_estancia" prefHeight="60.0" prefWidth="241.0" ripplerFill="#2e78e1" styleClass="button-inicio" text="     Pagar Estancia" textFill="#e4dede">
-               <graphic>
-                  <ImageView fitHeight="43.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../imagenes/login/pages-3-256.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </JFXButton>
+            <Label text="Operaciones" textFill="#f8f3f3">
+               <font>
+                  <Font name="Segoe UI" size="27.0" />
+               </font>
+            </Label>
+            <HBox fx:id="h1" alignment="CENTER" prefHeight="90.0" prefWidth="749.0" spacing="10.0">
+               <children>
+                  <JFXButton onAction="#Contratar_Reserva" prefHeight="60.0" prefWidth="256.0" ripplerFill="#2e78e1" styleClass="button-inicio" text="     Contratar Reserva" textFill="#e4dede" HBox.hgrow="ALWAYS">
+                     <graphic>
+                        <ImageView fitHeight="43.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../imagenes/login/pages-3-256.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton fx:id="CE" onAction="#Contratar_estancia" prefHeight="60.0" prefWidth="241.0" ripplerFill="#2e78e1" styleClass="button-inicio" text="     Contratar Estancia" textFill="#e4dede">
+                     <graphic>
+                        <ImageView fitHeight="43.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../imagenes/login/pages-3-256.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton onAction="#Pagar_estancia" prefHeight="60.0" prefWidth="241.0" ripplerFill="#2e78e1" styleClass="button-inicio" text="     Pagar Estancia" textFill="#e4dede" HBox.hgrow="ALWAYS">
+                     <graphic>
+                        <ImageView fitHeight="43.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../imagenes/login/pages-3-256.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+               </children>
+            </HBox>
+            <Label text="Reportes" textFill="#f8f3f3">
+               <font>
+                  <Font name="Segoe UI" size="27.0" />
+               </font>
+            </Label>
+            <HBox alignment="CENTER" prefHeight="142.0" prefWidth="749.0" />
          </children>
-      </HBox>
-      <Label layoutX="22.0" layoutY="20.0" text="Operaciones" textFill="#f8f3f3">
-         <font>
-            <Font name="Segoe UI" size="27.0" />
-         </font>
-      </Label>
-      <HBox alignment="CENTER" layoutY="241.0" prefHeight="313.0" prefWidth="750.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="241.0">
-         <children>
-            <ImageView fitHeight="302.0" fitWidth="638.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
-               <image>
-                  <Image url="@../imagenes/logo.png" />
-               </image>
-            </ImageView>
-         </children>
-      </HBox>
-      <Label layoutX="22.0" layoutY="138.0" text="Reportes" textFill="#f8f3f3">
-         <font>
-            <Font name="Segoe UI" size="27.0" />
-         </font>
-      </Label>
-      <HBox layoutY="171.0" prefHeight="60.0" prefWidth="741.0" spacing="10.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="0.0">
+      </VBox>
+      <HBox layoutY="171.0" prefHeight="60.0" prefWidth="741.0" spacing="10.0" AnchorPane.leftAnchor="1.0">
          <children>
             <JFXButton fx:id="btn_Certificado_Reserva" onAction="#Certificado_Reserva" prefHeight="60.0" prefWidth="255.0" ripplerFill="#2e78e1" styleClass="button-inicio" text="    Certificado de Reserva" textFill="#e4dede" HBox.hgrow="ALWAYS">
                <graphic>
@@ -71,7 +68,7 @@
                   </ImageView>
                </graphic>
             </JFXButton>
-            <JFXButton prefHeight="60.0" prefWidth="241.0" ripplerFill="#2e78e1" styleClass="button-inicio" text="     Factura de Estancia" textFill="#e4dede">
+            <JFXButton onAction="#Facturar_estancia" prefHeight="60.0" prefWidth="241.0" ripplerFill="#2e78e1" styleClass="button-inicio" text="     Factura de Estancia" textFill="#e4dede" HBox.hgrow="ALWAYS">
                <graphic>
                   <ImageView fitHeight="43.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -80,7 +77,7 @@
                   </ImageView>
                </graphic>
             </JFXButton>
-            <JFXButton prefHeight="60.0" prefWidth="241.0" ripplerFill="#2e78e1" styleClass="button-inicio" text="     Ingresos Anuales" textFill="#e4dede">
+            <JFXButton fx:id="IA" onAction="#Grafico" prefHeight="60.0" prefWidth="221.0" ripplerFill="#2e78e1" styleClass="button-inicio" text="     Ingresos Anuales" textFill="#e4dede" HBox.hgrow="ALWAYS">
                <graphic>
                   <ImageView fitHeight="43.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -91,5 +88,10 @@
             </JFXButton>
          </children>
       </HBox>
+      <ImageView fitHeight="302.0" fitWidth="638.0" layoutX="121.0" layoutY="258.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imagenes/logo.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
