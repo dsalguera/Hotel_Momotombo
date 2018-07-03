@@ -204,10 +204,56 @@ public class Ventana_ProductosController implements Initializable {
         double precio = lista_productos.getSelectionModel().getSelectedItem().getPrecio();
     }
     
+    void consulta() throws SQLException {
+    
+        Connection connection = (Connection) DriverManager.getConnection(c.getString_connection(), c.getUsername(), c.getPassword());
+        Statement stm = (Statement) connection.createStatement();
+        
+        String busq = txtbuscar.getText();
+        String filtro = (String) combo_buscar.getSelectionModel().getSelectedItem();
+        String query = "select * from Producto where "+filtro+" like '%"+(busq)+"%' and Eliminado = 0";
+        
+        ResultSet rs = stm.executeQuery(query);
+        
+         while (rs.next()) {
+                int id = rs.getInt("Id_producto");
+                String nombre = rs.getString("nombre");
+                String tipo = rs.getString("tipo_producto");
+                double precio = rs.getDouble("precio");
+                int estado = rs.getInt("estado");
+                int cantidad = rs.getInt("cantidad");
+                String imagen = rs.getString("imagen");
+                
+                Productos producto = new Productos(
+                        
+                new Image(new File(dir+imagen).toURI().toString()),id,nombre, precio, tipo,cantidad,estado);
+                data.add(producto);
+        }
+         
+        Crear_Lista(query);
+     
+    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        ObservableList busquedas = FXCollections.observableArrayList();
+        
+        busquedas.add("Nombre");
+        busquedas.add("Tipo_Producto");
+        busquedas.add("Precio");
+        busquedas.add("Cantidad");
+        
+        combo_buscar.getItems().addAll(busquedas);
+        
         Crear_Lista("select * from Producto where Eliminado = 0;");
+        
+        txtbuscar.setOnKeyTyped(event -> {
+            try {
+                consulta();
+            } catch (SQLException ex) {
+                Logger.getLogger(Ventana_ProductosController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
     }    
     
 }

@@ -16,7 +16,7 @@ public class Conexion {
             "root";
             //"epiz_21886301";
     private String password = 
-            "paramore1";
+            "Windows10123.";
             //"Windowsxp123456";
     private String string_connection = 
             "jdbc:mysql://localhost:3306/Hotel";

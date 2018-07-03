@@ -1,4 +1,8 @@
-
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package proyecto_hotel.interfaces;
 
 import com.jfoenix.controls.*;
@@ -267,6 +271,8 @@ public class RegistroController implements Initializable {
                             
                             Dialogo("Se ha guardado el registro.", "Exito al Guardar!",
                                     "Operación Realizada", Alert.AlertType.CONFIRMATION);
+                            
+                            Nuevo();
                             
                         } catch (SQLException ex) {
                             Dialogo("Ha ocurrido un error al guardar el registro.\n\n"+ex.getMessage()+"\n\n"+ex.getSQLState()+"", "Error al Guardar!",

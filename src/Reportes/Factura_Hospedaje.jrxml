@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="792" whenNoDataType="BlankPage" columnWidth="576" leftMargin="18" rightMargin="18" topMargin="15" bottomMargin="15">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="146"/>
 	<parameter name="Id_estancia" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -205,17 +205,17 @@
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{Costo_total1}]]></textFieldExpression>
 			</textField>
+			<line>
+				<reportElement x="0" y="2" width="576" height="1"/>
+			</line>
 			<subreport>
-				<reportElement x="-1" y="30" width="572" height="0"/>
+				<reportElement x="0" y="28" width="576" height="2"/>
 				<subreportParameter name="Id_servicio_cuarto">
 					<subreportParameterExpression><![CDATA[$F{Id_servicio_cuarto}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "Sub_Factura.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[new File("src\\Reportes\\Sub_Factura.jasper").toPath().toAbsolutePath().toString()]]></subreportExpression>
 			</subreport>
-			<line>
-				<reportElement x="0" y="2" width="576" height="1"/>
-			</line>
 		</band>
 	</detail>
 	<pageFooter>

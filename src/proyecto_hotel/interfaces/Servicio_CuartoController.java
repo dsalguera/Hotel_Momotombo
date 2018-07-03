@@ -127,6 +127,7 @@ public class Servicio_CuartoController implements Initializable {
     
     @FXML
     void Buscar_estancia(ActionEvent event) {
+        
         stage_buscar.close();
         if (!stage_buscar.isShowing()) {
         FXMLLoader fxmlLoader = new FXMLLoader();
@@ -280,7 +281,7 @@ public class Servicio_CuartoController implements Initializable {
                 Dialogo("Al parecer necesita agregar una imagen.", "¡No imagen!",
                     "Error", Alert.AlertType.ERROR,1);
             }else{
-            
+                
                 return true;
                 
             }
@@ -397,8 +398,7 @@ public class Servicio_CuartoController implements Initializable {
 
         });
         
-    }
-    
+    } 
     
     void Producto_Seleccionado(){
         
@@ -674,11 +674,11 @@ public class Servicio_CuartoController implements Initializable {
 //                    costo_total.getStyleClass().add("espacio");
 //                    id_detalle_servicio_al_cuarto.getStyleClass().add("espacio");
                     
-                    
                     HBox hBox = new HBox(
                             
                    imagen = new ImageView(item.getImagenProducto()), 
                             vBox);
+                    
                     imagen.setFitHeight(166/1.5);
                     imagen.setFitWidth(250/1.5);
                     
@@ -715,6 +715,25 @@ public class Servicio_CuartoController implements Initializable {
         busquedas.add("Costo_Total");
         
         combo_buscar.getItems().addAll(busquedas);
+        
+        txtcantidad.setOnKeyTyped(event -> {
+            String string =  txtcantidad.getText();
+          
+            if (string.length() > 8) {
+               event.consume();
+            }
+            boolean isDigit=true;
+                  try {
+                      int aux=Integer.parseInt(event.getCharacter());
+                  } catch (Exception e) {
+                      isDigit=false;
+                  }
+            if (!isDigit) {
+                event.consume();
+            }
+        });
+        
+ 
         
     }    
     

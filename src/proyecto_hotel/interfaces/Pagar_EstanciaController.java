@@ -135,6 +135,9 @@ public class Pagar_EstanciaController implements Initializable {
     JasperReport reporte = (JasperReport) JRLoader.loadObject("src//Reportes//Factura_Hospedaje.jasper"); 
     Map parametro=new HashMap();
     parametro.put("Id_estancia",lista_habitaciones.getSelectionModel().getSelectedItem().getId_estancia());
+    
+    parametro.put("SUBREPORT_DIR", new File("src\\Reportes\\").toPath().toAbsolutePath().toString());
+    
         if (lista_habitaciones.getSelectionModel().getSelectedItem().getId_reserva()==0) {
             parametro.put("deduccion", 0.0);
             System.out.println("2");
