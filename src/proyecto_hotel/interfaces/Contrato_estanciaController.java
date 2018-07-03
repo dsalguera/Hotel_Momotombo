@@ -235,6 +235,10 @@ public class Contrato_estanciaController implements Initializable {
         btnBuscar_habitacion.setDisable(true);
         btnBuscar_cliente.setDisable(true);
         screen_img.setDisable(true);
+        Id_habitacion=-1;
+        nombre="";
+        Id_Cliente=-1;
+        nombre_cliente="";
         screen_img1.setDisable(true);
         fecha_final.setDisable(true);
         
@@ -371,6 +375,7 @@ public class Contrato_estanciaController implements Initializable {
     void Nuevo_Registro(ActionEvent event) {
       txtnumero_tarjeta.setDisable(true);
       Radio_efectivo.setSelected(true);
+      fecha_inicio.setDisable(false);
       btnBuscar_habitacion.setDisable(false);
       Guardar_tarjeta=txtnumero_tarjeta.getText();
       txtnumero_tarjeta.setText("");
@@ -379,7 +384,7 @@ public class Contrato_estanciaController implements Initializable {
        screen_img1.setImage(null);
        Id_Cliente=-1;
        txtnombre_cliente.setText("");
-       
+       btnBuscar_cliente.setDisable(false);
         }
       txtcosto.setText("");
       txtnombre.setText("");
@@ -573,10 +578,12 @@ public class Contrato_estanciaController implements Initializable {
                  this.nombre=Nombre_habitacion;
                  this.imagen=i2;
                  this.Id_Cliente=Id_cliente;
-                 this.nombre_cliente=nombre_cliente;
+                 this.nombre_cliente=Nombre_cliente;
                  this.imagen_cliente=i1;
                  this.Fecha_Inicial=Fecha_inicio;
                  this.Fecha_Final=Fecha_final;
+                 fecha_inicio.setValue(LocalDate.parse(Fecha_inicio, DateTimeFormatter.ISO_LOCAL_DATE));
+                  fecha_final.setValue(LocalDate.parse(Fecha_final, DateTimeFormatter.ISO_LOCAL_DATE));
                  System.out.println("3");
                  Cliente_Seleccionada();
                  Habitacion_Seleccionada();

@@ -13,7 +13,6 @@ create table Usuario (
     Imagen varchar(500)
 );
 
-
 create table Cliente
 (
     Id_cliente int primary key not null auto_increment,	
@@ -34,8 +33,6 @@ create table Cliente
     Eliminado int,
     Imagen varchar(500)
 );
-
-
 create table Reserva
 (
 	Id_reserva int primary key not null auto_increment,	
@@ -48,7 +45,6 @@ create table Reserva
 	Fecha_reserva datetime
 
 );
-
 
 create table Estancia
 (
@@ -64,7 +60,6 @@ create table Estancia
 
 );
 
-
 create table Acciones
 (
     Id_accion int primary key not null auto_increment,	
@@ -76,7 +71,6 @@ create table Acciones
     Id_cliente int
 
 );
-
 
 create table Habitacion(
     Id_habitacion int primary key not null auto_increment,
@@ -90,14 +84,12 @@ create table Habitacion(
     Imagen varchar(500)
 );
 
-
 create table Servicio_al_cuarto(
 	Id_servicio_cuarto int primary key not null auto_increment,
 	Id_estancia int,
 	Fecha_hora datetime,	
 	Costo_total double
 );
-
 
 create table Producto(
 	Id_producto int primary key not null auto_increment,
@@ -110,7 +102,6 @@ create table Producto(
 	Imagen varchar(500)
 );
 
-
 create table Detalle_servicio_al_cuarto(
 	Id_detalle_servicio_al_cuarto int primary key not null auto_increment,	
 	Id_servicio_cuarto int,	
@@ -119,7 +110,6 @@ create table Detalle_servicio_al_cuarto(
 	Cantidad int,	
 	Sub_total double
 );
-
 
 create table Pago (id_pago int primary key auto_increment,
  monto  double, 
@@ -141,10 +131,7 @@ create table Pago (id_pago int primary key auto_increment,
  );
 Create Table Tarjeta(Id_tarjeta int primary key auto_increment,
 monto double);
-
-
 alter table Usuario add foreign key (id_cliente) references Cliente(id_cliente);
-
 alter table Pago add foreign key (id_cliente) references Cliente(id_cliente);
 alter table Reserva add foreign key (Id_cliente) references Cliente(Id_cliente);
 alter table Reserva add foreign key (Id_habitacion) references Habitacion(Id_habitacion);
@@ -156,7 +143,7 @@ alter table Servicio_al_cuarto add foreign key (Id_estancia) references Estancia
 alter table Detalle_servicio_al_cuarto add foreign key (Id_servicio_cuarto) references Servicio_al_cuarto(Id_servicio_cuarto);
 alter table Detalle_servicio_al_cuarto  add foreign key (Id_producto) references Producto(Id_producto);
 
------------------------------Triggers -------------------------
+/*-----------------------------Triggers -------------------------*/
 
 1. 
 
@@ -250,7 +237,6 @@ DELIMITER ;
 
 
 7. 
-
 DELIMITER //
 CREATE TRIGGER Registrar_Nuevo_Pago after insert ON Pago
 		FOR EACH ROW
@@ -304,7 +290,6 @@ CREATE TRIGGER Registrar_Nuevo_Servicio after insert ON servicio_al_cuarto
 		 values('Servicio al Cuarto',@cadena, now() ,'Protocolar',@Id_cliente);
 		END;//
 DELIMITER ;
-
 
 //11. 
 DELIMITER //
@@ -391,11 +376,7 @@ CREATE TRIGGER Habitacion_disponible after delete ON Estancia
 	END;//
 DELIMITER ;
 
-
-
-
-
------------------------------------Insert------------------------------------------
+/*--------------------------------Insert------------------------------------------*/
 
 insert into Tarjeta(monto) values(20000);
 insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado,Imagen) values ('Fresco de cacao', 30, 'Bebida', 25, 1,'fresco de cacao.jpg');
@@ -407,63 +388,45 @@ insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado,Imagen) va
 insert into Producto (Nombre, Precio, Tipo_producto, Cantidad, Estado,Imagen) values ('Snicker Barra', 60, 'Dulce', 150, 1, 'snicker.jpg');
 SET SQL_SAFE_UPDATES = 0;
 
-
 update Producto set Eliminado = 0;
-
 insert into Habitacion (Nombre, Tipo, Tarifa, Telefono, Estado, Descripcion,Imagen)
 values ('Brownie Room','Deluxe',45.06,'+505 22459851',1,'La mejor de todas','cuarto 1.jpg');
-
 insert into Habitacion (Nombre, Tipo, Tarifa, Telefono, Estado, Descripcion,Imagen)
 values ('Candy Room','Familiar',90.50,'+505 22548216',2,'La mejor para la familia','cuarto 2.jpg');
-
 insert into Habitacion (Nombre, Tipo, Tarifa, Telefono, Estado, Descripcion,Imagen)
 values ('Sweet Dreams Room','Doble',120.55,'+ 505 22786591',1,'La mejor para disfrutar en pareja','cuarto 3.jpg');
-
 insert into Habitacion (Nombre, Tipo, Tarifa, Telefono, Estado, Descripcion,Imagen)
 values ('Ocean Room','Familiar',250.00,'+ 505 22786591',2,'La mejor para disfrutar en pareja','cuarto 4.jpg');
-
 insert into Habitacion (Nombre, Tipo, Tarifa, Telefono, Estado, Descripcion,Imagen)
 values ('Couple Room','Doble',180.00,'+ 505 22786591',1,'La mejor para disfrutar en pareja','cuarto 5.jpg');
-
 insert into Habitacion (Nombre, Tipo, Tarifa, Telefono, Estado, Descripcion,Imagen)
 values ('Super Party Room','Deluxe',330.00,'+ 505 22786591',2,'La mejor para disfrutar en pareja','cuarto 6.jpg');
-
 update Habitacion set Eliminado = 0;
-
 insert into Usuario (Nombre_usuario, Contrasena, Tipo_cuenta, Estado, Imagen) values ('David','Salguera',1,1,'jarry.png');
 insert into Usuario (Nombre_usuario, Contrasena, Tipo_cuenta, Estado, Imagen) values ('Manuel','Lopez',2,1,'bob.png');
-
 insert into Cliente 
 (Primer_nombre,Segundo_nombre,Primer_apellido,Segundo_apellido,Identificacion,Tipo_identificacion,Pais_origen,Numero_reserva,Numero_estancia,GPA,
  Fecha_inscripcion,Fecha_nacimiento,Telefono,Correo,Imagen) values
 ('Donald','Jack','Trump','Musk','001-230999-1023A','Cedula','Estados Unidos',0,0,15000000.541,'2015-12-17','2015-12-17','+001 512 35612','donald@gmail.com','donald.jpg');
-
 insert into Cliente
 (Primer_nombre,Segundo_nombre,Primer_apellido,Segundo_apellido,Identificacion,Tipo_identificacion,Pais_origen,Numero_reserva,Numero_estancia,GPA,
  Fecha_inscripcion,Fecha_nacimiento,Telefono,Correo,Imagen) values
 ('Manuel','Enrique','Oviedo','Cardenal','001-270898-1084C','Cedula','Nicaragua',0,0,230000.541,'2018-05-21','2018-05-17','+001 512 35612','manuel_enrique@gmail.com','obama.jpg');
-
 update Cliente set Eliminado = 0;
-
 insert into Estancia(Id_cliente,Id_habitacion,Fecha_inicio,Fecha_final,Costo_total,Descripcion,Estado,Id_reserva)
 values (1,1,'2018-06-10','2018-06-16',1222.23,'Todo bien','Activo',null);
 
 -- Estado = 1 ; Activo
-
 insert into servicio_al_cuarto (Id_estancia,Fecha_hora,Costo_total)
 values (1,now(),200);
-
 insert into Servicio_al_Cuarto(Id_estancia,Fecha_hora,Costo_total) values(1,now(),300);
 insert into Servicio_al_Cuarto(Id_estancia,Fecha_hora,Costo_total) values(1,now(),45);
 insert into Servicio_al_Cuarto(Id_estancia,Fecha_hora,Costo_total) values(1,now(),4);
  
-
 /*---------------------------Procedimientos----------------------------------------------*/
 //Procedimiento para que agreges una reserva
 //1.
-
 DELIMITER //
-
 CREATE FUNcTION get_Verificar_Reserva(DId_habitacion int,DFecha_inicio date,DFecha_Final date) RETURNS int
 BEGIN
     RETURN  (select count(*) from Reserva where Id_habitacion=DId_habitacion and upper(Estado)=upper("Espera") and Fecha_final>=DFecha_inicio and Fecha_inicio<=DFecha_Final);
@@ -517,10 +480,7 @@ select "La Reserva fue contratada con exito." as mensaje;
 END $$
 DELIMITER ;
 
-
 call setReserva(1,5,"2018-06-2","2018-07-2","Efectivo",null);
-
-
 
 2.
  
@@ -550,7 +510,13 @@ DROP PROCEDURE IF EXISTS getCertificado_Reserva;
 DELIMITER $$
 CREATE PROCEDURE getCertificado_Reserva(DId_reserva int,Tipo_User varchar (40),permiso int)
 BEGIN
+if permiso=0 then
+set @documento="Copia";
+else
 set @documento="Oficial";
+ end if;
+
+
 SET lc_time_names = 'es_ES';
 if permiso=1 then 
 if upper(Tipo_User)=upper("Administrador") then
@@ -591,7 +557,7 @@ concat(day(now())," de ",monthname(now())," del ",year( now())) as fecha_hoy, DA
    select "La Reserva no existe o el pago no se registro." as mensaje;
 end if;
 else
-set @documento="Copia";
+
 select *,@documento,concat(day(Reserva.Fecha_inicio)," de ",monthname(Reserva.Fecha_inicio)," del ",year( Reserva.Fecha_inicio)) as fecha_incio,
 concat(day(Reserva.Fecha_final)," de ",monthname(Reserva.Fecha_final)," del ",year( Reserva.Fecha_final)) as fecha_finall,
 concat(day(now())," de ",monthname(now())," del ",year( now())) as fecha_hoy, DATE_FORMAT(NOW( ), "%H:%I:%S" ) as hora_hoy from Reserva
@@ -600,20 +566,13 @@ inner join Cliente on Cliente.Id_cliente=Reserva.Id_cliente
 inner join Pago on Pago.Id_origen=Reserva.Id_reserva and upper(Pago.concepto)=upper("Pago de Reserva")
 inner join Certificados on Certificados.Id_Origen= Reserva.Id_reserva and upper(Certificados.Origen)=upper("Certificado de Reserva")
  where Reserva.Id_reserva=DId_reserva  ;
-
+ 
 end if;
 
 END $$
-DELIMITER ;
+DELIMITER 
 
-call getCertificado_Reserva(1,"Administrador",1);
-call getCertificado_Reserva(2,"Secretario",1);
-call getCertificado_Reserva(1,"Visitante",0);
-
-
-
-
-3.
+ /*3.*/
 
 DROP PROCEDURE IF EXISTS getVerificar; 
 DELIMITER $$
@@ -631,7 +590,7 @@ DELIMITER ;
 
 
 
-4.
+ /*4.*/
 DROP PROCEDURE IF EXISTS getHabitaciones_disponibles; 
 DELIMITER $$
 CREATE PROCEDURE   getHabitaciones_disponibles(DFecha_inicio date,DFecha_Final  date)
@@ -641,7 +600,7 @@ select * from Habitacion where Eliminado=0 and get_Verificar_Reserva(Id_habitaci
 END $$
 DELIMITER ;
 
-5.
+ /*5.*/
 DROP PROCEDURE IF EXISTS getCosto_total; 
 DELIMITER $$
 CREATE PROCEDURE  getCosto_total(DFecha_inicio date,DFecha_Final  date,DId_habitacion int)
@@ -653,11 +612,11 @@ DELIMITER ;
 
 
 
-call getCosto_total('2018-03-2','2018-04-4',1)
+call getCosto_total('2018-03-2','2018-04-4',1);
 
 
 
-6.
+ /*6.*/
 DROP PROCEDURE IF EXISTS getHabitaciones_disponibles_buscar; 
 DELIMITER $$
 CREATE PROCEDURE   getHabitaciones_disponibles_buscar(DFecha_inicio date,DFecha_Final  date, filtro varchar(30),buscar varchar(50))
@@ -710,9 +669,7 @@ end if;
 END $$
 DELIMITER ;
 
-call setPago(200,1);
-
-8.
+ /*8.*/
 DROP PROCEDURE IF EXISTS setUsuario;
 
 DELIMITER $$
@@ -761,8 +718,7 @@ END $$
 DELIMITER ;
 
 /*call setUsuario();*/
-
-9.
+ /*9.*/
 DROP PROCEDURE IF EXISTS get_Reserva_consulta; 
 DELIMITER $$
 CREATE PROCEDURE  get_Reserva_consulta()
@@ -774,8 +730,8 @@ inner join  Habitacion on Habitacion.Id_habitacion=Reserva.Id_habitacion;
 END $$
 DELIMITER ;
 
-call  get_Reserva_consulta() 
-10.
+call  get_Reserva_consulta() ;
+ /*10.*/
 DROP PROCEDURE IF EXISTS get_Reserva_consulta_buscar; 
 DELIMITER $$
 CREATE PROCEDURE  get_Reserva_consulta_buscar(busc varchar(50), item int)
@@ -801,9 +757,9 @@ END $$
 DELIMITER ;
 
 
-call get_Reserva_consulta_buscar('karl',0)
+call get_Reserva_consulta_buscar('karl',0);
 
-11.
+ /*11.*/
 DROP PROCEDURE IF EXISTS get_Reserva_consulta_id; 
 DELIMITER $$
 CREATE PROCEDURE  get_Reserva_consulta_id(id int)
@@ -815,8 +771,8 @@ inner join  Habitacion on Habitacion.Id_habitacion=Reserva.Id_habitacion where C
 END $$
 DELIMITER ;
 
-call  get_Reserva_consulta_id(1) 
-12.
+call  get_Reserva_consulta_id(1) ;
+ /*12.*/
 DROP PROCEDURE IF EXISTS get_Reserva_consulta_buscar_id; 
 DELIMITER $$
 CREATE PROCEDURE  get_Reserva_consulta_buscar_id(busc varchar(50), item int, id int)
@@ -836,9 +792,9 @@ end if;
 END $$
 DELIMITER ;
 
-call get_Reserva_consulta_buscar_id('karl',0,1)
-
-13.
+call get_Reserva_consulta_buscar_id('karl',0,1);
+ 
+ /*13.*/
 DROP PROCEDURE IF EXISTS getHabitaciones_disponibles_e; 
 DELIMITER $$
 CREATE PROCEDURE   getHabitaciones_disponibles_e(DFecha_inicio date,DFecha_Final  date)
@@ -848,10 +804,9 @@ select * from Habitacion where Eliminado=0 and get_Verificar_Reserva(Id_habitaci
 END $$
 DELIMITER ;
 
-select * from Habitacion
 
 
-14.
+ /*14.*/
 DROP PROCEDURE IF EXISTS getHabitaciones_disponibles_buscar_e; 
 DELIMITER $$
 CREATE PROCEDURE   getHabitaciones_disponibles_buscar_e(DFecha_inicio date,DFecha_Final  date, filtro varchar(30),buscar varchar(50))
@@ -872,7 +827,7 @@ end if;
 END $$
 DELIMITER ;
 
-15.
+ /*15.*/
 DROP PROCEDURE IF EXISTS setEstancia; 
 DELIMITER $$
 CREATE PROCEDURE   setEstancia(DId_cliente int,DId_habitacion int,DFecha_inicio date,DFecha_final date,DCosto_total double,DDescripcion varchar(100), DId_reserva int)
@@ -883,12 +838,12 @@ Select "Se ha contratado una estancia" as mensaje;
 END $$
 DELIMITER ;
 
+ 
 
-call setEstancia(1,1,'2018-06-28','2018-06-28',121,'todo', 2);
 
 
-16.
-DROP PROCEDURE IF EXISTS setEstancianull; 
+ /*16.*/
+DROP  PROCEDURE IF EXISTS setEstancianull; 
 DELIMITER $$
 CREATE PROCEDURE   setEstancianull(DId_cliente int,DId_habitacion int,DFecha_inicio date,DFecha_final date,DCosto_total double,DDescripcion varchar(100))
 BEGIN
@@ -917,17 +872,17 @@ CREATE PROCEDURE   Audit_Habitacione()
 BEGIN
 SET SQL_SAFE_UPDATES = 0;
 update Reserva set Estado='Espera' where Estado is null;
-update Reserva set Estado='Perdido' where  Estado='Espera' and Fecha_inicio<now();
-update Estancia set estado='Inactivo' where Estado='Activo' and ADDDATE(Fecha_final,Interval 1 day)<now();
+update Reserva set Estado='Perdido' where  Estado='Espera' and Fecha_inicio<cast(now() as date);
+update Estancia set estado='Inactivo' where Estado='Activo' and Fecha_final<cast(now() as date);
 update Habitacion set Estado=1 where get_Estado(Id_habitacion)=0 and Estado=2;
 update Habitacion set Estado=2 where get_Estado(Id_habitacion)>0 and Estado=1;
+update Reserva inner join Estancia on Reserva.Id_reserva=Estancia.Id_reserva
+set Reserva.Estado='Cancelado' where Estancia.Id_habitacion=Reserva.Id_habitacion and Reserva.Estado='Espera' and Reserva.Fecha_inicio>=Estancia.Fecha_inicio and Estancia.Fecha_final>=Reserva.Fecha_final;
 END $$
 DELIMITER ;
 
 
-
-
-18.
+/*18*/
 DROP PROCEDURE IF EXISTS get_Estancia_consulta; 
 DELIMITER $$
 CREATE PROCEDURE  get_Estancia_consulta()
@@ -939,11 +894,10 @@ inner join  Habitacion on Habitacion.Id_habitacion=Estancia.Id_habitacion where 
 END $$
 DELIMITER ;
 
-call  get_Estancia_consulta() 
+call  get_Estancia_consulta() ;
 
 
-
-19.
+ /*19.*/
 DROP PROCEDURE IF EXISTS get_Estancia_consulta_buscar; 
 DELIMITER $$
 CREATE PROCEDURE  get_Estancia_consulta_buscar(busc varchar(50), item int)
@@ -969,10 +923,10 @@ END $$
 DELIMITER ;
 
 
-call get_Estancia_consulta_buscar('karl',0)
+call get_Estancia_consulta_buscar('karl',0);
 
-20.
-DROP PROCEDURE IF EXISTS get_Estancia_consulta_id; 
+ /*20.*/
+DROP  PROCEDURE IF EXISTS get_Estancia_consulta_id; 
 DELIMITER $$
 CREATE PROCEDURE  get_Estancia_consulta_id(id int)
 BEGIN
@@ -983,9 +937,9 @@ inner join  Habitacion on Habitacion.Id_habitacion=Estancia.Id_habitacion where 
 END $$
 DELIMITER ;
 
-call  get_Estancia_consulta_id(1) 
-21.
-DROP PROCEDURE IF EXISTS get_Estancia_consulta_buscar_id; 
+call  get_Estancia_consulta_id(1) ;
+ /*21.*/
+DROP  PROCEDURE IF EXISTS get_Estancia_consulta_buscar_id; 
 DELIMITER $$
 CREATE PROCEDURE  get_Estancia_consulta_buscar_id(busc varchar(50), item int, id int)
 BEGIN
@@ -1004,10 +958,10 @@ end if;
 END $$
 DELIMITER ;
 
-call get_Estancia_consulta_buscar_id('karl',0,1)
+call get_Estancia_consulta_buscar_id('karl',0,1);
 
-22.
-DROP PROCEDURE IF EXISTS get_Servicio_Cuarto; 
+ /*22.*/
+DROP  PROCEDURE IF EXISTS get_Servicio_Cuarto; 
 DELIMITER $$
 CREATE PROCEDURE  get_Servicio_Cuarto( id int)
 BEGIN
@@ -1017,3 +971,227 @@ END $$
 DELIMITER ;
 
  call get_Servicio_Cuarto(1);
+
+
+ /*23.*/
+DROP  PROCEDURE IF EXISTS get_Estancia_Reservada; 
+DELIMITER $$
+CREATE PROCEDURE get_Estancia_Reservada( id int)
+BEGIN
+Select Cliente.Id_cliente,Habitacion.Id_habitacion,cast(Reserva.Fecha_inicio as date) as Fecha_inicio ,cast(Reserva.Fecha_final as date) as Fecha_final,concat(Cliente.Primer_nombre,' ',Cliente.Segundo_nombre,' ',Cliente.Primer_apellido,' ',Cliente.Segundo_apellido) as nombre_cliente,
+Habitacion.nombre as nombre_habitacion,Cliente.Imagen as imgcliente, Habitacion.Imagen as imghabitacion from Reserva
+inner join Cliente on Cliente.Id_cliente=Reserva.Id_cliente
+inner join Habitacion on Habitacion.Id_habitacion=Reserva.Id_habitacion
+where Reserva.Id_reserva=id and Cliente.Eliminado=0 and Reserva.Estado='Espera';
+END $$
+DELIMITER ;
+
+ /*24.*/
+ 
+DELIMITER //
+
+CREATE FUNcTION get_ID_Certificado_estancia(DId_Estancia int) RETURNS varchar(30)
+BEGIN
+    RETURN  (select concat(Estancia.Id_estancia,Cliente.Id_cliente,Estancia.Id_habitacion,Pago.Id_pago) from Estancia
+inner join Habitacion on Habitacion.Id_habitacion=Estancia.Id_habitacion
+inner join Cliente on Cliente.Id_cliente=Estancia.Id_cliente 
+inner join Pago on Pago.Id_origen=Estancia.Id_estancia and upper(Pago.concepto)=upper("Pago de Estancia")
+ where Estancia.Id_estancia=DId_Estancia );
+END ;//
+
+ DELIMITER //
+
+CREATE FUNcTION get_Total_Servicio_cuarto(id int) RETURNS double
+BEGIN
+ 
+    RETURN  (  Select sum(Costo_total)  from Servicio_al_cuarto where Id_estancia=id);
+END ;//
+
+ 
+DROP  PROCEDURE IF EXISTS get_Factura; 
+DELIMITER $$
+CREATE PROCEDURE get_Factura( id int)
+BEGIN
+SET lc_time_names = 'es_ES';
+select  *,concat(day(now())," de ",monthname(now())," del ",year( now())) as fecha_hoy, DATE_FORMAT(NOW( ), "%H:%I:%S" ) as hora_hoy,
+ concat(day(Estancia.Fecha_inicio)," de ",monthname(Estancia.Fecha_inicio)," del ",year(Estancia.Fecha_inicio)) as fecha_incio,
+concat(day(Estancia.Fecha_final)," de ",monthname(Estancia.Fecha_final)," del ",year(Estancia.Fecha_final)) as fecha_finall 
+, Servicio_al_cuarto.Costo_total as Costo_total1,get_Total_Servicio_cuarto(id) as Suma_Costo_total,get_ID_Certificado_estancia(id) as Serie from Estancia  
+inner join Servicio_al_cuarto on servicio_al_cuarto.Id_estancia=Estancia.Id_estancia
+inner join Habitacion on Habitacion.Id_habitacion=Estancia.Id_habitacion
+inner join Pago on Pago.id_origen=Estancia.Id_estancia and Pago.concepto='Pago de Estancia'
+inner join Cliente on Cliente.Id_cliente=Estancia.Id_cliente and Estancia.Id_estancia =id;
+END $$
+DELIMITER ;
+
+call  get_Factura(4);
+
+/*25.*/
+
+DROP PROCEDURE IF EXISTS set_Cancelacion_Estancia;
+
+DELIMITER $$
+ 
+CREATE PROCEDURE set_Cancelacion_Estancia(DId_cliente int,DId_estancia int,Dmonto double, DTipo_pago varchar (30),DTarjeta varchar(40))
+BEGIN
+Insert Into Pago(monto,concepto,id_origen,fecha,id_cliente,tipo_pago,Tarjeta)
+values(Dmonto,'Pago de Estancia',DId_estancia,cast(now() as date),DId_cliente,DTipo_pago,DTarjeta);
+Update Estancia set Estado='Cancelado' where Estancia.Id_estancia=DId_estancia and Estancia.Estado='Activo';
+select "Exito" as mensaje;
+END $$
+DELIMITER ;
+
+/*26.*/
+
+DROP PROCEDURE IF EXISTS set_Cancelacion_Estancianull
+
+DELIMITER $$
+ 
+CREATE PROCEDURE set_Cancelacion_Estancianull(DId_cliente int,DId_estancia int,Dmonto double)
+BEGIN
+Insert Into Pago(monto,concepto,id_origen,fecha,id_cliente,tipo_pago,Tarjeta)
+values(Dmonto,'Pago de Estancia',DId_estancia,cast(now() as date),DId_cliente,'Efectivo',null);
+Update Estancia set Estado='Cancelado' where Estancia.Id_estancia=DId_estancia and Estancia.Estado='Activo';
+select "Exito" as mensaje;
+END $$
+DELIMITER ;
+
+
+/*27*/
+DROP PROCEDURE IF EXISTS get_Estancia_consulta_fact; 
+DELIMITER $$
+CREATE PROCEDURE  get_Estancia_consulta_fact()
+BEGIN
+select *,concat(Cliente.Primer_nombre,' ',Cliente.Segundo_nombre,' ',Cliente.Primer_apellido,' ',Cliente.Segundo_apellido) as nombre_cliente,
+Habitacion.Nombre as nombre_habitacion, Cliente.Imagen as imgcliente, Habitacion.Imagen as imghabitacion from Estancia inner join Cliente on Cliente.Id_cliente=Estancia.Id_cliente
+inner join  Habitacion on Habitacion.Id_habitacion=Estancia.Id_habitacion ;
+
+END $$
+DELIMITER ;
+
+call  get_Estancia_consulta_fact() ;
+
+
+ /*28.*/
+DROP PROCEDURE IF EXISTS get_Estancia_consulta_buscar_fact; 
+DELIMITER $$
+CREATE PROCEDURE  get_Estancia_consulta_buscar_fact(busc varchar(50), item int)
+BEGIN
+if item=0 then
+select *,concat(Cliente.Primer_nombre,' ',Cliente.Segundo_nombre,' ',Cliente.Primer_apellido,' ',Cliente.Segundo_apellido) as nombre_cliente,
+Habitacion.Nombre as nombre_habitacion, Cliente.Imagen as imgcliente, Habitacion.Imagen as imghabitacion from Estancia inner join Cliente on Cliente.Id_cliente=Estancia.Id_cliente
+inner join  Habitacion  on Habitacion.Id_habitacion=Estancia.Id_habitacion having nombre_cliente like concat('%',busc,'%') ;
+
+elseif item=1 then
+
+select *,concat(Cliente.Primer_nombre,' ',Cliente.Segundo_nombre,' ',Cliente.Primer_apellido,' ',Cliente.Segundo_apellido) as nombre_cliente,
+Habitacion.Nombre as nombre_habitacion, Cliente.Imagen as imgcliente, Habitacion.Imagen as imghabitacion from Estancia inner join Cliente on Cliente.Id_cliente=Estancia.Id_cliente
+inner join  Habitacion on Habitacion.Id_habitacion=Estancia.Id_habitacion  having nombre_habitacion like concat('%',busc,'%');
+
+else
+select *,concat(Cliente.Primer_nombre,' ',Cliente.Segundo_nombre,' ',Cliente.Primer_apellido,' ',Cliente.Segundo_apellido) as nombre_cliente,
+Habitacion.Nombre as nombre_habitacion, Cliente.Imagen as imgcliente, Habitacion.Imagen as imghabitacion from Estancia inner join Cliente on Cliente.Id_cliente=Estancia.Id_cliente
+inner join  Habitacion on Habitacion.Id_habitacion=Estancia.Id_habitacion  having Estancia.Estado like concat('%',busc,'%');
+
+end if;
+END $$
+DELIMITER ;
+
+
+call get_Estancia_consulta_buscar_fact('karl',0);
+
+ /*29.*/
+DROP  PROCEDURE IF EXISTS get_Estancia_consulta_id_fact; 
+DELIMITER $$
+CREATE PROCEDURE  get_Estancia_consulta_id_fact(id int)
+BEGIN
+select *,concat(Cliente.Primer_nombre,' ',Cliente.Segundo_nombre,' ',Cliente.Primer_apellido,' ',Cliente.Segundo_apellido) as nombre_cliente,
+Habitacion.Nombre as nombre_habitacion, Cliente.Imagen as imgcliente, Habitacion.Imagen as imghabitacion from Estancia inner join Cliente on Cliente.Id_cliente=Estancia.Id_cliente
+inner join  Habitacion on Habitacion.Id_habitacion=Estancia.Id_habitacion where Cliente.Id_cliente=id  ;
+
+END $$
+DELIMITER ;
+
+call  get_Estancia_consulta_id_fact(3) ;
+ /*30.*/
+DROP  PROCEDURE IF EXISTS get_Estancia_consulta_buscar_id_fact; 
+DELIMITER $$
+CREATE PROCEDURE  get_Estancia_consulta_buscar_id_fact(busc varchar(50), item int, id int)
+BEGIN
+if item=0 then
+select *,concat(Cliente.Primer_nombre,' ',Cliente.Segundo_nombre,' ',Cliente.Primer_apellido,' ',Cliente.Segundo_apellido) as nombre_cliente,
+Habitacion.Nombre as nombre_habitacion, Cliente.Imagen as imgcliente, Habitacion.Imagen as imghabitacion from Estancia inner join Cliente on Cliente.Id_cliente=Estancia.Id_cliente
+inner join  Habitacion on Habitacion.Id_habitacion=Estancia.Id_habitacion  where Cliente.Id_cliente=id   having nombre_habitacion like concat('%',busc,'%');
+
+elseif item=1 then
+select *,concat(Cliente.Primer_nombre,' ',Cliente.Segundo_nombre,' ',Cliente.Primer_apellido,' ',Cliente.Segundo_apellido) as nombre_cliente,
+Habitacion.Nombre as nombre_habitacion, Cliente.Imagen as imgcliente, Habitacion.Imagen as imghabitacion from Estancia inner join Cliente on Cliente.Id_cliente=Estancia.Id_cliente
+inner join  Habitacion on Habitacion.Id_habitacion=Estancia.Id_habitacion  where Cliente.Id_cliente=id  having Estancia.Estado like concat('%',busc,'%');
+
+
+end if;
+END $$
+DELIMITER ;
+
+call get_Estancia_consulta_buscar_id('karl',0,1);
+
+/*31.*/
+DROP  PROCEDURE IF EXISTS get_Informe; 
+DELIMITER $$
+CREATE PROCEDURE  get_Informe()
+BEGIN
+SET lc_time_names = 'es_ES';
+Select MONTHNAME(fecha) as Mes,round(sum(Pago.monto),4) as Monto, round(sum(if(concepto like 'Pago de Reserva',monto,0))/sum(monto)*100,2) as Reserva,
+ round(sum(if(concepto like 'Pago de Estancia',monto,0))/sum(monto)*100,2) as Estancia,
+ round(sum(if(tipo_pago like 'Efectivo',monto,0))/sum(monto)*100,2) as Efectivo,
+ round(sum(if(tipo_pago like 'Credito',monto,0))/sum(monto)*100,2) as Credito,
+ concat(day(now())," de ",monthname(now())," del ",year( now())) as fecha_hoy, DATE_FORMAT(NOW( ), "%H:%I:%S" ) as hora_hoy, year(now()) as Año from Pago
+group by MONTHNAME(fecha);
+END $$
+DELIMITER ;
+ call get_Informe();
+ 
+ /*32*/
+ 
+ DROP PROCEDURE IF EXISTS Inserta_Servicio
+
+DELIMITER $$
+CREATE PROCEDURE  Inserta_Servicio(
+in idservicio int,
+
+in idproducto int,
+in precio double,
+in cantidadP int,
+in subtotal double
+)
+BEGIN
+	
+	insert into detalle_servicio_al_cuarto (id_servicio_cuarto,id_producto,precio,cantidad,sub_total) 
+	values (idservicio,idproducto,precio,cantidadP,subtotal);
+    
+    set @nueva = cantidadP;
+    set @servicioS =  idservicio;
+    set @costo_total = (select sum(Sub_total) from detalle_servicio_al_cuarto where Id_servicio_cuarto = idservicio);
+    
+    update servicio_al_cuarto set Costo_total = @costo_total where Id_servicio_cuarto = @servicioS;
+    
+    set @Vieja_Cantidad = (select p.Cantidad from Producto p where Id_producto = idproducto);
+    
+    set @nueva = (@Vieja_Cantidad - @nueva);
+    
+    update Producto p set p.Cantidad = (@nueva) where Id_producto = idproducto;
+	
+END $$
+DELIMITER ;
+
+
+
+
+
+
+
+
+
+
+
+
